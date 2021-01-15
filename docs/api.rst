@@ -1,7 +1,9 @@
 API Documentation
 =================
 
-.. autosummary::
-   :toctree: autosummary
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
 
-   ehreact.canvas
+   arguments
+   train

@@ -1,0 +1,38 @@
+{
+    "hyper_template": {
+	"use_template": "lowest"
+    },
+    "hyper_location": {
+	"n": 2
+    },
+    "hyper_diversity": {
+	"mode": "mean",
+	"shift_amount": 0.5,
+	"cap": 1,
+	"cap_mean": 0.8,
+	"cap_std": 0.05,
+	"cap_via_overall": true
+    },
+    "hyper_overall": {
+	"mode": "sigmoid",
+	"center": 2.5,
+	"shift": 1
+    },
+    "hyper_similarity": {
+	"mode": "mae",
+	"factors": [["partial_charge",3]],
+	"use_prod":true
+    },
+    "hyper_negative": {
+	"use": true,
+	"n_sim": 2
+    },
+    "hyper_shape": {
+	"use": true,
+	"charges": "qm_pred"
+    },
+    "hyper_score": {
+	"mode":"mult",
+	"factors":[1,1,1,1,1,1,1]
+    }
+}

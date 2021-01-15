@@ -1,0 +1,62 @@
+"""
+train.py
+A Python package for extracting and scoring reaction templates based on extended Hasse diagrams.
+
+Training Hasse diagrams.
+"""
+
+from typing import List
+from typing_extensions import Literal
+from argparse import Namespace
+
+def calculate_diagram(smiles,
+                      negative_smiles=None,
+                      chemprop_args=Namespace(),
+                      no_qm=False,
+                      verbose=False,
+                      quiet=False,
+                      stereochemistry=False,
+                      compute_aam=False,
+                      save_path=None,
+                      plot=False,
+                      train_mode="transition_state",
+                      seed=[],
+                      no_props=False,
+                      plot_only_branches=False
+                      ):
+    """
+    Computes a Hasse diagram of a list of reaction or molecule smiles.
+
+    Parameters
+    ----------
+    smiles: List[str]
+        List of SMILES or reaction SMILES for positive data.
+    negative_smiles: List[str], default []
+        List of SMILES or reaction SMILES for negative data.
+    chemprop_args: Namespace, default Namespace()
+        Namespace of QM model arguments.
+    no_qm: bool, default False
+        Use QM information in building up the tree (precomputation of values) and during prediction in the scoring routine.
+    verbose: bool, default False
+        Whether to print additional information.
+    quiet: bool, default False
+        Whether to silence all output.
+    stereochemistry: bool, default False
+        Whether to use stereochemistry for scoring.
+    compute_aam: bool, default False
+        Whether to compute atom-mappings for reactions.
+    save_path: str, default  None
+        File to which diagram is saved.
+    plot:  bool, default False
+        Boolean whether the diagram is plotted.
+    train_mode: Literal["single_reactant","transition_state"], default "transition_state" 
+        Train mode, either transition states extracted from reaction smiles or single reactants extracted from smiles.
+    seed: List[str], default []
+        List of SMILES seeds for the reactant algorithm, usually a single seed is given.
+    no_props: bool, default False 
+        Do not compute any properties, just output the diagram.
+    plot_only_branches: bool, default False 
+        Plot only substructures that branch off.
+    """
+
+    pass

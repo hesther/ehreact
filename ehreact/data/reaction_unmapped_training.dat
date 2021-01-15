@@ -1,0 +1,9 @@
+C1=CC=C(C=C1)C(C(=O)[O-])O.O=O>>OO.C1=CC=C(C=C1)C(C(=O)[O-])=O
+CCC(C(=O)[O-])O.O=O>>OO.CCC(C(=O)[O-])=O
+OC(C([O-])=O)c1ccc(Cl)cc1.O=O>>OO.O=C(C([O-])=O)c1ccc(Cl)cc1
+C1=CC(=CC=C1C(C(=O)[O-])O)O.O=O>>OO.C1=CC(=CC=C1C(C(=O)[O-])=O)O
+COc1ccc(cc1)C(O)C([O-])=O.O=O>>OO.COc1ccc(cc1)C(=O)C([O-])=O
+OC(C([O-])=O)c1ccc(cc1)[N+]([O-])=O.O=O>>OO.O=C(C([O-])=O)c1ccc(cc1)[N+]([O-])=O
+CCCC(C(=O)[O-])O.O=O>>OO.CCCC(C(=O)[O-])=O
+CCC(C)C(C(=O)[O-])O.O=O>>OO.CCC(C)C(C(=O)[O-])=O
+CC(C(=O)[O-])O.O=O>>OO.CC(C(=O)[O-])=O

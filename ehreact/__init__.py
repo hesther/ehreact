@@ -4,7 +4,9 @@ A Python package for extracting and scoring reaction templates based on extended
 """
 
 # Add imports here
-from .arguments import *
+import ehreact.arguments
+import ehreact.train
+
 
 # Handle versioneer
 from ._version import get_versions

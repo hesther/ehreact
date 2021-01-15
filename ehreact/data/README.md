@@ -1,21 +1,17 @@
-# Sample Package Data
+# Package Data
 
-This directory contains sample additional data you may want to include with your package.
-This is a place where non-code related additional information (such as data files, molecular structures,  etc.) can 
-go that you want to ship alongside your code.
+This directory contains sample additional data needed to run through the tutorial of this package. The molecules and reactions represent the enzyme class EC 1.1.3.2 (L-lactate oxidase), taken from [BRENDA](https://www.brenda-enzymes.org/enzyme.php?ecno=1.1.3.2#SUBSTRATE).
 
-Please note that it is not recommended to place large files in your git directory. If your project requires files larger
-than a few megabytes in size it is recommended to host these files elsewhere. This is especially true for binary files
-as the `git` structure is unable to correctly take updates to these files and will store a complete copy of every version
-in your `git` history which can quickly add up. As a note most `git` hosting services like GitHub have a 1 GB per repository
-cap.
-
-## Including package data
-
-Modify your package's `setup.py` file and the `setup()` command. Include the 
-[`package_data`](http://setuptools.readthedocs.io/en/latest/setuptools.html#basic-use) keyword and point it at the 
-correct files.
 
 ## Manifest
 
-* `look_and_say.dat`: first entries of the "Look and Say" integer series, sequence [A005150](https://oeis.org/A005150)
+* `hyperparams_example.json`: example of a json file of the scoring function hyperparameters.
+* `molecule_negative.dat`: example of a set of molecule SMILES strings to use as negative data.
+* `molecule_test.dat`: example of a set of molecule SMILES strings to use as test data.
+* `molecule_training.dat`:  example of a set of molecule SMILES strings to use as training data.
+* `multi_molecule_test.dat`: example of a set of molecule SMILES strings containining multiple molecular fragments to use as test data.
+* `reaction_negative.dat`: example of a set of atom-mapped reaction SMILES (=SMIRKS) to use as negative data.
+* `reaction_test.dat`: example of a set of atom-mapped reaction SMILES (=SMIRKS) to use as test data.
+* `reaction_training.dat`: example of a set of atom-mapped reaction SMILES (=SMIRKS) to use as training data.
+* `reaction_unmapped_test.dat`: example of a set of non-atom-mapped reaction SMILES (=SMIRKS) to use as test data.
+* `reaction_unmapped_training.dat`: example of a set of non-atom-mapped reaction SMILES (=SMIRKS) to use as training data.
