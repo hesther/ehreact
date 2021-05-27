@@ -1,0 +1,550 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ehreact.diagram.diagram &mdash; ehreact  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ehreact
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ehreact</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ehreact.diagram.diagram</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ehreact.diagram.diagram</h1><div class="highlight"><pre>
+<div class="viewcode-block" id="Edge"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.diagram.Edge">[docs]</a><span></span><span class="k">class</span> <span class="nc">Edge</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An Edge connecting the parent to the child node.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parent_node: ehreact.diagram.diagram.Node</span>
+<span class="sd">        Parent node of the edge (more general template).</span>
+<span class="sd">    child_node: ehreact.diagram.diagram.Node</span>
+<span class="sd">        Child node of the edge (more specific template).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent_node</span><span class="p">,</span> <span class="n">child_node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes and edge.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        parent_node: ehreact.diagram.diagram.Node</span>
+<span class="sd">            Parent node of the edge (more general template).</span>
+<span class="sd">        child_node: ehreact.diagram.diagram.Node</span>
+<span class="sd">            Child node of the edge (more specific template).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent_node</span> <span class="o">=</span> <span class="n">parent_node</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">child_node</span> <span class="o">=</span> <span class="n">child_node</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent_node</span><span class="o">.</span><span class="n">edges_to_child</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">child_node</span><span class="o">.</span><span class="n">edges_to_parent</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the informal string representation of the Edge.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            String of the parent and child node key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_node</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;---&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">child_node</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the formal string representation of the Edge.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            String of the parent and child node key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent_node</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;---&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">child_node</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Node"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.diagram.Node">[docs]</a><span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Node holding information to which parent and child(s) it relates to, which rule it was derived from</span>
+<span class="sd">    and additional data.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    edges_to_child: List[ehreact.diagram.diagram.Edge]</span>
+<span class="sd">        List of edges to child nodes.</span>
+<span class="sd">    edges_to_parent: listList[ehreact.diagram.diagram.Edge]</span>
+<span class="sd">        List of edges to parent nodes.</span>
+<span class="sd">    key: str</span>
+<span class="sd">        Name of node.</span>
+<span class="sd">    is_leaf: bool</span>
+<span class="sd">        Whether the node is a leaf node (has no children).</span>
+<span class="sd">    rule: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule object of template (molecule or pseudomolecule).</span>
+<span class="sd">    rule_reac: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule object of reactant side of template (for transition state mode).</span>
+<span class="sd">    rule_prod: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule object of product side of template (for transition state mode).</span>
+<span class="sd">    all_leafs: List[str]</span>
+<span class="sd">        List of all SMILES strings of leaf nodes.</span>
+<span class="sd">    min_dist_leafs: int</span>
+<span class="sd">        Minimum distance to nearest leaf node.</span>
+<span class="sd">    fp_reac: List[rdkit.DataStructs.cDataStructs.ExplicitBitVect]</span>
+<span class="sd">        List of fingerprints of reactants without stereoinformation.</span>
+<span class="sd">    fp_reac_stereo: List[rdkit.DataStructs.cDataStructs.ExplicitBitVect]</span>
+<span class="sd">        List of fingerprints of reactants with stereoinformation.</span>
+<span class="sd">    fp_prod: List[rdkit.DataStructs.cDataStructs.ExplicitBitVect]</span>
+<span class="sd">        List of fingerprints of products without stereoinformation.</span>
+<span class="sd">    fp_prod_stereo: List[rdkit.DataStructs.cDataStructs.ExplicitBitVect]</span>
+<span class="sd">        List of fingerprints of products with stereoinformation.</span>
+<span class="sd">    diversity_reac: float</span>
+<span class="sd">        Mean pair similarity of all reactants of leaf nodes in the branch without stereoinformation.</span>
+<span class="sd">    diversity_prod: float</span>
+<span class="sd">        Mean pair similarity of all products of leaf nodes in the branch without stereoinformation.</span>
+<span class="sd">    diversity_reac_stereo: float</span>
+<span class="sd">        Mean pair similarity of all reactants of leaf nodes in the branch with stereoinformation.</span>
+<span class="sd">    diversity_prod_stereo: float</span>
+<span class="sd">        Mean pair similarity of all products of leaf nodes in the branch with stereoinformation.</span>
+<span class="sd">    tags_core: List[str]</span>
+<span class="sd">        A list of the atom map numbers in the reaction center.</span>
+<span class="sd">    fragment_reac: dict</span>
+<span class="sd">        A dictionary of fragments for a reaction.</span>
+<span class="sd">    change_dict: dict</span>
+<span class="sd">        A dictionary of all changes upon going from reactants to products.</span>
+<span class="sd">    lowest_template: str</span>
+<span class="sd">        Name of the lowest template of the current branch.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">rule</span><span class="p">,</span> <span class="n">is_leaf</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes a node.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key: str</span>
+<span class="sd">            Unique name of the node, usually SMILES string.</span>
+<span class="sd">        rule: rdkit.Chem.Mol</span>
+<span class="sd">            RDKit molecule of the reaction rule.</span>
+<span class="sd">        is_leaf: bool</span>
+<span class="sd">            Boolean whether the node is a leaf node (full molecule or reaction) or a reaction rule</span>
+<span class="sd">            (substructure or reaction template).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">edges_to_child</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edges_to_parent</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_leaf</span> <span class="o">=</span> <span class="n">is_leaf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rule</span> <span class="o">=</span> <span class="n">rule</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rule_reac</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rule_prod</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_leafs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_dist_leaf</span> <span class="o">=</span> <span class="mi">9999</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fp_reac</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fp_reac_stereo</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fp_prod</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fp_prod_stereo</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diversity_reac</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diversity_prod</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diversity_reac_stereo</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">diversity_prod_stereo</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags_core</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fragment_reac</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">change_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lowest_template</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the informal string representation of the Node.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            String of the node key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="s2">&quot;root&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">key</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the formal string representation of the Node.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            String of the node key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="s2">&quot;root&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">key</span>
+
+<div class="viewcode-block" id="Node.create_root_node"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.diagram.Node.create_root_node">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create_root_node</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to create an empty root node.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ehreact.diagram.diagram.Node</span>
+<span class="sd">            An empty root node</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">rule</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">is_leaf</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">n</span></div>
+
+<div class="viewcode-block" id="Node.create_new_node"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.diagram.Node.create_new_node">[docs]</a>    <span class="k">def</span> <span class="nf">create_new_node</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">rule</span><span class="p">,</span> <span class="n">is_leaf</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to create a new node.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key: str</span>
+<span class="sd">            Key of the newly created node.</span>
+<span class="sd">        rule: rdkit.Chem.Mol</span>
+<span class="sd">            RDKit molecule of the substructure/reaction rule of the node</span>
+<span class="sd">        is_leaf: bool</span>
+<span class="sd">            Boolean whether new node is a leaf node.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ehreact.diagram.diagram.Node</span>
+<span class="sd">            A new node</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">Node</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">rule</span><span class="o">=</span><span class="n">rule</span><span class="p">,</span> <span class="n">is_leaf</span><span class="o">=</span><span class="n">is_leaf</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="Diagram"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.diagram.Diagram">[docs]</a><span class="k">class</span> <span class="nc">Diagram</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Custom-made diagram class for extended Hasse diagrams.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    nodes: dict</span>
+<span class="sd">        Dictionary of all nodes.</span>
+<span class="sd">    root: ehreact.diagram.diagram.Node</span>
+<span class="sd">        Root node.</span>
+<span class="sd">    mode: str</span>
+<span class="sd">        Mode in which diagram was calculated.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes a diagram.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">Node</span><span class="o">.</span><span class="n">create_root_node</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Diagram.add_node"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.diagram.Diagram.add_node">[docs]</a>    <span class="k">def</span> <span class="nf">add_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_node</span><span class="p">,</span> <span class="n">rule</span><span class="p">,</span> <span class="n">is_leaf</span><span class="p">,</span> <span class="n">key_parent_node</span><span class="p">,</span> <span class="n">quiet</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to add a new node to the diagram.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key_node: str</span>
+<span class="sd">            Key of the newly created node.</span>
+<span class="sd">        rule: rdkit.Chem.Mol</span>
+<span class="sd">            RDKit molecule of the substructure/reaction rule of the node</span>
+<span class="sd">        is_leaf: bool</span>
+<span class="sd">            Boolean whether new node is a leaf node.</span>
+<span class="sd">        key_parent_node: str</span>
+<span class="sd">            Key of the parent node of the newly created node.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="n">Node</span><span class="o">.</span><span class="n">create_new_node</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key_node</span><span class="p">,</span> <span class="n">rule</span><span class="o">=</span><span class="n">rule</span><span class="p">,</span> <span class="n">is_leaf</span><span class="o">=</span><span class="n">is_leaf</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span>
+        <span class="n">Edge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key_parent_node</span><span class="p">],</span> <span class="n">n</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key_parent_node</span><span class="p">],</span> <span class="s2">&quot;to&quot;</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Diagram.insert_node"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.diagram.Diagram.insert_node">[docs]</a>    <span class="k">def</span> <span class="nf">insert_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_node</span><span class="p">,</span> <span class="n">rule</span><span class="p">,</span> <span class="n">is_leaf</span><span class="p">,</span> <span class="n">key_parent_node</span><span class="p">,</span> <span class="n">key_child_node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to insert a node between an existing parent-child pair.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key_node: str</span>
+<span class="sd">            Key of the newly created node.</span>
+<span class="sd">        rule: rdkit.Chem.Mol</span>
+<span class="sd">            RDKit molecule of the substructure/reaction rule of the node</span>
+<span class="sd">        is_leaf: bool</span>
+<span class="sd">            Boolean whether new node is a leaf node.</span>
+<span class="sd">        key_parent_node: str</span>
+<span class="sd">            Key of the parent node of the newly created node.</span>
+<span class="sd">        key_child_node: str</span>
+<span class="sd">            Key of the child node of the newly created node.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="n">Node</span><span class="o">.</span><span class="n">create_new_node</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key_node</span><span class="p">,</span> <span class="n">rule</span><span class="o">=</span><span class="n">rule</span><span class="p">,</span> <span class="n">is_leaf</span><span class="o">=</span><span class="n">is_leaf</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">n</span>
+
+        <span class="c1"># Delete old edge</span>
+        <span class="n">del_edge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key_child_node</span><span class="p">]</span><span class="o">.</span><span class="n">edges_to_parent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">del_edge</span><span class="o">.</span><span class="n">child_node</span><span class="o">.</span><span class="n">edges_to_parent</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">del_edge</span><span class="p">)</span>
+        <span class="n">del_edge</span><span class="o">.</span><span class="n">child_node</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">del_edge</span><span class="o">.</span><span class="n">parent_node</span><span class="o">.</span><span class="n">edges_to_child</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">del_edge</span><span class="p">)</span>
+        <span class="n">del_edge</span><span class="o">.</span><span class="n">parent_node</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Form two new edges</span>
+        <span class="n">Edge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key_parent_node</span><span class="p">],</span> <span class="n">n</span><span class="p">)</span>
+        <span class="n">Edge</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key_child_node</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Diagram.move_node"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.diagram.Diagram.move_node">[docs]</a>    <span class="k">def</span> <span class="nf">move_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_node</span><span class="p">,</span> <span class="n">key_parent_new</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to attach a child node to a new parent node.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key_node: str</span>
+<span class="sd">            Key of the node that is attached to a new parent.</span>
+<span class="sd">        key_parent_new: str</span>
+<span class="sd">            Key of the new parent.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Delete old edge</span>
+        <span class="n">del_edge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key_node</span><span class="p">]</span><span class="o">.</span><span class="n">edges_to_parent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">del_edge</span><span class="o">.</span><span class="n">child_node</span><span class="o">.</span><span class="n">edges_to_parent</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">del_edge</span><span class="p">)</span>
+        <span class="n">del_edge</span><span class="o">.</span><span class="n">child_node</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">del_edge</span><span class="o">.</span><span class="n">parent_node</span><span class="o">.</span><span class="n">edges_to_child</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">del_edge</span><span class="p">)</span>
+        <span class="n">del_edge</span><span class="o">.</span><span class="n">parent_node</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Form new edge</span>
+        <span class="n">Edge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key_parent_new</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key_node</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Diagram.delete_edges_around_node"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.diagram.Diagram.delete_edges_around_node">[docs]</a>    <span class="k">def</span> <span class="nf">delete_edges_around_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_node</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to remove a node from the diagram, with removing all edges.</span>
+<span class="sd">        The node will still be saved in the diagram, but without any edges connected to it.</span>
+<span class="sd">        This is only meaningful for plotting, not a useful function elsewhere!</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key_node: str</span>
+<span class="sd">            Key of the node that is to be removed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Delete edge to parent</span>
+        <span class="n">del_edges</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key_node</span><span class="p">]</span><span class="o">.</span><span class="n">edges_to_parent</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key_node</span><span class="p">]</span><span class="o">.</span><span class="n">edges_to_child</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">del_edge</span> <span class="ow">in</span> <span class="n">del_edges</span><span class="p">:</span>
+            <span class="n">del_edge</span><span class="o">.</span><span class="n">child_node</span><span class="o">.</span><span class="n">edges_to_parent</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">del_edge</span><span class="p">)</span>
+            <span class="n">del_edge</span><span class="o">.</span><span class="n">child_node</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">del_edge</span><span class="o">.</span><span class="n">parent_node</span><span class="o">.</span><span class="n">edges_to_child</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">del_edge</span><span class="p">)</span>
+            <span class="n">del_edge</span><span class="o">.</span><span class="n">parent_node</span> <span class="o">=</span> <span class="kc">None</span></div></div>
+
+
+<div class="viewcode-block" id="sanity_check"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.diagram.sanity_check">[docs]</a><span class="k">def</span> <span class="nf">sanity_check</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Perform a sanity check on the diagram.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    d: ehreact.diagram.diagram.Diagram</span>
+<span class="sd">        Hasse Diagram.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Diagram not empty:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Empty diagram&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Key is never used twice:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">keys</span><span class="p">())):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Key occured multiple times&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Every node (except root) has exactly one parent:</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">key</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">edges_to_parent</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Found a node with number of parent != 1&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Esther Heid. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.5.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

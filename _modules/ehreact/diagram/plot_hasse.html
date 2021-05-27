@@ -1,0 +1,599 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ehreact.diagram.plot_hasse &mdash; ehreact  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ehreact
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ehreact</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ehreact.diagram.plot_hasse</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ehreact.diagram.plot_hasse</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">rdkit.Chem.Draw</span> <span class="kn">import</span> <span class="n">rdMolDraw2D</span>
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">Chem</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="n">AllChem</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+
+<span class="n">USE_IMAGE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="c1"># TODO use additional option to print tree to the screen (in case a user has no graphviz installed)</span>
+
+
+<div class="viewcode-block" id="draw_mol"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.plot_hasse.draw_mol">[docs]</a><span class="k">def</span> <span class="nf">draw_mol</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">change_dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to transform and draw a smiles string using rdkit.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule.</span>
+<span class="sd">    path: str</span>
+<span class="sd">        Path to which a PNG image is saved.</span>
+<span class="sd">    change_dict: dict</span>
+<span class="sd">        A dictionary of all changes upon going from reactants to products.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">AllChem</span><span class="o">.</span><span class="n">Compute2DCoords</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">rdMolDraw2D</span><span class="o">.</span><span class="n">MolDraw2DCairo</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="n">d</span><span class="o">.</span><span class="n">drawOptions</span><span class="p">()</span><span class="o">.</span><span class="n">prepareMolsBeforeDrawing</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">color_atoms</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">color_bonds</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">color_by_atoms</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">color_by_bonds</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">)</span>
+        <span class="n">color2</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+        <span class="n">color3</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">HasProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">):</span>
+                <span class="n">atom</span><span class="o">.</span><span class="n">ClearProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">)</span>
+                <span class="n">atom_idx</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">()</span>
+                <span class="n">color_atoms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom_idx</span><span class="p">)</span>
+                <span class="n">color_by_atoms</span><span class="p">[</span><span class="n">atom_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">color</span>
+
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;reac&quot;</span><span class="p">][</span><span class="s2">&quot;atom&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;prod&quot;</span><span class="p">][</span><span class="s2">&quot;atom&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="o">&gt;</span> <span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;reac&quot;</span><span class="p">][</span><span class="s2">&quot;atom&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="p">):</span>
+                <span class="n">color_by_atoms</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">color2</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;prod&quot;</span><span class="p">][</span><span class="s2">&quot;atom&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="o">&lt;</span> <span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;reac&quot;</span><span class="p">][</span><span class="s2">&quot;atom&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="p">):</span>
+                <span class="n">color_by_atoms</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">color3</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">color_by_atoms</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">color</span>
+
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;reac&quot;</span><span class="p">][</span><span class="s2">&quot;bond&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">bond</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetBondBetweenAtoms</span><span class="p">(</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">bond_idx</span> <span class="o">=</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">()</span>
+            <span class="n">color_bonds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bond_idx</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetBondType</span><span class="p">()</span> <span class="o">==</span> <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">DATIVEL</span><span class="p">:</span>
+                <span class="n">color_by_bonds</span><span class="p">[</span><span class="n">bond_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">color2</span>
+                <span class="n">bond</span><span class="o">.</span><span class="n">SetBondType</span><span class="p">(</span><span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;reac&quot;</span><span class="p">][</span><span class="s2">&quot;bond&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetBondType</span><span class="p">()</span> <span class="o">==</span> <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">DATIVER</span><span class="p">:</span>
+                <span class="n">color_by_bonds</span><span class="p">[</span><span class="n">bond_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">color3</span>
+                <span class="n">bond</span><span class="o">.</span><span class="n">SetBondType</span><span class="p">(</span><span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;reac&quot;</span><span class="p">][</span><span class="s2">&quot;bond&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">color_by_bonds</span><span class="p">[</span><span class="n">bond_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">color</span>
+            <span class="n">bond</span><span class="o">.</span><span class="n">SetBondType</span><span class="p">(</span><span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;reac&quot;</span><span class="p">][</span><span class="s2">&quot;bond&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="n">mol</span><span class="o">.</span><span class="n">UpdatePropertyCache</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+            <span class="n">atom</span><span class="o">.</span><span class="n">GetExplicitValence</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">mc</span> <span class="o">=</span> <span class="n">rdMolDraw2D</span><span class="o">.</span><span class="n">PrepareMolForDrawing</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">kekulize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">mc</span> <span class="o">=</span> <span class="n">rdMolDraw2D</span><span class="o">.</span><span class="n">PrepareMolForDrawing</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">kekulize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">color_atoms</span> <span class="o">!=</span> <span class="p">[]</span> <span class="ow">or</span> <span class="n">color_bonds</span> <span class="o">!=</span> <span class="p">[]:</span>
+            <span class="n">d</span><span class="o">.</span><span class="n">DrawMolecule</span><span class="p">(</span>
+                <span class="n">mc</span><span class="p">,</span>
+                <span class="n">highlightAtoms</span><span class="o">=</span><span class="n">color_atoms</span><span class="p">,</span>
+                <span class="n">highlightBonds</span><span class="o">=</span><span class="n">color_bonds</span><span class="p">,</span>
+                <span class="n">highlightAtomColors</span><span class="o">=</span><span class="n">color_by_atoms</span><span class="p">,</span>
+                <span class="n">highlightBondColors</span><span class="o">=</span><span class="n">color_by_bonds</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">d</span><span class="o">.</span><span class="n">DrawMolecule</span><span class="p">(</span><span class="n">mc</span><span class="p">)</span>
+
+        <span class="n">d</span><span class="o">.</span><span class="n">FinishDrawing</span><span class="p">()</span>
+        <span class="n">pic</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">GetDrawingText</span><span class="p">()</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">pic</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Could not plot one of the molecules&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="write_beginning_dotfile"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.plot_hasse.write_beginning_dotfile">[docs]</a><span class="k">def</span> <span class="nf">write_beginning_dotfile</span><span class="p">(</span><span class="n">temp_dir_img</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Write the beginning of the dotfile (graphviz input).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    temp_dir_img: str</span>
+<span class="sd">        Directory to save images to temporarily.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">temp_dir_img</span> <span class="o">+</span> <span class="s2">&quot;/image_specs.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;digraph {</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;fontsize = 20</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;rank = sink</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;rankdir = RL</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;ranksep = &quot;1.5&quot;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;nodesep = &quot;0.2&quot;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;size = &quot;100,100&quot;&#39;</span><span class="p">)</span>
+
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;node[&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;penwidth = 5</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;color = blue</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;fillcolor = &quot;#ffffff&quot;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;fontcolor = black</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;fontsize = 20</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;fontname = Helvetica</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;shape = square</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;style = filled</span><span class="se">\n</span><span class="s2">]&quot;</span><span class="p">)</span>
+
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;edge [ arrowhead = open</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;color = black</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;fontcolor = black</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;fontname = Courier</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;fontsize = 12</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;style = solid</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;]</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="write_end_dotfile"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.plot_hasse.write_end_dotfile">[docs]</a><span class="k">def</span> <span class="nf">write_end_dotfile</span><span class="p">(</span><span class="n">temp_dir_img</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Write the end of the dotfile (graphviz input).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    temp_dir_img: str</span>
+<span class="sd">        Directory to save images to temporarily.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">temp_dir_img</span> <span class="o">+</span> <span class="s2">&quot;/image_specs.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;}&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="run_dot"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.plot_hasse.run_dot">[docs]</a><span class="k">def</span> <span class="nf">run_dot</span><span class="p">(</span><span class="n">temp_dir_img</span><span class="p">,</span> <span class="n">save_plot</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Runs graphviz to plot the Hasse diagram.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    temp_dir_img: str</span>
+<span class="sd">        Directory to save images to temporarily.</span>
+<span class="sd">    save_plot: str</span>
+<span class="sd">        File name to save PNG image to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">(</span>
+        <span class="s2">&quot;dot -o&quot;</span>
+        <span class="o">+</span> <span class="n">temp_dir_img</span>
+        <span class="o">+</span> <span class="s2">&quot;/diagram.svg -Tsvg &quot;</span>
+        <span class="o">+</span> <span class="n">temp_dir_img</span>
+        <span class="o">+</span> <span class="s2">&quot;/image_specs.txt&quot;</span><span class="p">,</span>
+        <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">(</span>
+        <span class="s2">&quot;rsvg-convert &quot;</span> <span class="o">+</span> <span class="n">temp_dir_img</span> <span class="o">+</span> <span class="s2">&quot;/diagram.svg &gt;&quot;</span> <span class="o">+</span> <span class="n">save_plot</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="write_node"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.plot_hasse.write_node">[docs]</a><span class="k">def</span> <span class="nf">write_node</span><span class="p">(</span><span class="n">temp_dir_img</span><span class="p">,</span> <span class="n">smiles</span><span class="p">,</span> <span class="n">mol</span><span class="p">,</span> <span class="n">is_leaf</span><span class="p">,</span> <span class="n">file_numbers</span><span class="p">,</span> <span class="n">change_dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to write a single node information to the image specification file</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    temp_dir_img: str</span>
+<span class="sd">        Directory to save images to temporarily.</span>
+<span class="sd">    smiles: str</span>
+<span class="sd">        SMILES string of the current node.</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule to be drawn.</span>
+<span class="sd">    is_leaf: bool</span>
+<span class="sd">        Whether the current node is a leaf node.</span>
+<span class="sd">    file_numbers: int</span>
+<span class="sd">        Consecutive file identifier.</span>
+<span class="sd">    change_dict: dict</span>
+<span class="sd">        A dictionary of all changes upon going from reactants to products.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">temp_dir_img</span> <span class="o">+</span> <span class="s2">&quot;/image_specs.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">double_quoted</span><span class="p">(</span><span class="n">smiles</span><span class="p">))</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;[&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;label=&quot;</span> <span class="o">+</span> <span class="n">double_quoted</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">is_leaf</span><span class="p">:</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;color=&quot;</span> <span class="o">+</span> <span class="s2">&quot;black&quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;color=&quot;</span> <span class="o">+</span> <span class="s2">&quot;red&quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">USE_IMAGE</span> <span class="ow">and</span> <span class="n">smiles</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+            <span class="s1">&#39;image=&quot;&#39;</span> <span class="o">+</span> <span class="n">temp_dir_img</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">file_numbers</span><span class="p">[</span><span class="n">smiles</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span> <span class="o">+</span> <span class="s1">&#39;&quot;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="p">)</span>
+        <span class="n">draw_mol</span><span class="p">(</span>
+            <span class="n">mol</span><span class="o">=</span><span class="n">mol</span><span class="p">,</span>
+            <span class="n">path</span><span class="o">=</span><span class="n">temp_dir_img</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">file_numbers</span><span class="p">[</span><span class="n">smiles</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">,</span>
+            <span class="n">change_dict</span><span class="o">=</span><span class="n">change_dict</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;shape=square &quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;]</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="write_edge"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.plot_hasse.write_edge">[docs]</a><span class="k">def</span> <span class="nf">write_edge</span><span class="p">(</span><span class="n">temp_dir_img</span><span class="p">,</span> <span class="n">smiles1</span><span class="p">,</span> <span class="n">smiles2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to write a single edge information to the image specification file</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    temp_dir_img: str</span>
+<span class="sd">        Directory to save images to temporarily.</span>
+<span class="sd">    smiles1: str</span>
+<span class="sd">        SMILES string of the parent node.</span>
+<span class="sd">    smiles2: str</span>
+<span class="sd">        SMILES string of the child node.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">temp_dir_img</span> <span class="o">+</span> <span class="s2">&quot;/image_specs.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="ow">not</span> <span class="p">(</span><span class="s1">&#39;&quot;&#39;</span> <span class="ow">in</span> <span class="n">smiles1</span> <span class="ow">or</span> <span class="s1">&#39;&quot;&#39;</span> <span class="ow">in</span> <span class="n">smiles2</span><span class="p">)</span>
+
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">double_quoted</span><span class="p">(</span><span class="n">smiles2</span><span class="p">))</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot; -&gt; &quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">double_quoted</span><span class="p">(</span><span class="n">smiles1</span><span class="p">))</span>
+
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;[dir=back &quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;shape=vee &quot;</span><span class="p">)</span>
+
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;]</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="double_quoted"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.plot_hasse.double_quoted">[docs]</a><span class="k">def</span> <span class="nf">double_quoted</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to put double quotes around a string.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    s: str</span>
+<span class="sd">        String.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        String in double quotes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="s1">&#39;&quot;&#39;</span> <span class="o">+</span> <span class="n">s</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span></div>
+
+
+<div class="viewcode-block" id="remove_linear_chains"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.plot_hasse.remove_linear_chains">[docs]</a><span class="k">def</span> <span class="nf">remove_linear_chains</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to remove nodes that have exactly one parent and one child.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    d: ehreact.diagram.diagram.Diagram</span>
+<span class="sd">        A Hasse diagram.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    d: ehreact.diagram.diagram.Diagram</span>
+<span class="sd">        The modified Hasse diagram without linear chain nodes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">node_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">node_list</span><span class="p">:</span>
+        <span class="n">key_node</span> <span class="o">=</span> <span class="n">n</span>
+        <span class="k">if</span> <span class="n">key_node</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">key_parent</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">edges_to_parent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">parent_node</span><span class="o">.</span><span class="n">key</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">edges_to_child</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">d</span><span class="o">.</span><span class="n">move_node</span><span class="p">(</span>
+                <span class="n">key_node</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">edges_to_child</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">child_node</span><span class="o">.</span><span class="n">key</span><span class="p">,</span>
+                <span class="n">key_parent_new</span><span class="o">=</span><span class="n">key_parent</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">d</span><span class="o">.</span><span class="n">delete_edges_around_node</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">d</span></div>
+
+
+<div class="viewcode-block" id="plot_hasse"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.plot_hasse.plot_hasse">[docs]</a><span class="k">def</span> <span class="nf">plot_hasse</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">temp_dir_img</span><span class="p">,</span> <span class="n">save_plot</span><span class="p">,</span> <span class="n">plot_only_branches</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to plot a Hasse diagram.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    d: ehreact.diagram.diagram.Diagram</span>
+<span class="sd">        A Hasse diagram.</span>
+<span class="sd">    temp_dir_img: str</span>
+<span class="sd">        Directory to save images to temporarily.</span>
+<span class="sd">    save_plot: str</span>
+<span class="sd">        File name to save PNG image to.</span>
+<span class="sd">    plot_only_branches: bool</span>
+<span class="sd">        Whether to remove linear chain nodes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">file_numbers</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">write_beginning_dotfile</span><span class="p">(</span><span class="n">temp_dir_img</span><span class="p">)</span>
+    <span class="n">smiles</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">seed</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">is_leaf</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">smiles</span><span class="p">]</span><span class="o">.</span><span class="n">is_leaf</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">smiles</span><span class="p">]</span><span class="o">.</span><span class="n">rule</span>
+
+    <span class="k">if</span> <span class="n">plot_only_branches</span><span class="p">:</span>
+        <span class="n">d_compressed</span> <span class="o">=</span> <span class="n">remove_linear_chains</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="n">plot_iteration</span><span class="p">(</span>
+            <span class="n">temp_dir_img</span><span class="p">,</span>
+            <span class="n">d</span><span class="o">=</span><span class="n">d_compressed</span><span class="p">,</span>
+            <span class="n">smiles</span><span class="o">=</span><span class="n">smiles</span><span class="p">,</span>
+            <span class="n">mol</span><span class="o">=</span><span class="n">mol</span><span class="p">,</span>
+            <span class="n">is_leaf</span><span class="o">=</span><span class="n">is_leaf</span><span class="p">,</span>
+            <span class="n">file_numbers</span><span class="o">=</span><span class="n">file_numbers</span><span class="p">,</span>
+            <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">plot_iteration</span><span class="p">(</span>
+            <span class="n">temp_dir_img</span><span class="p">,</span>
+            <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span>
+            <span class="n">smiles</span><span class="o">=</span><span class="n">smiles</span><span class="p">,</span>
+            <span class="n">mol</span><span class="o">=</span><span class="n">mol</span><span class="p">,</span>
+            <span class="n">is_leaf</span><span class="o">=</span><span class="n">is_leaf</span><span class="p">,</span>
+            <span class="n">file_numbers</span><span class="o">=</span><span class="n">file_numbers</span><span class="p">,</span>
+            <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="n">write_end_dotfile</span><span class="p">(</span><span class="n">temp_dir_img</span><span class="p">)</span>
+    <span class="n">run_dot</span><span class="p">(</span><span class="n">temp_dir_img</span><span class="p">,</span> <span class="n">save_plot</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="plot_iteration"><a class="viewcode-back" href="../../../diagram.html#ehreact.diagram.plot_hasse.plot_iteration">[docs]</a><span class="k">def</span> <span class="nf">plot_iteration</span><span class="p">(</span><span class="n">temp_dir_img</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">smiles</span><span class="p">,</span> <span class="n">mol</span><span class="p">,</span> <span class="n">is_leaf</span><span class="p">,</span> <span class="n">file_numbers</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Recursive function to plot the diagram. Per call, all current child nodes and corresponding edges are plotted.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    temp_dir_img: str</span>
+<span class="sd">        Directory to save images to temporarily.</span>
+<span class="sd">    d: ehreact.diagram.diagram.Diagram</span>
+<span class="sd">        A Hasse diagram.</span>
+<span class="sd">    smiles: str</span>
+<span class="sd">        SMILES string of the current node.</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule to be drawn.</span>
+<span class="sd">    is_leaf: bool</span>
+<span class="sd">        Whether the current node is a leaf node.</span>
+<span class="sd">    file_numbers: int</span>
+<span class="sd">        Consecutive file identifier.</span>
+<span class="sd">    seed: int</span>
+<span class="sd">        Name of the minimal template of the current branch.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">file_numbers</span><span class="p">[</span><span class="n">smiles</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">file_numbers</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+    <span class="k">if</span> <span class="n">smiles</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">change_dict</span> <span class="o">!=</span> <span class="p">{}:</span>
+        <span class="n">change_dict</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">change_dict</span><span class="p">[</span><span class="n">seed</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">change_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;reac&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;atom&quot;</span><span class="p">:</span> <span class="p">{},</span> <span class="s2">&quot;bond&quot;</span><span class="p">:</span> <span class="p">{}},</span>
+            <span class="s2">&quot;prod&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;atom&quot;</span><span class="p">:</span> <span class="p">{},</span> <span class="s2">&quot;bond&quot;</span><span class="p">:</span> <span class="p">{}},</span>
+        <span class="p">}</span>
+
+    <span class="n">write_node</span><span class="p">(</span>
+        <span class="n">temp_dir_img</span><span class="p">,</span>
+        <span class="n">smiles</span><span class="o">=</span><span class="n">smiles</span><span class="p">,</span>
+        <span class="n">mol</span><span class="o">=</span><span class="n">mol</span><span class="p">,</span>
+        <span class="n">is_leaf</span><span class="o">=</span><span class="n">is_leaf</span><span class="p">,</span>
+        <span class="n">file_numbers</span><span class="o">=</span><span class="n">file_numbers</span><span class="p">,</span>
+        <span class="n">change_dict</span><span class="o">=</span><span class="n">change_dict</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">smiles</span><span class="p">]</span><span class="o">.</span><span class="n">edges_to_child</span><span class="p">:</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">edge</span><span class="o">.</span><span class="n">child_node</span><span class="o">.</span><span class="n">key</span>
+        <span class="n">write_edge</span><span class="p">(</span><span class="n">temp_dir_img</span><span class="p">,</span> <span class="n">smiles2</span><span class="o">=</span><span class="n">child</span><span class="p">,</span> <span class="n">smiles1</span><span class="o">=</span><span class="n">smiles</span><span class="p">)</span>
+        <span class="n">plot_iteration</span><span class="p">(</span>
+            <span class="n">temp_dir_img</span><span class="p">,</span>
+            <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span>
+            <span class="n">smiles</span><span class="o">=</span><span class="n">child</span><span class="p">,</span>
+            <span class="n">mol</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">rule</span><span class="p">,</span>
+            <span class="n">is_leaf</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">is_leaf</span><span class="p">,</span>
+            <span class="n">file_numbers</span><span class="o">=</span><span class="n">file_numbers</span><span class="p">,</span>
+            <span class="n">seed</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">child</span><span class="p">]</span><span class="o">.</span><span class="n">lowest_template</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Esther Heid. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.5.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

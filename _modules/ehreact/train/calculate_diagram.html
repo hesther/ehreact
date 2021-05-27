@@ -1,0 +1,763 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ehreact.train.calculate_diagram &mdash; ehreact  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ehreact
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ehreact</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ehreact.train.calculate_diagram</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ehreact.train.calculate_diagram</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">calculate_diagram.py</span>
+<span class="sd">Training Hasse diagrams.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="kn">from</span> <span class="nn">.hasse</span> <span class="kn">import</span> <span class="n">extended_hasse</span>
+<span class="kn">from</span> <span class="nn">ehreact.helpers.rdkit</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">read_in_smiles_unique</span><span class="p">,</span>
+    <span class="n">read_in_reactions_unique</span><span class="p">,</span>
+    <span class="n">preprocess_seeds</span><span class="p">,</span>
+    <span class="n">make_fragment_indices</span><span class="p">,</span>
+    <span class="n">morgan_bit_fp_from_mol</span><span class="p">,</span>
+    <span class="n">tanimoto_from_fp</span><span class="p">,</span>
+    <span class="n">find_matching_atoms</span><span class="p">,</span>
+    <span class="n">canonicalize</span><span class="p">,</span>
+    <span class="n">make_mol</span><span class="p">,</span>
+    <span class="n">make_mol_no_sanit_h</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">ehreact.diagram.diagram</span> <span class="kn">import</span> <span class="n">sanity_check</span>
+<span class="kn">from</span> <span class="nn">ehreact.diagram.plot_hasse</span> <span class="kn">import</span> <span class="n">plot_hasse</span>
+<span class="kn">from</span> <span class="nn">ehreact.helpers.utils</span> <span class="kn">import</span> <span class="n">findsubsets</span>
+<span class="kn">from</span> <span class="nn">ehreact.helpers.transition_state</span> <span class="kn">import</span> <span class="n">compute_aam_with_h</span>
+
+
+<div class="viewcode-block" id="calculate_diagram"><a class="viewcode-back" href="../../../train.html#ehreact.train.calculate_diagram.calculate_diagram">[docs]</a><span class="k">def</span> <span class="nf">calculate_diagram</span><span class="p">(</span>
+    <span class="n">smiles</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">compute_aam</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">save_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">save_plot</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">train_mode</span><span class="o">=</span><span class="s2">&quot;transition_state&quot;</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">no_props</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">plot_only_branches</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">temp_dir_img</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes a Hasse diagram of a list of reaction or molecule smiles.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    smiles: List[str]</span>
+<span class="sd">        List of SMILES or reaction SMILES.</span>
+<span class="sd">    verbose: bool, default False</span>
+<span class="sd">        Whether to print additional information.</span>
+<span class="sd">    quiet: bool, default True</span>
+<span class="sd">        Whether to silence all output.</span>
+<span class="sd">    compute_aam: bool, default False</span>
+<span class="sd">        Whether to compute atom-mappings for reactions.</span>
+<span class="sd">    save_path: str, default  None</span>
+<span class="sd">        File to which diagram is saved.</span>
+<span class="sd">    save_plot:  str, default  None</span>
+<span class="sd">        File to which save image of diagram.</span>
+<span class="sd">    train_mode: Literal[&quot;single_reactant&quot;,&quot;transition_state&quot;], default &quot;transition_state&quot;</span>
+<span class="sd">        Train mode, either transition states extracted from reaction smiles or single reactants extracted from smiles.</span>
+<span class="sd">    seed: List[str], default []</span>
+<span class="sd">        List of SMILES seeds for the reactant algorithm, usually a single seed is given.</span>
+<span class="sd">    no_props: bool, default False</span>
+<span class="sd">        Do not compute any properties, just output the diagram.</span>
+<span class="sd">    plot_only_branches: bool, default False</span>
+<span class="sd">        Plot only substructures that branch off.</span>
+<span class="sd">    temp_dir_img: str, default None</span>
+<span class="sd">        Directory to save temporary image files</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    d: ehreact.diagram.diagram.Diagram</span>
+<span class="sd">        The Hasse diagram of the input list of molecules/reactions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Create Hasse diagram</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculating diagram&quot;</span><span class="p">)</span>
+    <span class="n">start1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">train_mode</span> <span class="o">==</span> <span class="s2">&quot;single_reactant&quot;</span><span class="p">:</span>
+        <span class="n">d</span><span class="p">,</span> <span class="n">smiles_dict</span> <span class="o">=</span> <span class="n">calculate_diagram_single_reactant</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">quiet</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">train_mode</span> <span class="o">==</span> <span class="s2">&quot;transition_state&quot;</span><span class="p">:</span>
+        <span class="n">d</span><span class="p">,</span> <span class="n">smiles_dict</span> <span class="o">=</span> <span class="n">calculate_diagram_transition_state</span><span class="p">(</span>
+            <span class="n">smiles</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">quiet</span><span class="p">,</span> <span class="n">compute_aam</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown option used for train_mode.&quot;</span><span class="p">)</span>
+    <span class="n">d</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">train_mode</span>
+    <span class="n">sanity_check</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="n">end1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="c1"># Fill additional information into diagram</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Create additional diagram information&quot;</span><span class="p">)</span>
+    <span class="n">start2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="c1"># Need to calculate the lowest template for each node for correct plotting of diagram</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+        <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">lowest_template</span> <span class="o">=</span> <span class="n">find_lowest_template</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">d</span><span class="p">)</span>
+    <span class="c1"># Calculate all other properties only if not no_props:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">no_props</span><span class="p">:</span>
+        <span class="n">fill_information</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">train_mode</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">smiles_dict</span><span class="p">)</span>
+    <span class="n">end2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="c1"># Save diagram</span>
+    <span class="n">start3</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">save_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saving model&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">handle</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saved model to&quot;</span><span class="p">,</span> <span class="n">save_path</span><span class="p">)</span>
+    <span class="n">end3</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="c1"># Plot diagram</span>
+    <span class="n">start4</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">save_plot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Plotting model&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">temp_dir_img</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Must supply a directory for saving temporary images files.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">plot_hasse</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">temp_dir_img</span><span class="p">,</span> <span class="n">save_plot</span><span class="p">,</span> <span class="n">plot_only_branches</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Plotted diagram in png format to &quot;</span> <span class="o">+</span> <span class="n">save_plot</span><span class="p">)</span>
+    <span class="n">end4</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="c1"># Print timing</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Finished&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculating diagram -- time:</span><span class="si">{}</span><span class="s2">s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">end1</span> <span class="o">-</span> <span class="n">start1</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Create additional diagram information -- time:</span><span class="si">{}</span><span class="s2">s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">end2</span> <span class="o">-</span> <span class="n">start2</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saving model -- time:</span><span class="si">{}</span><span class="s2">s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">end3</span> <span class="o">-</span> <span class="n">start3</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Plotting model -- time:</span><span class="si">{}</span><span class="s2">s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">end4</span> <span class="o">-</span> <span class="n">start4</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">d</span></div>
+
+
+<div class="viewcode-block" id="calculate_diagram_single_reactant"><a class="viewcode-back" href="../../../train.html#ehreact.train.calculate_diagram.calculate_diagram_single_reactant">[docs]</a><span class="k">def</span> <span class="nf">calculate_diagram_single_reactant</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span> <span class="n">seed_list</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">quiet</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes a Hasse diagram of a list of molecule smiles.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    smiles: List[str]</span>
+<span class="sd">        List of SMILES.</span>
+<span class="sd">    seed_list: List[str]</span>
+<span class="sd">        List of SMILES seeds.</span>
+<span class="sd">    verbose: bool</span>
+<span class="sd">        Whether to print additional information.</span>
+<span class="sd">    quiet: bool</span>
+<span class="sd">        Whether to silence all output.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    d: ehreact.diagram.diagram.Diagram</span>
+<span class="sd">        The Hasse diagram of the input list of molecules.</span>
+<span class="sd">    smiles_dict: dict</span>
+<span class="sd">        A dictionary of the canonicalized input smiles.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Create canonical smiles and mol objects:</span>
+    <span class="n">smiles</span><span class="p">,</span> <span class="n">smiles_dict</span><span class="p">,</span> <span class="n">skipped</span> <span class="o">=</span> <span class="n">read_in_smiles_unique</span><span class="p">(</span><span class="n">smiles</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">skipped</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Skipped duplicates:&quot;</span><span class="p">,</span> <span class="n">skipped</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;Input:&quot;</span><span class="p">,</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">smiles</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">skipped</span><span class="p">),</span>
+            <span class="s2">&quot;(of which&quot;</span><span class="p">,</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">skipped</span><span class="p">),</span>
+            <span class="s2">&quot;were skipped due to duplicates).&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Canonicalized smiles used for training:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">smi</span> <span class="ow">in</span> <span class="n">smiles</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Without stereochemistry:&quot;</span><span class="p">,</span>
+                <span class="n">smi</span><span class="p">,</span>
+                <span class="s2">&quot; with stereochemistry:&quot;</span><span class="p">,</span>
+                <span class="n">smiles_dict</span><span class="p">[</span><span class="n">smi</span><span class="p">][</span><span class="s2">&quot;canonical_smi&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+
+    <span class="c1"># Create seeds:</span>
+    <span class="k">if</span> <span class="n">verbose</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">seed_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;No seed given, find maximum common substructure of all molecules instead.&quot;</span>
+        <span class="p">)</span>
+    <span class="n">seeds</span><span class="p">,</span> <span class="n">rule_dict</span><span class="p">,</span> <span class="n">num_smiles_seed</span> <span class="o">=</span> <span class="n">preprocess_seeds</span><span class="p">(</span><span class="n">seed_list</span><span class="p">,</span> <span class="n">smiles</span><span class="p">,</span> <span class="n">smiles_dict</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Seeds&quot;</span><span class="p">,</span> <span class="n">seeds</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">num_smiles_seed</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">smiles</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not all molecules fit a seed. Check given seeds.&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">num_smiles_seed</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">smiles</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Seeds are not mutually exclusive. Check given seeds.&quot;</span><span class="p">)</span>
+
+    <span class="n">tags_core</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">extended_hasse</span><span class="p">(</span><span class="n">smiles_dict</span><span class="p">,</span> <span class="n">seeds</span><span class="p">,</span> <span class="n">rule_dict</span><span class="p">,</span> <span class="n">tags_core</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">quiet</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">d</span><span class="p">,</span> <span class="n">smiles_dict</span></div>
+
+
+<div class="viewcode-block" id="calculate_diagram_transition_state"><a class="viewcode-back" href="../../../train.html#ehreact.train.calculate_diagram.calculate_diagram_transition_state">[docs]</a><span class="k">def</span> <span class="nf">calculate_diagram_transition_state</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">quiet</span><span class="p">,</span> <span class="n">compute_aam</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes a Hasse diagram of a list of reaction smiles.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    smiles: List[str]</span>
+<span class="sd">        List of reaction SMILES.</span>
+<span class="sd">    verbose: bool, default False</span>
+<span class="sd">        Whether to print additional information.</span>
+<span class="sd">    quiet: bool</span>
+<span class="sd">        Whether to silence all output.</span>
+<span class="sd">    compute_aam: bool</span>
+<span class="sd">        Whether to compute atom-mappings for reactions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    d: ehreact.diagram.diagram.Diagram</span>
+<span class="sd">        The Hasse diagram of the input list of reactions.</span>
+<span class="sd">    smiles_dict: dict</span>
+<span class="sd">        A dictionary of the canonicalized input smiles.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Create transition states</span>
+    <span class="k">if</span> <span class="n">compute_aam</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculating atom-mappings&quot;</span><span class="p">)</span>
+        <span class="n">mapped_smiles</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">smi</span> <span class="ow">in</span> <span class="n">smiles</span><span class="p">:</span>
+            <span class="n">mapped_smiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">compute_aam_with_h</span><span class="p">(</span><span class="n">smi</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">smi</span><span class="p">,</span> <span class="n">mapped_smiles</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">smiles</span> <span class="o">=</span> <span class="n">mapped_smiles</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Finished calculating atom-mappings&quot;</span><span class="p">)</span>
+    <span class="p">(</span>
+        <span class="n">seeds</span><span class="p">,</span>
+        <span class="n">rule_dict</span><span class="p">,</span>
+        <span class="n">smiles</span><span class="p">,</span>
+        <span class="n">smiles_dict</span><span class="p">,</span>
+        <span class="n">skipped</span><span class="p">,</span>
+        <span class="n">tags_core</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">=</span> <span class="n">read_in_reactions_unique</span><span class="p">(</span><span class="n">smiles</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">skipped</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Skipped duplicates:&quot;</span><span class="p">,</span> <span class="n">skipped</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;Input:&quot;</span><span class="p">,</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">smiles</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">skipped</span><span class="p">),</span>
+            <span class="s2">&quot;(of which&quot;</span><span class="p">,</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">skipped</span><span class="p">),</span>
+            <span class="s2">&quot;were skipped due to duplicates).&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Canonicalized smiles used for training:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">smi</span> <span class="ow">in</span> <span class="n">smiles</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Without stereochemistry:&quot;</span><span class="p">,</span>
+                <span class="n">smi</span><span class="p">,</span>
+                <span class="s2">&quot; with stereochemistry:&quot;</span><span class="p">,</span>
+                <span class="n">smiles_dict</span><span class="p">[</span><span class="n">smi</span><span class="p">][</span><span class="s2">&quot;canonical_smi&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+
+    <span class="n">d</span> <span class="o">=</span> <span class="n">extended_hasse</span><span class="p">(</span><span class="n">smiles_dict</span><span class="p">,</span> <span class="n">seeds</span><span class="p">,</span> <span class="n">rule_dict</span><span class="p">,</span> <span class="n">tags_core</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">quiet</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">d</span><span class="p">,</span> <span class="n">smiles_dict</span></div>
+
+
+<div class="viewcode-block" id="find_lowest_template"><a class="viewcode-back" href="../../../train.html#ehreact.train.calculate_diagram.find_lowest_template">[docs]</a><span class="k">def</span> <span class="nf">find_lowest_template</span><span class="p">(</span><span class="n">curr_node</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function to find the lowest (most general) substructure/reaction rule in the tree.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    curr_node: ehreact.diagram.diagram.Node</span>
+<span class="sd">         Node for which to find the lowest template.</span>
+<span class="sd">    d: ehreact.diagram.diagram.Diagram</span>
+<span class="sd">         Hasse diagram.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    lowest_template: str</span>
+<span class="sd">        Name of the lowest template.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">curr_node</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">while</span> <span class="n">curr_node</span><span class="o">.</span><span class="n">edges_to_parent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">parent_node</span><span class="o">.</span><span class="n">key</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="n">curr_node</span> <span class="o">=</span> <span class="n">curr_node</span><span class="o">.</span><span class="n">edges_to_parent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">parent_node</span>
+    <span class="n">lowest_template</span> <span class="o">=</span> <span class="n">curr_node</span><span class="o">.</span><span class="n">key</span>
+    <span class="k">return</span> <span class="n">lowest_template</span></div>
+
+
+<div class="viewcode-block" id="fill_information"><a class="viewcode-back" href="../../../train.html#ehreact.train.calculate_diagram.fill_information">[docs]</a><span class="k">def</span> <span class="nf">fill_information</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">train_mode</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">smiles_dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function to fill topology information and fingerprints into a Hasse diagram (alters diagram in-place).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    d: ehreact.diagram.diagram.Diagram</span>
+<span class="sd">         Hasse diagram.</span>
+<span class="sd">    train_mode: Literal[&quot;single_reactant&quot;,&quot;transition_state&quot;]</span>
+<span class="sd">        Train mode, either transition states extracted from reaction smiles or single reactants extracted from smiles.</span>
+<span class="sd">    verbose: bool, default False</span>
+<span class="sd">        Whether to print additional information.</span>
+<span class="sd">    smiles_dict: dict</span>
+<span class="sd">        A dictionary of the canonicalized input smiles.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Make a leaf and non_leaf list, since they need different information to be created</span>
+    <span class="n">leafs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">non_leafs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">is_leaf</span><span class="p">:</span>
+            <span class="n">leafs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">key</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">non_leafs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="c1"># For all leafs, calculate the distance to every non-leaf</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;... calculating minimum distance to leaf nodes&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">leaf</span> <span class="ow">in</span> <span class="n">leafs</span><span class="p">:</span>
+        <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">min_dist_leaf</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">child</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span>
+        <span class="k">while</span> <span class="n">child</span><span class="o">.</span><span class="n">key</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="n">edges_to_parent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">parent_node</span>
+            <span class="n">parent</span><span class="o">.</span><span class="n">min_dist_leaf</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">parent</span><span class="o">.</span><span class="n">min_dist_leaf</span><span class="p">,</span> <span class="n">child</span><span class="o">.</span><span class="n">min_dist_leaf</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">parent</span><span class="o">.</span><span class="n">all_leafs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">leaf</span><span class="p">)</span>
+            <span class="n">child</span> <span class="o">=</span> <span class="n">parent</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">non_leaf</span> <span class="ow">in</span> <span class="n">non_leafs</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;...... distance&quot;</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">non_leaf</span><span class="p">]</span><span class="o">.</span><span class="n">min_dist_leaf</span><span class="p">,</span> <span class="s2">&quot;for&quot;</span><span class="p">,</span> <span class="n">non_leaf</span><span class="p">)</span>
+
+    <span class="c1"># Calculate Morgan fingerprints for each leaf</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculating fingerprints&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">leaf</span> <span class="ow">in</span> <span class="n">leafs</span><span class="p">:</span>
+        <span class="n">mol</span> <span class="o">=</span> <span class="n">smiles_dict</span><span class="p">[</span><span class="n">leaf</span><span class="p">][</span><span class="s2">&quot;mol&quot;</span><span class="p">]</span>
+        <span class="n">mol_no_stereo</span> <span class="o">=</span> <span class="n">smiles_dict</span><span class="p">[</span><span class="n">leaf</span><span class="p">][</span><span class="s2">&quot;mol_no_stereo&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">train_mode</span> <span class="o">==</span> <span class="s2">&quot;single_reactant&quot;</span><span class="p">:</span>
+            <span class="n">fp</span> <span class="o">=</span> <span class="n">morgan_bit_fp_from_mol</span><span class="p">(</span><span class="n">mol_no_stereo</span><span class="p">)</span>
+            <span class="n">fp_stereo</span> <span class="o">=</span> <span class="p">[</span><span class="n">morgan_bit_fp_from_mol</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">chirality</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">mol</span><span class="p">]</span>
+            <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">fp_reac</span> <span class="o">=</span> <span class="n">fp</span>
+            <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">fp_reac_stereo</span> <span class="o">=</span> <span class="n">fp_stereo</span>
+        <span class="k">elif</span> <span class="n">train_mode</span> <span class="o">==</span> <span class="s2">&quot;transition_state&quot;</span><span class="p">:</span>
+            <span class="n">fp_reac</span> <span class="o">=</span> <span class="n">morgan_bit_fp_from_mol</span><span class="p">(</span><span class="n">mol_no_stereo</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">fp_reac_stereo</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">morgan_bit_fp_from_mol</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">chirality</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">mol</span>
+            <span class="p">]</span>
+            <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">fp_reac</span> <span class="o">=</span> <span class="n">fp_reac</span>
+            <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">fp_reac_stereo</span> <span class="o">=</span> <span class="n">fp_reac_stereo</span>
+            <span class="n">fp_prod</span> <span class="o">=</span> <span class="n">morgan_bit_fp_from_mol</span><span class="p">(</span><span class="n">mol_no_stereo</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">fp_prod_stereo</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">morgan_bit_fp_from_mol</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">chirality</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">mol</span>
+            <span class="p">]</span>
+            <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">fp_prod</span> <span class="o">=</span> <span class="n">fp_prod</span>
+            <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">fp_prod_stereo</span> <span class="o">=</span> <span class="n">fp_prod_stereo</span>
+
+    <span class="c1"># Calculate overall diversity of diagram:</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculating overall diversity&quot;</span><span class="p">)</span>
+    <span class="n">div_mean_reac</span><span class="p">,</span> <span class="n">div_mean_prod</span> <span class="o">=</span> <span class="n">calculate_diversity</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">train_mode</span><span class="p">)</span>
+    <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">diversity_reac</span> <span class="o">=</span> <span class="n">div_mean_reac</span>
+    <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">diversity_prod</span> <span class="o">=</span> <span class="n">div_mean_prod</span>
+    <span class="n">div_mean_reac</span><span class="p">,</span> <span class="n">div_mean_prod</span> <span class="o">=</span> <span class="n">calculate_diversity</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">train_mode</span><span class="p">)</span>
+    <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">diversity_reac_stereo</span> <span class="o">=</span> <span class="n">div_mean_reac</span>
+    <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">diversity_prod_stereo</span> <span class="o">=</span> <span class="n">div_mean_prod</span>
+
+    <span class="c1"># Write fragment list to root</span>
+    <span class="k">if</span> <span class="n">train_mode</span> <span class="o">==</span> <span class="s2">&quot;transition_state&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Creating fragment list&quot;</span><span class="p">)</span>
+        <span class="n">write_fragment_list_to_root</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">train_mode</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">smiles_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="write_fragment_list_to_root"><a class="viewcode-back" href="../../../train.html#ehreact.train.calculate_diagram.write_fragment_list_to_root">[docs]</a><span class="k">def</span> <span class="nf">write_fragment_list_to_root</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">train_mode</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">smiles_dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function to calculate a list of reactant rule fragments (only atoms in reaction center). This in needed</span>
+<span class="sd">    to transform inputted molecules to their corresponding transition state. Save to the root node (in-place).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    d: ehreact.diagram.diagram.Diagram</span>
+<span class="sd">         Hasse diagram.</span>
+<span class="sd">    train_mode: Literal[&quot;single_reactant&quot;,&quot;transition_state&quot;]</span>
+<span class="sd">        Train mode, either transition states extracted from reaction smiles or single reactants extracted from smiles.</span>
+<span class="sd">    verbose: bool, default False</span>
+<span class="sd">        Whether to print additional information.</span>
+<span class="sd">    smiles_dict: dict</span>
+<span class="sd">        A dictionary of the canonicalized input smiles.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculating reactant fragments for each minimal template&quot;</span><span class="p">)</span>
+    <span class="n">fragment_dict_reac</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">minimal_templates_edges</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">edges_to_child</span>
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">minimal_templates_edges</span><span class="p">:</span>
+        <span class="n">minimal_template</span> <span class="o">=</span> <span class="n">edge</span><span class="o">.</span><span class="n">child_node</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;template&quot;</span><span class="p">,</span> <span class="n">minimal_template</span><span class="p">)</span>
+        <span class="n">fragment_dict_reac</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">minimal_template</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">rule_reac</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">minimal_template</span><span class="p">)]</span><span class="o">.</span><span class="n">rule_reac</span>
+        <span class="n">rule_reac_fragment_indices</span><span class="p">,</span> <span class="n">rule_reac_fragment_mols</span> <span class="o">=</span> <span class="n">make_fragment_indices</span><span class="p">(</span>
+            <span class="n">rule_reac</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rule_reac_fragment_indices</span><span class="p">)):</span>
+            <span class="n">fragment_dict_reac</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">minimal_template</span><span class="p">)][</span><span class="n">rule_reac_fragment_indices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;rule_fragment&quot;</span><span class="p">:</span> <span class="n">rule_reac_fragment_mols</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="s2">&quot;molecules&quot;</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="p">}</span>
+        <span class="k">for</span> <span class="n">leaf</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">minimal_template</span><span class="p">)]</span><span class="o">.</span><span class="n">all_leafs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;... leaf&quot;</span><span class="p">,</span> <span class="n">leaf</span><span class="p">)</span>
+            <span class="n">tags_core</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">tags_core</span>
+            <span class="n">smi_reac</span> <span class="o">=</span> <span class="n">leaf</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">mol_reac</span> <span class="o">=</span> <span class="n">make_mol_no_sanit_h</span><span class="p">(</span><span class="n">smi_reac</span><span class="p">)</span>
+            <span class="n">matches_reac</span> <span class="o">=</span> <span class="n">find_matching_atoms</span><span class="p">(</span>
+                <span class="n">train_mode</span><span class="p">,</span> <span class="n">mol_reac</span><span class="p">,</span> <span class="n">rule_reac</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">tags_core</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches_reac</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;WARNING: Expected exactly one match, but got &quot;</span>
+                    <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">matches_reac</span><span class="p">))</span>
+                    <span class="o">+</span> <span class="s2">&quot; instead.&quot;</span>
+                <span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;tags:&quot;</span><span class="p">,</span> <span class="n">tags_core</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;leaf:&quot;</span><span class="p">,</span> <span class="n">leaf</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;minimal_template:&quot;</span><span class="p">,</span> <span class="n">minimal_template</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">matches_reac</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Zero matches, something went wrong.&quot;</span><span class="p">)</span>
+            <span class="n">matches_reac</span> <span class="o">=</span> <span class="n">matches_reac</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">smi_reac</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rule_reac_fragment_indices</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;Intramolecular reaction detected. This is currently not tested to work correctly&quot;</span>
+                <span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;this might lead to erraneous results.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">leaf</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">smi_reac</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">rule_reac_fragment_indices</span><span class="p">)</span>
+                <span class="c1"># TODO implement intramolecular version, write exception if rule_atoms_in_fragment not found</span>
+                <span class="c1"># (since it is a superset of the combination of available fragments then,</span>
+                <span class="c1"># need to iterate through those!</span>
+            <span class="k">for</span> <span class="n">smi_fragment</span> <span class="ow">in</span> <span class="n">smi_reac</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
+                <span class="n">fragment</span> <span class="o">=</span> <span class="n">make_mol</span><span class="p">(</span><span class="n">smi_fragment</span><span class="p">)</span>
+                <span class="n">fragment_matches</span> <span class="o">=</span> <span class="n">mol_reac</span><span class="o">.</span><span class="n">GetSubstructMatches</span><span class="p">(</span><span class="n">fragment</span><span class="p">)</span>
+                <span class="n">fragment_match</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">fragment_matches</span><span class="p">:</span>
+                    <span class="n">correct_match</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">match</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">fragment</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">HasProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">):</span>
+                            <span class="k">if</span> <span class="n">fragment</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span>
+                                <span class="s2">&quot;molAtomMapNumber&quot;</span>
+                            <span class="p">)</span> <span class="o">!=</span> <span class="n">mol_reac</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">):</span>
+                                <span class="n">correct_match</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">if</span> <span class="n">correct_match</span><span class="p">:</span>
+                        <span class="n">fragment_match</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fragment_match</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;Expected exactly one match, but got&quot;</span><span class="p">,</span>
+                        <span class="nb">len</span><span class="p">(</span><span class="n">fragment_match</span><span class="p">),</span>
+                        <span class="s2">&quot;instead. Exit program&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="n">fragment_match</span> <span class="o">=</span> <span class="n">fragment_match</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">rule_atoms_in_fragment</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">matches_reac</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">fragment_match</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">fragment</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+                    <span class="n">atom</span><span class="o">.</span><span class="n">SetAtomMapNum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">canonical_smi_fragment</span> <span class="o">=</span> <span class="n">canonicalize</span><span class="p">(</span><span class="n">fragment</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">rule_atoms_in_fragment</span>
+                    <span class="ow">not</span> <span class="ow">in</span> <span class="n">fragment_dict_reac</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">minimal_template</span><span class="p">)]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                <span class="p">):</span>
+                    <span class="c1"># Could be in intramolecular reaction, correct for it here:</span>
+                    <span class="c1"># TODO, add to molecules for each of the subsets that apply.</span>
+                    <span class="c1"># else this is an error:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;An error occured: Found rule fragment doesn&#39;t match available fragments&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">canonical_smi_fragment</span>
+                    <span class="ow">not</span> <span class="ow">in</span> <span class="n">fragment_dict_reac</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">minimal_template</span><span class="p">)][</span>
+                        <span class="n">rule_atoms_in_fragment</span>
+                    <span class="p">][</span><span class="s2">&quot;molecules&quot;</span><span class="p">]</span>
+                <span class="p">):</span>
+                    <span class="n">fragment_dict_reac</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">minimal_template</span><span class="p">)][</span><span class="n">rule_atoms_in_fragment</span><span class="p">][</span>
+                        <span class="s2">&quot;molecules&quot;</span>
+                    <span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">canonical_smi_fragment</span><span class="p">)</span>
+
+    <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fragment_reac</span> <span class="o">=</span> <span class="n">fragment_dict_reac</span></div>
+
+
+<div class="viewcode-block" id="calculate_diversity"><a class="viewcode-back" href="../../../train.html#ehreact.train.calculate_diagram.calculate_diversity">[docs]</a><span class="k">def</span> <span class="nf">calculate_diversity</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">stereo</span><span class="p">,</span> <span class="n">train_mode</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculates diversity within a branch or tree.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    d: ehreact.diagram.diagram.Diagram</span>
+<span class="sd">         Hasse diagram.</span>
+<span class="sd">    node: ehreact.diagram.diagram.Node</span>
+<span class="sd">         Node for which to calculate diversity, all leaf nodes attached to this node by an arbitrary number of</span>
+<span class="sd">         edges toward children are taken into account.</span>
+<span class="sd">    stereo: bool</span>
+<span class="sd">         Whether to include stereochemistry in fingerprints</span>
+<span class="sd">    train_mode: Literal[&quot;single_reactant&quot;, &quot;transition_state&quot;]</span>
+<span class="sd">        Train mode, either transition states extracted from reaction smiles or single reactants extracted from smiles.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    mean_div_reac: float</span>
+<span class="sd">        Mean pair similarity of reactants.</span>
+<span class="sd">    mean_div_prod: float</span>
+<span class="sd">        Mean pair similarity of products.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">diversity_reac</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">diversity_prod</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">all_leafs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">combi</span> <span class="ow">in</span> <span class="n">findsubsets</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">all_leafs</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">stereo</span><span class="p">:</span>
+                <span class="n">fp1</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">combi</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">fp_reac</span>
+                <span class="n">fp2</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">combi</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">fp_reac</span>
+                <span class="n">diversity_reac</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tanimoto_from_fp</span><span class="p">(</span><span class="n">fp1</span><span class="p">,</span> <span class="n">fp2</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">train_mode</span> <span class="o">==</span> <span class="s2">&quot;transition_state&quot;</span><span class="p">:</span>
+                    <span class="n">fp1</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">combi</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">fp_prod</span>
+                    <span class="n">fp2</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">combi</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">fp_prod</span>
+                    <span class="n">diversity_prod</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tanimoto_from_fp</span><span class="p">(</span><span class="n">fp1</span><span class="p">,</span> <span class="n">fp2</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">diversity_prod</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">best_sim</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">fp1</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">combi</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">fp_reac_stereo</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">fp2</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">combi</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">fp_reac_stereo</span><span class="p">:</span>
+                        <span class="n">sim</span> <span class="o">=</span> <span class="n">tanimoto_from_fp</span><span class="p">(</span><span class="n">fp1</span><span class="p">,</span> <span class="n">fp2</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">sim</span> <span class="o">&gt;</span> <span class="n">best_sim</span><span class="p">:</span>
+                            <span class="n">best_sim</span> <span class="o">=</span> <span class="n">sim</span>
+                <span class="n">diversity_reac</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">best_sim</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">train_mode</span> <span class="o">==</span> <span class="s2">&quot;transition_state&quot;</span><span class="p">:</span>
+                    <span class="n">best_sim</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">for</span> <span class="n">fp1</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">combi</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">fp_prod_stereo</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">fp2</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">combi</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">fp_prod_stereo</span><span class="p">:</span>
+                            <span class="n">sim</span> <span class="o">=</span> <span class="n">tanimoto_from_fp</span><span class="p">(</span><span class="n">fp1</span><span class="p">,</span> <span class="n">fp2</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="n">sim</span> <span class="o">&gt;</span> <span class="n">best_sim</span><span class="p">:</span>
+                                <span class="n">best_sim</span> <span class="o">=</span> <span class="n">sim</span>
+                    <span class="n">diversity_prod</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">best_sim</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">diversity_prod</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">diversity_reac</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">diversity_prod</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">mean_div_reac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">diversity_reac</span><span class="p">)</span>
+    <span class="n">mean_div_prod</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">diversity_prod</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mean_div_reac</span><span class="p">,</span> <span class="n">mean_div_prod</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Esther Heid. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.5.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

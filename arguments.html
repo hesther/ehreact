@@ -1,0 +1,311 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Command Line Arguments &mdash; ehreact  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Train" href="train.html" />
+    <link rel="prev" title="API Documentation" href="api.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ehreact
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Command Line Arguments</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#common-arguments">Common Arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#train-arguments">Train Arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#predict-arguments">Predict Arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="train.html">Train</a></li>
+<li class="toctree-l2"><a class="reference internal" href="predict.html">Predict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="helpers.html">Helpers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="diagram.html">Diagram</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ehreact</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="api.html">API Documentation</a> &raquo;</li>
+        
+      <li>Command Line Arguments</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/arguments.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="command-line-arguments">
+<span id="arguments"></span><h1>Command Line Arguments<a class="headerlink" href="#command-line-arguments" title="Permalink to this headline">¶</a></h1>
+<p>ehreact.arguments.py contains all command line arguments, which are processed using the <a class="reference external" href="https://github.com/swansonk14/typed-argument-parser">Typed Argument Parser</a> (<code class="code docutils literal notranslate"><span class="pre">Tap</span></code>) package.</p>
+<div class="section" id="common-arguments">
+<h2>Common Arguments<a class="headerlink" href="#common-arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ehreact.arguments.CommonArgs">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ehreact.arguments.</span></span><span class="sig-name descname"><span class="pre">CommonArgs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">underscores_to_dashes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit_bool</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_files</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/arguments.html#CommonArgs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.arguments.CommonArgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>CommonArgs contains arguments that are used in both TrainArgs and PredictArgs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>default False</em>) – Whether to print additional information.</p></li>
+<li><p><strong>quiet</strong> (<em>bool</em><em>, </em><em>default False</em>) – Whether to silence all output.</p></li>
+<li><p><strong>compute_aam</strong> (<em>bool</em><em>, </em><em>default False</em>) – Whether to compute atom-mappings for reactions.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ehreact.arguments.CommonArgs.process_args">
+<span class="sig-name descname"><span class="pre">process_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/arguments.html#CommonArgs.process_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.arguments.CommonArgs.process_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform additional argument processing and/or validation.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="train-arguments">
+<h2>Train Arguments<a class="headerlink" href="#train-arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ehreact.arguments.TrainArgs">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ehreact.arguments.</span></span><span class="sig-name descname"><span class="pre">TrainArgs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">underscores_to_dashes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit_bool</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_files</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/arguments.html#TrainArgs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.arguments.TrainArgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>TrainArgs includes CommonArgs along with additional arguments used for generating a
+template tree from a list of reaction smiles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_path</strong> (<em>str</em>) – Path to data CSV file.</p></li>
+<li><p><strong>save_path</strong> (<em>str</em><em>, </em><em>default  None</em>) – File to which diagram is saved.</p></li>
+<li><p><strong>save_plot</strong> (<em>str</em><em>, </em><em>default None</em>) – File to which save image of diagram.</p></li>
+<li><p><strong>train_mode</strong> (<em>Literal</em><em>[</em><em>&quot;single_reactant&quot;</em><em>, </em><em>&quot;transition_state&quot;</em><em>]</em><em>, </em><em>default &quot;transition_state&quot;</em>) – Train mode, either transition states extracted from reaction smiles or single reactants extracted from smiles.</p></li>
+<li><p><strong>seed</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>default</em><em> [</em><em>]</em>) – List of SMILES seeds for the reactant algorithm, usually a single seed is given.</p></li>
+<li><p><strong>no_props</strong> (<em>bool</em><em>, </em><em>default False</em>) – Do not compute any properties, just output the diagram.</p></li>
+<li><p><strong>plot_only_branches</strong> (<em>bool</em><em>, </em><em>default False</em>) – Plot only substructures that branch off.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ehreact.arguments.TrainArgs.process_args">
+<span class="sig-name descname"><span class="pre">process_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/arguments.html#TrainArgs.process_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.arguments.TrainArgs.process_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform additional argument processing and/or validation.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="predict-arguments">
+<h2>Predict Arguments<a class="headerlink" href="#predict-arguments" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="ehreact.arguments.PredictArgs">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ehreact.arguments.</span></span><span class="sig-name descname"><span class="pre">PredictArgs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">underscores_to_dashes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explicit_bool</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_files</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/arguments.html#PredictArgs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.arguments.PredictArgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>PredictArgs includes CommonArgs along with additional arguments used for predicting reaction scores
+from a template tree and a list of reaction smiles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>load_path</strong> (<em>str</em>) – File from which diagram is loaded.</p></li>
+<li><p><strong>test_path</strong> (<em>str</em>) – Path to CSV file containing testing data for which predictions will be made.</p></li>
+<li><p><strong>preds_path</strong> (<em>str</em><em>, </em><em>default None</em>) – Path to CSV file where predictions will be saved.</p></li>
+<li><p><strong>predict_mode</strong> (<em>Literal</em><em>[</em><em>&quot;single_reactant&quot;</em><em>, </em><em>&quot;multi_reactant&quot;</em><em>, </em><em>&quot;transition_state&quot;</em><em>]</em><em>, </em><em>default &quot;transition_state&quot;</em>) – Predict mode, either transition states (input reaction smiles, with train_mode=’transition_state’)
+or multiple reactants (input list of smiles, with train_mode=’transition_state’) or single reactants
+(input smiles, compatible with both train_modes).</p></li>
+<li><p><strong>hyper_params</strong> (<em>str</em><em>, </em><em>default None</em>) – File from which hyperparameters are loaded.</p></li>
+<li><p><strong>stereochemistry</strong> (<em>bool</em><em>, </em><em>default False</em>) – Whether to use stereochemistry for scoring.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ehreact.arguments.PredictArgs.process_args">
+<span class="sig-name descname"><span class="pre">process_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/arguments.html#PredictArgs.process_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.arguments.PredictArgs.process_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform additional argument processing and/or validation.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="train.html" class="btn btn-neutral float-right" title="Train" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="api.html" class="btn btn-neutral float-left" title="API Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Esther Heid. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.5.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

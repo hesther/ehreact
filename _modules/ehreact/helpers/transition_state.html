@@ -1,0 +1,1064 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ehreact.helpers.transition_state &mdash; ehreact  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ehreact
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ehreact</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ehreact.helpers.transition_state</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ehreact.helpers.transition_state</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">transition_state.py</span>
+<span class="sd">Some of the functions in this file originate from RDChiral (https://github.com/connorcoley/rdchiral).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">rdkit.Chem</span> <span class="k">as</span> <span class="nn">Chem</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="n">AllChem</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+
+<div class="viewcode-block" id="make_mols"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.make_mols">[docs]</a><span class="k">def</span> <span class="nf">make_mols</span><span class="p">(</span><span class="n">smi</span><span class="p">,</span> <span class="n">stereoinformation</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Takes a smiles string as input and creates an RDKit mol object. The molecule cannot be sanitized,</span>
+<span class="sd">    since we would else get rid of the explicit hydrogens. Thus, instead we check if the molecule could</span>
+<span class="sd">    be sanitized, and reorder the atoms corresponding to the sanitized molecule. The reordering of atoms</span>
+<span class="sd">    and molecules ensures that the same reaction with different atom ordering gives the same transition</span>
+<span class="sd">    state.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    smi: str</span>
+<span class="sd">        SMILES string.</span>
+<span class="sd">    stereoinformation: bool</span>
+<span class="sd">        Whether to use stereoinformation.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    mol_ordered: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">):</span>
+        <span class="c1"># Order molecules</span>
+        <span class="n">sorted_smi</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">smis</span> <span class="o">=</span> <span class="n">smi</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+        <span class="n">smis_nolabel</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\:[0-9]+\]&quot;</span><span class="p">,</span> <span class="s2">&quot;]&quot;</span><span class="p">,</span> <span class="n">smi</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">natoms</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">smis_nolabel</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">stereoinformation</span><span class="p">:</span>
+                <span class="n">smis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">smis</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="p">)</span>  <span class="c1"># Delete Stereo</span>
+            <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smis</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">sanitize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">Chem</span><span class="o">.</span><span class="n">SanitizeMol</span><span class="p">(</span>
+                <span class="n">mol</span><span class="p">,</span>
+                <span class="n">sanitizeOps</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">SanitizeFlags</span><span class="o">.</span><span class="n">SANITIZE_ALL</span>
+                <span class="o">^</span> <span class="n">Chem</span><span class="o">.</span><span class="n">SanitizeFlags</span><span class="o">.</span><span class="n">SANITIZE_ADJUSTHS</span><span class="p">,</span>
+            <span class="p">)</span>  <span class="c1"># Sanitize all functions apart hydrogens</span>
+            <span class="n">mol_nolabel</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smis_nolabel</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">smis_nolabel</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">mol_nolabel</span><span class="p">)</span>
+            <span class="n">order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="nb">list</span><span class="p">(</span>
+                    <span class="n">mol</span><span class="o">.</span><span class="n">GetSubstructMatch</span><span class="p">(</span>
+                        <span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span>
+                            <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span>
+                                <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span>
+                                    <span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smis_nolabel</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+                                <span class="p">)</span>
+                            <span class="p">)</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">natoms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mol</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">())</span>
+        <span class="n">overall_order</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">sorting_keys</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">smis_nolabel</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="n">smis_nolabel</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sorting_keys</span><span class="p">:</span>
+            <span class="n">sorted_smi</span> <span class="o">+=</span> <span class="n">smis</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">sorted_smi</span> <span class="o">+=</span> <span class="s2">&quot;.&quot;</span>
+            <span class="n">overall_order</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">x</span> <span class="o">+</span> <span class="n">j</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">order</span><span class="p">[</span><span class="n">key</span><span class="p">]])</span>
+            <span class="n">j</span> <span class="o">+=</span> <span class="n">natoms</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="n">sorted_smi</span> <span class="o">=</span> <span class="n">sorted_smi</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Create molecule and reorder atom</span>
+        <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">sorted_smi</span><span class="p">,</span> <span class="n">sanitize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">Chem</span><span class="o">.</span><span class="n">SanitizeMol</span><span class="p">(</span>
+            <span class="n">mol</span><span class="p">,</span>
+            <span class="n">sanitizeOps</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">SanitizeFlags</span><span class="o">.</span><span class="n">SANITIZE_ALL</span>
+            <span class="o">^</span> <span class="n">Chem</span><span class="o">.</span><span class="n">SanitizeFlags</span><span class="o">.</span><span class="n">SANITIZE_ADJUSTHS</span><span class="p">,</span>
+        <span class="p">)</span>  <span class="c1"># Sanitize all functions apart hydrogens</span>
+        <span class="n">mol_ordered</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">RenumberAtoms</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">overall_order</span><span class="p">)</span>
+        <span class="n">mol_ordered</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span>
+            <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">mol_ordered</span><span class="p">),</span> <span class="n">sanitize</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>  <span class="c1"># Correct atom ordering needs another round of mol -&gt; smiles -&gt; mol</span>
+        <span class="n">Chem</span><span class="o">.</span><span class="n">SanitizeMol</span><span class="p">(</span>
+            <span class="n">mol_ordered</span><span class="p">,</span>
+            <span class="n">sanitizeOps</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">SanitizeFlags</span><span class="o">.</span><span class="n">SANITIZE_ALL</span>
+            <span class="o">^</span> <span class="n">Chem</span><span class="o">.</span><span class="n">SanitizeFlags</span><span class="o">.</span><span class="n">SANITIZE_ADJUSTHS</span><span class="p">,</span>
+        <span class="p">)</span>  <span class="c1"># Sanitize all functions apart hydrogens</span>
+        <span class="n">mol_ordered</span><span class="o">.</span><span class="n">UpdatePropertyCache</span><span class="p">()</span>
+        <span class="n">Chem</span><span class="o">.</span><span class="n">GetSymmSSSR</span><span class="p">(</span><span class="n">mol_ordered</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Smiles string doesn&#39;t produce a valid RDKit mol!&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">mol_ordered</span></div>
+
+
+<div class="viewcode-block" id="bond_to_label"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.bond_to_label">[docs]</a><span class="k">def</span> <span class="nf">bond_to_label</span><span class="p">(</span><span class="n">bond</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function takes an RDKit bond and creates a label describing</span>
+<span class="sd">    the most important attributes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bond: rdkit.Chem.Bond</span>
+<span class="sd">        RDKit bond.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    label: str</span>
+<span class="sd">        Label of bond.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">a1_label</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">bond</span><span class="o">.</span><span class="n">GetBeginAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">())</span>
+    <span class="n">a2_label</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">bond</span><span class="o">.</span><span class="n">GetEndAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetBeginAtom</span><span class="p">()</span><span class="o">.</span><span class="n">HasProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">):</span>
+        <span class="n">a1_label</span> <span class="o">+=</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetBeginAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetEndAtom</span><span class="p">()</span><span class="o">.</span><span class="n">HasProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">):</span>
+        <span class="n">a2_label</span> <span class="o">+=</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetEndAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">)</span>
+    <span class="n">atoms</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">a1_label</span><span class="p">,</span> <span class="n">a2_label</span><span class="p">])</span>
+
+    <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">atoms</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetSmarts</span><span class="p">(),</span> <span class="n">atoms</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">label</span></div>
+
+
+<div class="viewcode-block" id="atoms_are_different"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.atoms_are_different">[docs]</a><span class="k">def</span> <span class="nf">atoms_are_different</span><span class="p">(</span><span class="n">atom1</span><span class="p">,</span> <span class="n">atom2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compares two RDKit atoms based on basic properties.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    atom1: rdkit.Chem.Atom</span>
+<span class="sd">        First RDKit atom.</span>
+<span class="sd">    atom2: rdkit.Chem.Atom</span>
+<span class="sd">        Second RDKit atom.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        Boolean whether the atoms have the same properties.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">atom1</span><span class="o">.</span><span class="n">GetSmarts</span><span class="p">()</span> <span class="o">!=</span> <span class="n">atom2</span><span class="o">.</span><span class="n">GetSmarts</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># should be very general</span>
+    <span class="k">if</span> <span class="n">atom1</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span> <span class="o">!=</span> <span class="n">atom2</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># must be true for atom mapping</span>
+    <span class="k">if</span> <span class="n">atom1</span><span class="o">.</span><span class="n">GetFormalCharge</span><span class="p">()</span> <span class="o">!=</span> <span class="n">atom2</span><span class="o">.</span><span class="n">GetFormalCharge</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">atom1</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">()</span> <span class="o">!=</span> <span class="n">atom2</span><span class="o">.</span><span class="n">GetDegree</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">atom1</span><span class="o">.</span><span class="n">GetNumRadicalElectrons</span><span class="p">()</span> <span class="o">!=</span> <span class="n">atom2</span><span class="o">.</span><span class="n">GetNumRadicalElectrons</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">atom1</span><span class="o">.</span><span class="n">GetIsAromatic</span><span class="p">()</span> <span class="o">!=</span> <span class="n">atom2</span><span class="o">.</span><span class="n">GetIsAromatic</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># Check bonds and nearest neighbor identity</span>
+    <span class="n">bonds1</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">bond_to_label</span><span class="p">(</span><span class="n">bond</span><span class="p">)</span> <span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="n">atom1</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">()])</span>
+    <span class="n">bonds2</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="n">bond_to_label</span><span class="p">(</span><span class="n">bond</span><span class="p">)</span> <span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="n">atom2</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">()])</span>
+    <span class="k">if</span> <span class="n">bonds1</span> <span class="o">!=</span> <span class="n">bonds2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="get_tagged_atoms_from_mol"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.get_tagged_atoms_from_mol">[docs]</a><span class="k">def</span> <span class="nf">get_tagged_atoms_from_mol</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Takes an RDKit molecule and returns list of tagged atoms and their</span>
+<span class="sd">    corresponding numbers.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    atoms: List[rdkit.Chem.Atom]</span>
+<span class="sd">        List of tagged atoms</span>
+<span class="sd">    atom_tags: List[str]</span>
+<span class="sd">        List of atom-mapping numbers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">atoms</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">atom_tags</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">HasProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">):</span>
+            <span class="n">atoms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
+            <span class="n">atom_tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">atoms</span><span class="p">,</span> <span class="n">atom_tags</span></div>
+
+
+<div class="viewcode-block" id="get_changed_atoms"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.get_changed_atoms">[docs]</a><span class="k">def</span> <span class="nf">get_changed_atoms</span><span class="p">(</span><span class="n">reacs</span><span class="p">,</span> <span class="n">prods</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Looks at mapped atoms in a reaction and determines which ones changed.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    reacs: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule of reactant(s).</span>
+<span class="sd">    prods: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule of product(s).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    changed_atoms: List[rdkit.Chem.Atom]</span>
+<span class="sd">        List of changed atoms</span>
+<span class="sd">    changed_atom_tags: List[str]</span>
+<span class="sd">        List of tag numbers of changed atoms</span>
+<span class="sd">    err: int</span>
+<span class="sd">        Integer indicating an error if not equal 0.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">err</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">prod_atoms</span><span class="p">,</span> <span class="n">prod_atom_tags</span> <span class="o">=</span> <span class="n">get_tagged_atoms_from_mol</span><span class="p">(</span><span class="n">prods</span><span class="p">)</span>
+    <span class="n">reac_atoms</span><span class="p">,</span> <span class="n">reac_atom_tags</span> <span class="o">=</span> <span class="n">get_tagged_atoms_from_mol</span><span class="p">(</span><span class="n">reacs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">prod_atom_tags</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">reac_atom_tags</span><span class="p">)):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;warning: different atom tags appear in reactants and products&quot;</span><span class="p">)</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">prod_atoms</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">reac_atoms</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;warning: total number of tagged atoms differ, stoichometry != 1?&quot;</span><span class="p">)</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># Find differences</span>
+    <span class="n">changed_atoms</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">changed_atom_tags</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Product atoms that are different from reactant atom equivalent</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">prod_tag</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">prod_atom_tags</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">reac_tag</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">reac_atom_tags</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">reac_tag</span> <span class="o">!=</span> <span class="n">prod_tag</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">reac_tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">changed_atom_tags</span>
+            <span class="p">):</span>  <span class="c1"># don&#39;t bother comparing if we know this atom changes</span>
+                <span class="c1"># If atom changed, add</span>
+                <span class="k">if</span> <span class="n">atoms_are_different</span><span class="p">(</span><span class="n">prod_atoms</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">reac_atoms</span><span class="p">[</span><span class="n">j</span><span class="p">]):</span>
+                    <span class="n">changed_atoms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reac_atoms</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                    <span class="n">changed_atom_tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reac_tag</span><span class="p">)</span>
+                    <span class="k">break</span>
+
+    <span class="k">return</span> <span class="n">changed_atoms</span><span class="p">,</span> <span class="n">changed_atom_tags</span><span class="p">,</span> <span class="n">err</span></div>
+
+
+<div class="viewcode-block" id="get_strict_smarts_for_atom"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.get_strict_smarts_for_atom">[docs]</a><span class="k">def</span> <span class="nf">get_strict_smarts_for_atom</span><span class="p">(</span><span class="n">atom</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For an RDkit atom object, generate a simple SMARTS pattern.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    atom: rdkit.Chem.Atom</span>
+<span class="sd">        RDKit atom.</span>
+
+<span class="sd">    Results</span>
+<span class="sd">    -------</span>
+<span class="sd">    symbol: str</span>
+<span class="sd">        SMARTS symbol of the atom.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">symbol</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetSmarts</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s2">&quot;[&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">symbol</span><span class="p">:</span>
+        <span class="n">symbol</span> <span class="o">=</span> <span class="s2">&quot;[&quot;</span> <span class="o">+</span> <span class="n">symbol</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+
+    <span class="k">return</span> <span class="n">symbol</span></div>
+
+
+<div class="viewcode-block" id="get_fragments_for_changed_atoms"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.get_fragments_for_changed_atoms">[docs]</a><span class="k">def</span> <span class="nf">get_fragments_for_changed_atoms</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">changed_atom_tags</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given an RDKit mols and a list of changed atom tags, this function</span>
+<span class="sd">    computes the SMILES string of molecular fragments using MolFragmentToSmiles</span>
+<span class="sd">    for all changed fragments.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule</span>
+<span class="sd">    changed_atom_tags: List[str]</span>
+<span class="sd">        List of changed atom tags.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    this_fragment: str</span>
+<span class="sd">        SMILES string of molecular fragment of changed atoms</span>
+<span class="sd">    fragment_atoms: dict</span>
+<span class="sd">        Dictionary of atoms in fragment.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fragment_atoms</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Initialize list of replacement symbols (updated during expansion)</span>
+    <span class="n">symbol_replacements</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Build list of atoms to use</span>
+    <span class="n">atoms_to_use</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="c1"># Check self (only tagged atoms)</span>
+        <span class="k">if</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetSmarts</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetSmarts</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">changed_atom_tags</span><span class="p">:</span>
+                <span class="n">fragment_atoms</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetSmarts</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">])]</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">()</span>
+                <span class="n">atoms_to_use</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">())</span>
+                <span class="n">symbol</span> <span class="o">=</span> <span class="n">get_strict_smarts_for_atom</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">symbol</span> <span class="o">!=</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetSmarts</span><span class="p">():</span>
+                    <span class="n">symbol_replacements</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">atom</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">(),</span> <span class="n">symbol</span><span class="p">))</span>
+                <span class="k">continue</span>
+
+    <span class="c1"># Define new symbols based on symbol_replacements</span>
+    <span class="n">symbols</span> <span class="o">=</span> <span class="p">[</span><span class="n">atom</span><span class="o">.</span><span class="n">GetSmarts</span><span class="p">()</span> <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">symbol</span><span class="p">)</span> <span class="ow">in</span> <span class="n">symbol_replacements</span><span class="p">:</span>
+        <span class="n">symbols</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">symbol</span>
+
+    <span class="n">mol_copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">ClearProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mol_copy</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+    <span class="n">this_fragment</span> <span class="o">=</span> <span class="n">AllChem</span><span class="o">.</span><span class="n">MolFragmentToSmiles</span><span class="p">(</span>
+        <span class="n">mol_copy</span><span class="p">,</span>
+        <span class="n">atoms_to_use</span><span class="p">,</span>
+        <span class="n">atomSymbols</span><span class="o">=</span><span class="n">symbols</span><span class="p">,</span>
+        <span class="n">allHsExplicit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">isomericSmiles</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">allBondsExplicit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">this_fragment</span><span class="p">,</span> <span class="n">fragment_atoms</span></div>
+
+
+<div class="viewcode-block" id="changed_labels"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.changed_labels">[docs]</a><span class="k">def</span> <span class="nf">changed_labels</span><span class="p">(</span>
+    <span class="n">reac_fragments</span><span class="p">,</span>
+    <span class="n">prod_fragments</span><span class="p">,</span>
+    <span class="n">reac_fragment_atoms</span><span class="p">,</span>
+    <span class="n">prod_fragment_atoms</span><span class="p">,</span>
+    <span class="n">reac_mols</span><span class="p">,</span>
+    <span class="n">prod_mols</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given the fragments of reactants and products (strings), the mapping of index to atom-mapping number</span>
+<span class="sd">    (dictionaries), and the whole molecules (RDKit mols), this function computes the changed labels, this</span>
+<span class="sd">    is the changed formal charges (e.g. R-O-H to R-O- (change of charge on the oxygen).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    reac_fragments: str</span>
+<span class="sd">        Fragment of reactant(s).</span>
+<span class="sd">    prod_fragments: str</span>
+<span class="sd">        Fragment of product(s).</span>
+<span class="sd">    reac_fragment_atoms: dict</span>
+<span class="sd">        Dictionary of index to atom-mapping numbers in reactant fragment.</span>
+<span class="sd">    prod_fragment_atoms: dict</span>
+<span class="sd">        Dictionary of index to atom-mapping numbers in product fragment.</span>
+<span class="sd">    reac_mols: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit reactant(s) molecule.</span>
+<span class="sd">    reac_prod: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit product(s) molecule.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    change_dict_atoms: list</span>
+<span class="sd">        List of changed labels (=changed formal charges).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">change_dict_atoms</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">tags</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\:([0-9]+)\]&quot;</span><span class="p">,</span> <span class="n">reac_fragments</span><span class="p">)</span>
+    <span class="n">reac_symbols</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[[^\]]*\]&quot;</span><span class="p">,</span> <span class="n">reac_fragments</span><span class="p">)</span>
+    <span class="n">prod_symbols</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\[[^\]]*\]&quot;</span><span class="p">,</span> <span class="n">prod_fragments</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
+        <span class="n">reac</span> <span class="o">=</span> <span class="n">reac_symbols</span><span class="p">[</span>
+            <span class="p">[(</span><span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="n">tag</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span> <span class="ow">in</span> <span class="n">reac_symbol</span><span class="p">)</span> <span class="k">for</span> <span class="n">reac_symbol</span> <span class="ow">in</span> <span class="n">reac_symbols</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span>
+                <span class="kc">True</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">prod</span> <span class="o">=</span> <span class="n">prod_symbols</span><span class="p">[</span>
+            <span class="p">[(</span><span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="n">tag</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span> <span class="ow">in</span> <span class="n">prod_symbol</span><span class="p">)</span> <span class="k">for</span> <span class="n">prod_symbol</span> <span class="ow">in</span> <span class="n">prod_symbols</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span>
+                <span class="kc">True</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">reac</span> <span class="o">!=</span> <span class="n">prod</span><span class="p">:</span>
+            <span class="n">charge_reac</span> <span class="o">=</span> <span class="n">reac_mols</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span>
+                <span class="n">reac_fragment_atoms</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">tag</span><span class="p">)]</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">GetFormalCharge</span><span class="p">()</span>
+            <span class="n">charge_prod</span> <span class="o">=</span> <span class="n">prod_mols</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span>
+                <span class="n">prod_fragment_atoms</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">tag</span><span class="p">)]</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">GetFormalCharge</span><span class="p">()</span>
+            <span class="n">change_dict_atoms</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">tag</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[</span><span class="n">charge_reac</span><span class="p">,</span> <span class="n">charge_prod</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">change_dict_atoms</span></div>
+
+
+<div class="viewcode-block" id="include_bonds"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.include_bonds">[docs]</a><span class="k">def</span> <span class="nf">include_bonds</span><span class="p">(</span><span class="n">mols</span><span class="p">,</span> <span class="n">changed_atom_tags</span><span class="p">,</span> <span class="n">fragment_atoms</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Creates a list of bonds and their indices that have changed atoms attached and should thus</span>
+<span class="sd">    be included in the transition state.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mols: List[rdkit.Chem.Mol]</span>
+<span class="sd">        RDKit molecule(s).</span>
+<span class="sd">    changed_atom_tags: List[int]</span>
+<span class="sd">        Indices of changed atoms.</span>
+<span class="sd">    fragment_atoms: dict</span>
+<span class="sd">        Dictionary of index to atom-mapping numbers in fragment.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    included_bonds: list</span>
+<span class="sd">        List of included bonds.</span>
+<span class="sd">    included_bonds_idx: List[int]</span>
+<span class="sd">        List of included bond indices</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">included_bonds</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">included_bonds_idx</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">fragment_atoms</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="n">atom</span> <span class="o">=</span> <span class="n">mols</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">():</span>
+            <span class="n">begin_atom</span> <span class="o">=</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetBeginAtom</span><span class="p">()</span>
+            <span class="n">end_atom</span> <span class="o">=</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetEndAtom</span><span class="p">()</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">begin_atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">changed_atom_tags</span>
+                <span class="ow">and</span> <span class="n">end_atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">changed_atom_tags</span>
+            <span class="p">):</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">idx</span> <span class="o">&lt;=</span> <span class="n">begin_atom</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">()</span> <span class="ow">and</span> <span class="n">idx</span> <span class="o">&lt;=</span> <span class="n">end_atom</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">()</span>
+                <span class="p">):</span>  <span class="c1"># cound each bond only once</span>
+                    <span class="n">included_bonds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="nb">int</span><span class="p">(</span><span class="n">begin_atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">)),</span>
+                            <span class="nb">int</span><span class="p">(</span><span class="n">end_atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">)),</span>
+                            <span class="n">bond</span><span class="o">.</span><span class="n">GetBondType</span><span class="p">(),</span>
+                        <span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="n">included_bonds_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bond</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">included_bonds</span><span class="p">,</span> <span class="n">included_bonds_idx</span></div>
+
+
+<div class="viewcode-block" id="changed_bonds"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.changed_bonds">[docs]</a><span class="k">def</span> <span class="nf">changed_bonds</span><span class="p">(</span><span class="n">included_bonds_reac</span><span class="p">,</span> <span class="n">included_bonds_prod</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a dictionary of changed bonds from a list of included bonds in the reactants and products.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    included_bonds_reac: list</span>
+<span class="sd">        List of included bonds in the reactants.</span>
+<span class="sd">    included_bonds_prod: list</span>
+<span class="sd">        List of included bonds in the products.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    change_dict_bonds: dict</span>
+<span class="sd">        Dictionary of changed bonds.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">change_dict_bonds</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="n">included_bonds_reac</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">bond</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">included_bonds_prod</span><span class="p">:</span>
+            <span class="n">change_dict_bonds</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([</span><span class="n">bond</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bond</span><span class="p">[</span><span class="mi">1</span><span class="p">]]))]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">bond</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">ZERO</span><span class="p">,</span>
+            <span class="p">]</span>
+    <span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="n">included_bonds_prod</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">bond</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">included_bonds_reac</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([</span><span class="n">bond</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bond</span><span class="p">[</span><span class="mi">1</span><span class="p">]]))</span> <span class="ow">in</span> <span class="n">change_dict_bonds</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">change_dict_bonds</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([</span><span class="n">bond</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bond</span><span class="p">[</span><span class="mi">1</span><span class="p">]]))][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">bond</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">change_dict_bonds</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([</span><span class="n">bond</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bond</span><span class="p">[</span><span class="mi">1</span><span class="p">]]))]</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">ZERO</span><span class="p">,</span>
+                    <span class="n">bond</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">change_dict_bonds</span></div>
+
+
+<div class="viewcode-block" id="bond_order_increases"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.bond_order_increases">[docs]</a><span class="k">def</span> <span class="nf">bond_order_increases</span><span class="p">(</span><span class="n">bond1</span><span class="p">,</span> <span class="n">bond2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines whether bond order gets larger from bond1 to bond2.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    bond1: rdkit.Chem.Bond</span>
+<span class="sd">        RDKit bond object.</span>
+<span class="sd">    bond2: rdkit.Chem.Bond</span>
+<span class="sd">        RDKit bond object.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        Whether bond order increases from bond1 to bond2.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">known_bonds</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">SINGLE</span><span class="p">,</span>
+        <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">,</span>
+        <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">TRIPLE</span><span class="p">,</span>
+        <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">AROMATIC</span><span class="p">,</span>
+        <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">ZERO</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="n">bond1</span> <span class="ow">in</span> <span class="n">known_bonds</span>
+    <span class="p">),</span> <span class="s2">&quot;Bond type not supported (must be zero, single, double, triple or aromatic)&quot;</span>
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="n">bond2</span> <span class="ow">in</span> <span class="n">known_bonds</span>
+    <span class="p">),</span> <span class="s2">&quot;Bond type not supported (must be zero, single, double, triple or aromatic)&quot;</span>
+
+    <span class="n">values</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">SINGLE</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">TRIPLE</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">AROMATIC</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">,</span>
+        <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">ZERO</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="n">bond2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">values</span><span class="p">[</span><span class="n">bond1</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="make_ts"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.make_ts">[docs]</a><span class="k">def</span> <span class="nf">make_ts</span><span class="p">(</span>
+    <span class="n">reac_mols</span><span class="p">,</span>
+    <span class="n">included_bonds_idx</span><span class="p">,</span>
+    <span class="n">change_dict_bonds</span><span class="p">,</span>
+    <span class="n">change_dict_atoms</span><span class="p">,</span>
+    <span class="n">reac_fragment_atoms</span><span class="p">,</span>
+    <span class="n">ts_seed</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Makes an RDKit mol of the transition state, either the whole transistion state (with all atoms and bonds included,</span>
+<span class="sd">    or only the seed (if ts_seed==True), which includes only the atoms undergoing changes and the corresponding bonds.</span>
+<span class="sd">    Returns the transition state (whole or seed), and dictionaries of how to change bond types and charges to</span>
+<span class="sd">    revert back to either the products or reactants.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    reac_mols: rdkit.Chem.mol</span>
+<span class="sd">        RDKit molecule of reactant(s).</span>
+<span class="sd">    included_bonds_idx: List[int]</span>
+<span class="sd">        List of included bond indices in transition state.</span>
+<span class="sd">    change_dict_bonds: dict</span>
+<span class="sd">        Dictionary of bond changes in reaction.</span>
+<span class="sd">    change_dict_atoms: dict</span>
+<span class="sd">        Dictionary of formal charge changes in reaction.</span>
+<span class="sd">    reac_fragment_atoms: dict</span>
+<span class="sd">        Dictionary of atom indices in reactant(s) fragment.</span>
+<span class="sd">    ts_seed: bool</span>
+<span class="sd">        Boolean whether only to save the full transition state or only the reaction center.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    change_ts_to_reac: dict</span>
+<span class="sd">        Dictionary of bond and atom changes from the ts to the reactants</span>
+<span class="sd">    change_ts_to_prod: dict</span>
+<span class="sd">        Dictionary of bond and atom changes from the ts to the products,</span>
+<span class="sd">    ts: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule of the transition state</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ts</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">reac_mols</span><span class="p">)</span>
+    <span class="n">ts_included_bonds_idx</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">included_bonds_idx</span><span class="p">)</span>
+    <span class="n">bond_idx</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">GetNumBonds</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">change_dict_bonds</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">change_dict_bonds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">ZERO</span>
+        <span class="p">):</span>  <span class="c1"># Change of an existing bond</span>
+            <span class="n">bond</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">GetBondBetweenAtoms</span><span class="p">(</span>
+                <span class="n">reac_fragment_atoms</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">reac_fragment_atoms</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">bond_order_increases</span><span class="p">(</span>
+                <span class="n">change_dict_bonds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">change_dict_bonds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="p">):</span>
+                <span class="n">bond</span><span class="o">.</span><span class="n">SetBondType</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">DATIVEL</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">bond</span><span class="o">.</span><span class="n">SetBondType</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">DATIVER</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># add new bond</span>
+            <span class="n">editable</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">EditableMol</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+            <span class="n">editable</span><span class="o">.</span><span class="n">AddBond</span><span class="p">(</span>
+                <span class="n">reac_fragment_atoms</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                <span class="n">reac_fragment_atoms</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+                <span class="n">order</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">DATIVEL</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">ts_included_bonds_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bond_idx</span><span class="p">)</span>
+            <span class="n">ts</span> <span class="o">=</span> <span class="n">editable</span><span class="o">.</span><span class="n">GetMol</span><span class="p">()</span>
+            <span class="n">bond_idx</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">ts_seed</span><span class="p">:</span>
+        <span class="n">amap</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">ts</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">PathToSubmol</span><span class="p">(</span>
+            <span class="n">ts</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">ts_included_bonds_idx</span><span class="p">),</span> <span class="n">atomMap</span><span class="o">=</span><span class="n">amap</span>
+        <span class="p">)</span>  <span class="c1"># Match only fragment</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">amap</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">ts</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">PathToSubmol</span><span class="p">(</span>
+            <span class="n">ts</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">bond_idx</span><span class="p">)),</span> <span class="n">atomMap</span><span class="o">=</span><span class="n">amap</span>
+        <span class="p">)</span>  <span class="c1"># Match whole molecule</span>
+
+    <span class="c1"># Set up dictionary of change</span>
+    <span class="n">change_ts_to_reac</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;bond&quot;</span><span class="p">:</span> <span class="p">{},</span> <span class="s2">&quot;atom&quot;</span><span class="p">:</span> <span class="p">{}}</span>
+    <span class="n">change_ts_to_prod</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;bond&quot;</span><span class="p">:</span> <span class="p">{},</span> <span class="s2">&quot;atom&quot;</span><span class="p">:</span> <span class="p">{}}</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">change_dict_bonds</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">id_atom1</span> <span class="o">=</span> <span class="n">amap</span><span class="p">[</span><span class="n">reac_fragment_atoms</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]]]</span>
+        <span class="n">id_atom2</span> <span class="o">=</span> <span class="n">amap</span><span class="p">[</span><span class="n">reac_fragment_atoms</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">]]]</span>
+        <span class="n">bond_idx</span> <span class="o">=</span> <span class="p">(</span><span class="n">id_atom1</span><span class="p">,</span> <span class="n">id_atom2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">bond_order_increases</span><span class="p">(</span><span class="n">change_dict_bonds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">change_dict_bonds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">change_ts_to_reac</span><span class="p">[</span><span class="s2">&quot;bond&quot;</span><span class="p">][</span><span class="n">bond_idx</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">change_dict_bonds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">DATIVEL</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">change_ts_to_prod</span><span class="p">[</span><span class="s2">&quot;bond&quot;</span><span class="p">][</span><span class="n">bond_idx</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">change_dict_bonds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">DATIVEL</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">change_ts_to_reac</span><span class="p">[</span><span class="s2">&quot;bond&quot;</span><span class="p">][</span><span class="n">bond_idx</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">change_dict_bonds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">DATIVER</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">change_ts_to_prod</span><span class="p">[</span><span class="s2">&quot;bond&quot;</span><span class="p">][</span><span class="n">bond_idx</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">change_dict_bonds</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">DATIVER</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">change_dict_atoms</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">id_atom</span> <span class="o">=</span> <span class="n">amap</span><span class="p">[</span><span class="n">reac_fragment_atoms</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span>
+        <span class="n">change_ts_to_reac</span><span class="p">[</span><span class="s2">&quot;atom&quot;</span><span class="p">][</span><span class="n">id_atom</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">change_dict_atoms</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">change_dict_atoms</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">change_ts_to_prod</span><span class="p">[</span><span class="s2">&quot;atom&quot;</span><span class="p">][</span><span class="n">id_atom</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">change_dict_atoms</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">change_dict_atoms</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">change_ts_to_reac</span><span class="p">,</span> <span class="n">change_ts_to_prod</span><span class="p">,</span> <span class="n">ts</span></div>
+
+
+<div class="viewcode-block" id="mapping_list_dict"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.mapping_list_dict">[docs]</a><span class="k">def</span> <span class="nf">mapping_list_dict</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes a list of all map numbers and an atom-mapping indices dictionary.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    map_numbers: List[int]</span>
+<span class="sd">        Sorted list of atom map numbers</span>
+<span class="sd">    mapping: dict</span>
+<span class="sd">        Dictionary of mapping</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">map_numbers</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">mapping</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">HasProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">):</span>
+            <span class="n">map_numbers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">)))</span>
+            <span class="n">mapping</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">))]</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">()</span>
+    <span class="n">map_numbers</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">map_numbers</span><span class="p">,</span> <span class="n">mapping</span></div>
+
+
+<div class="viewcode-block" id="compute_aam_with_h"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.compute_aam_with_h">[docs]</a><span class="k">def</span> <span class="nf">compute_aam_with_h</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper function to produce an atom mapping for a reaction smiles via the</span>
+<span class="sd">    ReactionRecoder tool (RDT) by Syed Asad Rahman. The tool maps hydrogens that undergo changes,</span>
+<span class="sd">    and this function adds the necessary atom-mapping to all other hydrogens.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rxn_smiles: str</span>
+<span class="sd">        Reaction SMILES.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    rxn_smiles: str</span>
+<span class="sd">        atom-mapped reaction SMILES with hydrogens.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">reac_smiles</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span>
+        <span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="p">)</span>
+    <span class="n">prod_smiles</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span>
+        <span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="p">)</span>
+    <span class="n">rxn_smiles</span> <span class="o">=</span> <span class="n">reac_smiles</span> <span class="o">+</span> <span class="s2">&quot;&gt;&gt;&quot;</span> <span class="o">+</span> <span class="n">prod_smiles</span>
+
+    <span class="n">dirname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="n">rdt_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="s2">&quot;../../ReactionDecoder/ReactionDecoder.jar&quot;</span><span class="p">)</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;java -jar </span><span class="si">{</span><span class="n">rdt_path</span><span class="si">}</span><span class="s1"> -Q SMI -q &quot;</span><span class="si">{</span><span class="n">rxn_smiles</span><span class="si">}</span><span class="s1">&quot;  -j AAM -f TEXT&#39;</span>
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">)</span>
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+        <span class="s1">&#39;grep -A 1 &quot;SELECTED AAM MAPPING&quot; ECBLAST_smiles_AAM.txt | tail -n 1 &gt; ECBLAST_smiles_AAM.smi&#39;</span><span class="p">,</span>
+        <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;ECBLAST_smiles_AAM.smi&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">rxn_smiles</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">(</span><span class="s2">&quot;rm -f ECBLAST_smiles_AAM.*&quot;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">reac_mols</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span>
+        <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sanitize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">prod_mols</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span>
+        <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">sanitize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">Chem</span><span class="o">.</span><span class="n">SanitizeMol</span><span class="p">(</span>
+        <span class="n">reac_mols</span><span class="p">,</span>
+        <span class="n">sanitizeOps</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">SanitizeFlags</span><span class="o">.</span><span class="n">SANITIZE_ALL</span>
+        <span class="o">^</span> <span class="n">Chem</span><span class="o">.</span><span class="n">SanitizeFlags</span><span class="o">.</span><span class="n">SANITIZE_ADJUSTHS</span><span class="p">,</span>
+    <span class="p">)</span>  <span class="c1"># Sanitize all functions apart hydrogens</span>
+    <span class="n">Chem</span><span class="o">.</span><span class="n">SanitizeMol</span><span class="p">(</span>
+        <span class="n">prod_mols</span><span class="p">,</span>
+        <span class="n">sanitizeOps</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">SanitizeFlags</span><span class="o">.</span><span class="n">SANITIZE_ALL</span>
+        <span class="o">^</span> <span class="n">Chem</span><span class="o">.</span><span class="n">SanitizeFlags</span><span class="o">.</span><span class="n">SANITIZE_ADJUSTHS</span><span class="p">,</span>
+    <span class="p">)</span>  <span class="c1"># Sanitize all functions apart hydrogens</span>
+
+    <span class="n">map_numbers_reac</span><span class="p">,</span> <span class="n">mapping_reac</span> <span class="o">=</span> <span class="n">mapping_list_dict</span><span class="p">(</span><span class="n">reac_mols</span><span class="p">)</span>
+    <span class="n">map_numbers_prod</span><span class="p">,</span> <span class="n">mapping_prod</span> <span class="o">=</span> <span class="n">mapping_list_dict</span><span class="p">(</span><span class="n">prod_mols</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">map_numbers_reac</span> <span class="o">!=</span> <span class="n">map_numbers_prod</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Atom mapping is missing atoms. Exit program.&quot;</span><span class="p">)</span>
+
+    <span class="n">idx</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">map_numbers_reac</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">map_numbers_reac</span><span class="p">:</span>
+        <span class="n">atom_reac</span> <span class="o">=</span> <span class="n">reac_mols</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">mapping_reac</span><span class="p">[</span><span class="n">num</span><span class="p">])</span>
+        <span class="n">atom_prod</span> <span class="o">=</span> <span class="n">prod_mols</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">mapping_prod</span><span class="p">[</span><span class="n">num</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">atom_reac</span><span class="o">.</span><span class="n">GetSymbol</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;H&quot;</span><span class="p">:</span>
+            <span class="n">idx2</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">atom_reac_neighbor</span> <span class="ow">in</span> <span class="n">atom_reac</span><span class="o">.</span><span class="n">GetNeighbors</span><span class="p">():</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">atom_reac_neighbor</span><span class="o">.</span><span class="n">GetSymbol</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;H&quot;</span>
+                    <span class="ow">and</span> <span class="ow">not</span> <span class="n">atom_reac_neighbor</span><span class="o">.</span><span class="n">HasProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">)</span>
+                <span class="p">):</span>
+                    <span class="n">atom_reac_neighbor</span><span class="o">.</span><span class="n">SetAtomMapNum</span><span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="n">idx2</span><span class="p">)</span>
+                    <span class="n">idx2</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">idx3</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">atom_prod_neighbor</span> <span class="ow">in</span> <span class="n">atom_prod</span><span class="o">.</span><span class="n">GetNeighbors</span><span class="p">():</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">atom_prod_neighbor</span><span class="o">.</span><span class="n">GetSymbol</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;H&quot;</span>
+                    <span class="ow">and</span> <span class="ow">not</span> <span class="n">atom_prod_neighbor</span><span class="o">.</span><span class="n">HasProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">)</span>
+                <span class="p">):</span>
+                    <span class="n">atom_prod_neighbor</span><span class="o">.</span><span class="n">SetAtomMapNum</span><span class="p">(</span><span class="n">idx</span> <span class="o">+</span> <span class="n">idx3</span><span class="p">)</span>
+                    <span class="n">idx3</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">idx2</span> <span class="o">!=</span> <span class="n">idx3</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Atom mapping is missing atoms. Exit program.&quot;</span><span class="p">)</span>
+            <span class="n">idx</span> <span class="o">+=</span> <span class="n">idx2</span>
+
+    <span class="n">rxn_smiles</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">reac_mols</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&gt;&gt;&quot;</span> <span class="o">+</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">prod_mols</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">rxn_smiles</span></div>
+
+
+<div class="viewcode-block" id="compute_aam_without_h"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.compute_aam_without_h">[docs]</a><span class="k">def</span> <span class="nf">compute_aam_without_h</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This helper function produces an atom mapping for a reaction smiles via the</span>
+<span class="sd">    ReactionRecoder tool (RDT) by Syed Asad Rahman.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rxn_smiles: str</span>
+<span class="sd">        Reaction SMILES.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    rxn_smiles: str</span>
+<span class="sd">        atom-mapped reaction SMILES without hydrogens.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">reac_smiles</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">prod_smiles</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">rxn_smiles</span> <span class="o">=</span> <span class="n">reac_smiles</span> <span class="o">+</span> <span class="s2">&quot;&gt;&gt;&quot;</span> <span class="o">+</span> <span class="n">prod_smiles</span>
+
+    <span class="n">dirname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+    <span class="n">rdt_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">,</span> <span class="s2">&quot;../../ReactionDecoder/ReactionDecoder.jar&quot;</span><span class="p">)</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;java -jar </span><span class="si">{</span><span class="n">rdt_path</span><span class="si">}</span><span class="s1"> -Q SMI -q &quot;</span><span class="si">{</span><span class="n">rxn_smiles</span><span class="si">}</span><span class="s1">&quot;  -j AAM -f TEXT&#39;</span>
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">)</span>
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+        <span class="s1">&#39;grep -A 1 &quot;SELECTED AAM MAPPING&quot; ECBLAST_smiles_AAM.txt | tail -n 1 &gt; ECBLAST_smiles_AAM.smi&#39;</span><span class="p">,</span>
+        <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;ECBLAST_smiles_AAM.smi&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">rxn_smiles</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">(</span><span class="s2">&quot;rm -f ECBLAST_smiles_AAM.*&quot;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">rxn_smiles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="process_an_example"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.process_an_example">[docs]</a><span class="k">def</span> <span class="nf">process_an_example</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Processes one rxn_smiles string and returns the transition state (whole or seed depending on ts_seed)</span>
+<span class="sd">    RDKit mol object, as well as dictionaries of how to change bond types and charges to revert the transition state</span>
+<span class="sd">    back to either the products or reactants.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rxn_smiles: str</span>
+<span class="sd">        Reaction SMILES.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    change_ts_to_reac: dict</span>
+<span class="sd">        Dictionary of bond and atom changes from the ts to the reactants</span>
+<span class="sd">    change_ts_to_prod: dict</span>
+<span class="sd">        Dictionary of bond and atom changes from the ts to the products</span>
+<span class="sd">    ts: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule of the whole imaginary transition state</span>
+<span class="sd">    ts_seed: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule of the reaction center</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">reac_mols</span> <span class="o">=</span> <span class="n">make_mols</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="n">prod_mols</span> <span class="o">=</span> <span class="n">make_mols</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">changed_atoms</span><span class="p">,</span> <span class="n">changed_atom_tags</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">get_changed_atoms</span><span class="p">(</span><span class="n">reac_mols</span><span class="p">,</span> <span class="n">prod_mols</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not get changed atoms&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">changed_atom_tags</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No change detected&quot;</span><span class="p">)</span>
+
+    <span class="n">reac_fragments</span><span class="p">,</span> <span class="n">reac_fragment_atoms</span> <span class="o">=</span> <span class="n">get_fragments_for_changed_atoms</span><span class="p">(</span>
+        <span class="n">reac_mols</span><span class="p">,</span> <span class="n">changed_atom_tags</span>
+    <span class="p">)</span>
+    <span class="n">prod_fragments</span><span class="p">,</span> <span class="n">prod_fragment_atoms</span> <span class="o">=</span> <span class="n">get_fragments_for_changed_atoms</span><span class="p">(</span>
+        <span class="n">prod_mols</span><span class="p">,</span> <span class="n">changed_atom_tags</span>
+    <span class="p">)</span>
+    <span class="n">included_bonds_reac</span><span class="p">,</span> <span class="n">included_bonds_idx</span> <span class="o">=</span> <span class="n">include_bonds</span><span class="p">(</span>
+        <span class="n">reac_mols</span><span class="p">,</span> <span class="n">changed_atom_tags</span><span class="p">,</span> <span class="n">reac_fragment_atoms</span>
+    <span class="p">)</span>
+    <span class="n">included_bonds_prod</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">include_bonds</span><span class="p">(</span>
+        <span class="n">prod_mols</span><span class="p">,</span> <span class="n">changed_atom_tags</span><span class="p">,</span> <span class="n">prod_fragment_atoms</span>
+    <span class="p">)</span>
+    <span class="n">change_dict_bonds</span> <span class="o">=</span> <span class="n">changed_bonds</span><span class="p">(</span><span class="n">included_bonds_reac</span><span class="p">,</span> <span class="n">included_bonds_prod</span><span class="p">)</span>
+    <span class="n">change_dict_atoms</span> <span class="o">=</span> <span class="n">changed_labels</span><span class="p">(</span>
+        <span class="n">reac_fragments</span><span class="p">,</span>
+        <span class="n">prod_fragments</span><span class="p">,</span>
+        <span class="n">reac_fragment_atoms</span><span class="p">,</span>
+        <span class="n">prod_fragment_atoms</span><span class="p">,</span>
+        <span class="n">reac_mols</span><span class="p">,</span>
+        <span class="n">prod_mols</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">change_ts_to_reac</span><span class="p">,</span> <span class="n">change_ts_to_prod</span><span class="p">,</span> <span class="n">ts_seed</span> <span class="o">=</span> <span class="n">make_ts</span><span class="p">(</span>
+        <span class="n">reac_mols</span><span class="p">,</span>
+        <span class="n">included_bonds_idx</span><span class="p">,</span>
+        <span class="n">change_dict_bonds</span><span class="p">,</span>
+        <span class="n">change_dict_atoms</span><span class="p">,</span>
+        <span class="n">reac_fragment_atoms</span><span class="p">,</span>
+        <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">ts</span> <span class="o">=</span> <span class="n">make_ts</span><span class="p">(</span>
+        <span class="n">reac_mols</span><span class="p">,</span>
+        <span class="n">included_bonds_idx</span><span class="p">,</span>
+        <span class="n">change_dict_bonds</span><span class="p">,</span>
+        <span class="n">change_dict_atoms</span><span class="p">,</span>
+        <span class="n">reac_fragment_atoms</span><span class="p">,</span>
+        <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">change_ts_to_reac</span><span class="p">,</span> <span class="n">change_ts_to_prod</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">ts_seed</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Esther Heid. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.5.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,474 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Getting Started &mdash; ehreact  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Documentation" href="api.html" />
+    <link rel="prev" title="Welcome to ehreact’s documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ehreact
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-of-optional-packages">Installation of optional packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tutorial">Tutorial</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-diagrams-from-the-command-line">Creating diagrams from the command line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-diagrams-within-a-python-script">Creating diagrams within a python script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scoring-new-reactions-from-the-command-line">Scoring new reactions from the command line</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scoring-new-reactions-within-a-python-script">Scoring new reactions within a python script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#changing-the-scoring-function">Changing the scoring function</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ehreact</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Getting Started</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/getting_started.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>This page details how to get started with ehreact.</p>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>Ehreact uses Python 3.6+ and a number of python packages, see <a class="reference internal" href="#installation"><span class="std std-ref">Installation</span></a> for a detailed installation instruction and list of dependencies. We assume you have Conda on your system. If this is not the case yet, install Miniconda from <a class="reference external" href="https://conda.io/miniconda.html">https://conda.io/miniconda.html</a>. However, Conda is optional and you may choose to install packages otherwise.</p>
+</div>
+<div class="section" id="installation">
+<span id="id1"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>To install ehreact, make a new conda environment via:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">env</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">environment</span><span class="o">.</span><span class="n">yml</span>
+<span class="n">conda</span> <span class="n">activate</span> <span class="n">ehreact</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
+</pre></div>
+</div>
+<p>(Note: If you have an old version of conda (&lt; conda 4.4), the second command is <code class="code docutils literal notranslate"><span class="pre">source</span> <span class="pre">activate</span> <span class="pre">ehreact</span></code>). The environment
+simply contains python, numpy, rdkit, and typed-argument-parser. If you do not like to use conda, you can instead install these
+packages yourself, and then run <code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code>.</p>
+<p>To check your installation, try to import ehreact in a Python session:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ehreact</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="installation-of-optional-packages">
+<h2>Installation of optional packages<a class="headerlink" href="#installation-of-optional-packages" title="Permalink to this headline">¶</a></h2>
+<p>If you want to automatically atom-map reactions, download ReactionDecoder from <a class="reference external" href="https://github.com/asad/ReactionDecoder/releases">Github</a> (tested with rdt-2.4.1-jar-with-dependencies.jar), put the jar file into the folder <code class="code docutils literal notranslate"><span class="pre">ReactionDecoder</span></code> (within the ehreact package folder) and rename the file to <code class="code docutils literal notranslate"><span class="pre">ReactionDecoder.jar</span></code> This is optional, and you can run EHreact without ReactionDecoder.</p>
+<p>Plotting Hasse diagrams relies on dot (install for example graphviz) and rsvg-convert. If you do not have these packages on your system already, you can install both via homebrew on Macos:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">brew</span> <span class="n">install</span> <span class="n">graphviz</span>
+<span class="n">brew</span> <span class="n">install</span> <span class="n">librsvg</span>
+</pre></div>
+</div>
+<p>or via apt-get on Linux (Ubuntu, Debian):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">graphviz</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">librsvg2</span><span class="o">-</span><span class="nb">bin</span>
+</pre></div>
+</div>
+<p>There are other options to install, too. Installing dot and rsvg-convert is optional, and you can run EHreact without both, but will not be able to plot diagrams to an image.</p>
+</div>
+<div class="section" id="tutorial">
+<h2>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h2>
+<p>After installing ehreact, you are ready to calculate, plot and score a few Hasse diagrams. We will use the enzyme class L-lactate oxidase (EC. 1.1.3.2) as an example, with reactions taken from <a class="reference external" href="https://www.brenda-enzymes.org/enzyme.php?ecno=1.1.3.2#SUBSTRATE">BRENDA</a> after removing stereochemistry. Exemplary data files can be found in <code class="code docutils literal notranslate"><span class="pre">ehreact/data/</span></code>.</p>
+<p>Lactate oxidase can oxidize lactate using oxygen:</p>
+<a class="reference internal image-reference" href="_images/lactate.png"><img alt="_images/lactate.png" src="_images/lactate.png" style="width: 700px;" /></a>
+<p>We will use nine known substrates for L-lactate oxidase to construct extended Hasse diagrams, and later also score some new putative reactions:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C1</span><span class="o">=</span><span class="n">CC</span><span class="o">=</span><span class="n">C</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C1</span><span class="p">)</span><span class="n">C</span><span class="p">(</span><span class="n">C</span><span class="p">(</span><span class="o">=</span><span class="n">O</span><span class="p">)[</span><span class="n">O</span><span class="o">-</span><span class="p">])</span><span class="n">O</span>
+<span class="n">CCC</span><span class="p">(</span><span class="n">C</span><span class="p">(</span><span class="o">=</span><span class="n">O</span><span class="p">)[</span><span class="n">O</span><span class="o">-</span><span class="p">])</span><span class="n">O</span>
+<span class="n">OC</span><span class="p">(</span><span class="n">C</span><span class="p">([</span><span class="n">O</span><span class="o">-</span><span class="p">])</span><span class="o">=</span><span class="n">O</span><span class="p">)</span><span class="n">c1ccc</span><span class="p">(</span><span class="n">Cl</span><span class="p">)</span><span class="n">cc1</span>
+<span class="n">C1</span><span class="o">=</span><span class="n">CC</span><span class="p">(</span><span class="o">=</span><span class="n">CC</span><span class="o">=</span><span class="n">C1C</span><span class="p">(</span><span class="n">C</span><span class="p">(</span><span class="o">=</span><span class="n">O</span><span class="p">)[</span><span class="n">O</span><span class="o">-</span><span class="p">])</span><span class="n">O</span><span class="p">)</span><span class="n">O</span>
+<span class="n">COc1ccc</span><span class="p">(</span><span class="n">cc1</span><span class="p">)</span><span class="n">C</span><span class="p">(</span><span class="n">O</span><span class="p">)</span><span class="n">C</span><span class="p">([</span><span class="n">O</span><span class="o">-</span><span class="p">])</span><span class="o">=</span><span class="n">O</span>
+<span class="n">OC</span><span class="p">(</span><span class="n">C</span><span class="p">([</span><span class="n">O</span><span class="o">-</span><span class="p">])</span><span class="o">=</span><span class="n">O</span><span class="p">)</span><span class="n">c1ccc</span><span class="p">(</span><span class="n">cc1</span><span class="p">)[</span><span class="n">N</span><span class="o">+</span><span class="p">]([</span><span class="n">O</span><span class="o">-</span><span class="p">])</span><span class="o">=</span><span class="n">O</span>
+<span class="n">CCCC</span><span class="p">(</span><span class="n">C</span><span class="p">(</span><span class="o">=</span><span class="n">O</span><span class="p">)[</span><span class="n">O</span><span class="o">-</span><span class="p">])</span><span class="n">O</span>
+<span class="n">CCC</span><span class="p">(</span><span class="n">C</span><span class="p">)</span><span class="n">C</span><span class="p">(</span><span class="n">C</span><span class="p">(</span><span class="o">=</span><span class="n">O</span><span class="p">)[</span><span class="n">O</span><span class="o">-</span><span class="p">])</span><span class="n">O</span>
+<span class="n">CC</span><span class="p">(</span><span class="n">C</span><span class="p">(</span><span class="o">=</span><span class="n">O</span><span class="p">)[</span><span class="n">O</span><span class="o">-</span><span class="p">])</span><span class="n">O</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/substrates.png"><img alt="_images/substrates.png" src="_images/substrates.png" style="width: 700px;" /></a>
+<div class="section" id="creating-diagrams-from-the-command-line">
+<h3>Creating diagrams from the command line<a class="headerlink" href="#creating-diagrams-from-the-command-line" title="Permalink to this headline">¶</a></h3>
+<p>First, let’s use ehreact from the command line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">train</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">data_path</span> <span class="n">ehreact</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">molecule_training</span><span class="o">.</span><span class="n">dat</span> <span class="o">--</span><span class="n">save_plot</span> <span class="n">test</span><span class="o">.</span><span class="n">png</span> <span class="o">--</span><span class="n">train_mode</span> <span class="n">single_reactant</span> <span class="o">--</span><span class="n">seed</span> <span class="s2">&quot;C([H])O[H]&quot;</span> <span class="o">--</span><span class="n">no_props</span>
+</pre></div>
+</div>
+<p>where we have specified the path to read a list of smiles strings via <code class="code docutils literal notranslate"><span class="pre">--data_path</span> <span class="pre">ehreact/data/molecule_training.dat</span></code>, process them in single reactant mode (<code class="code docutils literal notranslate"><span class="pre">--train_mode</span> <span class="pre">single_reactant</span></code> with C([H])O[H] as seed via <code class="code docutils literal notranslate"><span class="pre">--seed</span> <span class="pre">&quot;C([H])O[H]&quot;</span></code>) and
+have requested to plot the diagram via <code class="code docutils literal notranslate"><span class="pre">--save_plot</span> <span class="pre">test.png</span></code>. Since we are only interested in looking at the created diagram currently, we have ommitted the calculation of a number of properties for each node in the diagram (<code class="code docutils literal notranslate"><span class="pre">--no_props</span></code>) to speed up the diagram creation. The execution of the command should produce a PNG image <code class="code docutils literal notranslate"><span class="pre">test.png</span></code>:</p>
+<a class="reference internal image-reference" href="_images/reactant_diagram1.png"><img alt="_images/reactant_diagram1.png" src="_images/reactant_diagram1.png" style="width: 700px;" /></a>
+<p>Substructures/fragments are shown in red, and full molecules in black (which are always leaf nodes). The first node is the seed itself. Since the alcohol is always secondary in the known substrates of L-lactate oxidase, the next node shows the rule extended to include the two neighbouring carbon atoms. There are now two possible atoms to extend the rule further, but only of of them, namely adding the oxygens of the carboxylate group, is applicable to all substrates, so that this extension is made first. The diagram then splits up in branches as it extends the rule at the other carbon atom, with either only hydrogens attached, a linear chain, a branched chain or an aromatic ring.</p>
+<p>You can also plot a condensed diagram, showing only those substructures which are followed by branching or a leaf node (ommiting all red nodes connected to a single other red node) via the <code class="code docutils literal notranslate"><span class="pre">--plot_only_branches</span></code> command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">train</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">data_path</span> <span class="n">ehreact</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">molecule_training</span><span class="o">.</span><span class="n">dat</span> <span class="o">--</span><span class="n">save_plot</span> <span class="n">test</span><span class="o">.</span><span class="n">png</span> <span class="o">--</span><span class="n">train_mode</span> <span class="n">single_reactant</span> <span class="o">--</span><span class="n">seed</span> <span class="s2">&quot;C([H])O[H]&quot;</span> <span class="o">--</span><span class="n">no_props</span> <span class="o">--</span><span class="n">plot_only_branches</span>
+</pre></div>
+</div>
+<p>which creates a condensed diagram, that can be handy if viewing very large systems:</p>
+<a class="reference internal image-reference" href="_images/reactant_diagram2.png"><img alt="_images/reactant_diagram2.png" src="_images/reactant_diagram2.png" style="width: 700px;" /></a>
+<p>The <code class="code docutils literal notranslate"><span class="pre">--plot_only_branches</span></code> command only influences the plotted diagram, and does not change the Hasse diagram saved to file in any way.</p>
+<p>Running EHreact in single_reactant mode only enables a limited set of evaluating and scoring new reactions later on, so it is usually advisable to provide full reactions instead of only the reactants. If atom-mapped reactions are available (including hydrogens), they can be used as direct input to EHreact. An example file is given in <code class="code docutils literal notranslate"><span class="pre">ehreact/data/reaction_training.dat</span></code> for L-lactate oxidase. An exemplary line reads:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">H</span><span class="p">:</span><span class="mi">1</span><span class="p">][</span><span class="n">O</span><span class="p">:</span><span class="mi">2</span><span class="p">][</span><span class="n">C</span><span class="p">:</span><span class="mi">3</span><span class="p">]([</span><span class="n">H</span><span class="p">:</span><span class="mi">4</span><span class="p">])([</span><span class="n">C</span><span class="p">:</span><span class="mi">5</span><span class="p">](</span><span class="o">=</span><span class="p">[</span><span class="n">O</span><span class="p">:</span><span class="mi">6</span><span class="p">])[</span><span class="n">O</span><span class="o">-</span><span class="p">:</span><span class="mi">7</span><span class="p">])[</span><span class="n">C</span><span class="p">:</span><span class="mi">8</span><span class="p">]([</span><span class="n">H</span><span class="p">:</span><span class="mi">9</span><span class="p">])([</span><span class="n">H</span><span class="p">:</span><span class="mi">10</span><span class="p">])[</span><span class="n">H</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">.</span><span class="p">[</span><span class="n">O</span><span class="p">:</span><span class="mi">12</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="n">O</span><span class="p">:</span><span class="mi">13</span><span class="p">]</span><span class="o">&gt;&gt;</span><span class="p">[</span><span class="n">O</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="n">C</span><span class="p">:</span><span class="mi">3</span><span class="p">]([</span><span class="n">C</span><span class="p">:</span><span class="mi">5</span><span class="p">](</span><span class="o">=</span><span class="p">[</span><span class="n">O</span><span class="p">:</span><span class="mi">6</span><span class="p">])[</span><span class="n">O</span><span class="o">-</span><span class="p">:</span><span class="mi">7</span><span class="p">])[</span><span class="n">C</span><span class="p">:</span><span class="mi">8</span><span class="p">]([</span><span class="n">H</span><span class="p">:</span><span class="mi">9</span><span class="p">])([</span><span class="n">H</span><span class="p">:</span><span class="mi">10</span><span class="p">])[</span><span class="n">H</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span><span class="o">.</span><span class="p">[</span><span class="n">H</span><span class="p">:</span><span class="mi">1</span><span class="p">][</span><span class="n">O</span><span class="p">:</span><span class="mi">12</span><span class="p">][</span><span class="n">O</span><span class="p">:</span><span class="mi">13</span><span class="p">][</span><span class="n">H</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>and visually corresponds to:</p>
+<a class="reference internal image-reference" href="_images/aam.png"><img alt="_images/aam.png" src="_images/aam.png" style="width: 700px;" /></a>
+<p>We can now run EHreact in transition_state mode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">train</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">data_path</span> <span class="n">ehreact</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">reaction_training</span><span class="o">.</span><span class="n">dat</span> <span class="o">--</span><span class="n">save_plot</span> <span class="n">test</span><span class="o">.</span><span class="n">png</span> <span class="o">--</span><span class="n">train_mode</span> <span class="n">transition_state</span> <span class="o">--</span><span class="n">no_props</span>
+</pre></div>
+</div>
+<p>where we do not need to provide a seed, since the seed is automatically extracted as the reaction center (all atoms undergoing changes). The plotted diagram now depicts the transition states for each reaction rule, where bonds colored in red reduce their bond order upon reaction, and bonds colored in green increase their bond order upon reaction. Atoms colored in gray are part of the reaction center. Atoms can also be colored in red or green if they change their formal charge upon reaction (not shown).</p>
+<a class="reference internal image-reference" href="_images/transition_diagram1.png"><img alt="_images/transition_diagram1.png" src="_images/transition_diagram1.png" style="width: 700px;" /></a>
+<p>If there are no atom-mappings available for the reactions of interest, EHreact can create them via the <a class="reference external" href="https://github.com/asad/ReactionDecoder">ReactionDecoderTool</a>. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">train</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">data_path</span> <span class="n">ehreact</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">reaction_unmapped_training</span><span class="o">.</span><span class="n">dat</span> <span class="o">--</span><span class="n">save_plot</span> <span class="n">test</span><span class="o">.</span><span class="n">png</span> <span class="o">--</span><span class="n">train_mode</span> <span class="n">transition_state</span> <span class="o">--</span><span class="n">no_props</span> <span class="o">--</span><span class="n">compute_aam</span>
+</pre></div>
+</div>
+<p>will produce the same diagram (albeit somewhat slower due to the computation of the atom-mapping). If you use this functionality, please cite RDT as:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">SA</span> <span class="pre">Rahman,</span> <span class="pre">G</span> <span class="pre">Torrance,</span> <span class="pre">L</span> <span class="pre">Baldacci,</span> <span class="pre">SM</span> <span class="pre">Cuesta,</span> <span class="pre">F</span> <span class="pre">Fenninger,</span> <span class="pre">N</span> <span class="pre">Gopal,</span> <span class="pre">S</span> <span class="pre">Choudhary,</span></code>
+<code class="docutils literal notranslate"><span class="pre">JW</span> <span class="pre">May,</span> <span class="pre">GL</span> <span class="pre">Holliday,</span> <span class="pre">C</span> <span class="pre">Steinbeck</span> <span class="pre">and</span> <span class="pre">JM</span> <span class="pre">Thornton:</span> <span class="pre">Reaction</span> <span class="pre">Decoder</span> <span class="pre">Tool</span> <span class="pre">(RDT):</span></code>
+<code class="docutils literal notranslate"><span class="pre">Extracting</span> <span class="pre">Features</span> <span class="pre">from</span> <span class="pre">Chemical</span> <span class="pre">Reactions,</span> <span class="pre">Bioinformatics</span> <span class="pre">(2016)</span></code></p>
+</div></blockquote>
+<p>On a minor note: No atom-mapping algorithm is perfect, make sure to always check whether the outputted mappings are correct. Use the <code class="code docutils literal notranslate"><span class="pre">--verbose</span></code> option to see the computed mappings.</p>
+</div>
+<div class="section" id="creating-diagrams-within-a-python-script">
+<h3>Creating diagrams within a python script<a class="headerlink" href="#creating-diagrams-within-a-python-script" title="Permalink to this headline">¶</a></h3>
+<p>You can also use EHreact within a python script. For example, open up a python session (for example, an interactive session via iPython or a Jupyter Notebook) and run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ehreact</span>
+<span class="kn">from</span> <span class="nn">ehreact.train</span> <span class="kn">import</span> <span class="n">calculate_diagram</span>
+
+<span class="n">smiles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;O=CCO&quot;</span><span class="p">,</span><span class="s2">&quot;O=CCC&quot;</span><span class="p">,</span><span class="s2">&quot;O=CC&quot;</span><span class="p">]</span>
+<span class="n">d</span><span class="o">=</span><span class="n">calculate_diagram</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span><span class="n">train_mode</span><span class="o">=</span><span class="s1">&#39;single_reactant&#39;</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;C=O&#39;</span><span class="p">],</span><span class="n">no_props</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;C=O&quot;</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>This will print the name of all nodes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;&#39;</span><span class="p">:</span> <span class="n">root</span><span class="p">,</span>
+<span class="s1">&#39;C=O&#39;</span><span class="p">:</span> <span class="n">C</span><span class="o">=</span><span class="n">O</span><span class="p">,</span>
+<span class="s1">&#39;[H]C(C)=O&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">H</span><span class="p">]</span><span class="n">C</span><span class="p">(</span><span class="n">C</span><span class="p">)</span><span class="o">=</span><span class="n">O</span><span class="p">,</span>
+<span class="s1">&#39;CC=O&#39;</span><span class="p">:</span> <span class="n">CC</span><span class="o">=</span><span class="n">O</span><span class="p">,</span>
+<span class="s1">&#39;[H]C(=O)C([H])([H])C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">H</span><span class="p">]</span><span class="n">C</span><span class="p">(</span><span class="o">=</span><span class="n">O</span><span class="p">)</span><span class="n">C</span><span class="p">([</span><span class="n">H</span><span class="p">])([</span><span class="n">H</span><span class="p">])</span><span class="n">C</span><span class="p">,</span>
+<span class="s1">&#39;CCC=O&#39;</span><span class="p">:</span> <span class="n">CCC</span><span class="o">=</span><span class="n">O</span><span class="p">,</span>
+<span class="s1">&#39;[H]C(=O)C([H])([H])O&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">H</span><span class="p">]</span><span class="n">C</span><span class="p">(</span><span class="o">=</span><span class="n">O</span><span class="p">)</span><span class="n">C</span><span class="p">([</span><span class="n">H</span><span class="p">])([</span><span class="n">H</span><span class="p">])</span><span class="n">O</span><span class="p">,</span>
+<span class="s1">&#39;O=CCO&#39;</span><span class="p">:</span> <span class="n">O</span><span class="o">=</span><span class="n">CCO</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>And the variables associated with the node “C=O” (we printed only assorted lines in the following, the true output is longer!):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="s1">&#39;edges_to_child&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">C</span><span class="o">=</span><span class="n">O</span><span class="o">---</span><span class="p">[</span><span class="n">H</span><span class="p">]</span><span class="n">C</span><span class="p">(</span><span class="n">C</span><span class="p">)</span><span class="o">=</span><span class="n">O</span><span class="p">],</span>
+<span class="s1">&#39;edges_to_parent&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">root</span><span class="o">---</span><span class="n">C</span><span class="o">=</span><span class="n">O</span><span class="p">],</span>
+<span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="s1">&#39;C=O&#39;</span><span class="p">,</span>
+<span class="s1">&#39;is_leaf&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<span class="s1">&#39;rule&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">rdkit</span><span class="o">.</span><span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">Mol</span> <span class="n">at</span> <span class="mh">0x7f9749d259e0</span><span class="o">&gt;</span>
+<span class="c1"># [... lines ommitted here...]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Where we can see that the node C=O has exactly one child node, [[H]C(C)=O], and root as parent node, i.e. it is the first real node in the diagram. It is not a leaf node, the respective substructure/rule is saved in ‘rule’ as an RDKit molecule object, and most of the other fields correspond to the default values, since we produced the diagram with <code class="code docutils literal notranslate"><span class="pre">--no_props</span></code>, and thus omitted to fill additional information into the diagram. You can rerun the diagram creation with all information:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">d</span><span class="o">=</span><span class="n">calculate_diagram</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span><span class="n">train_mode</span><span class="o">=</span><span class="s1">&#39;single_reactant&#39;</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;C=O&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;C=O&quot;</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>which adds some more information to the diagram (for example <code class="code docutils literal notranslate"><span class="pre">all_leafs</span></code> now lists all leaf nodes further down that node, <code class="code docutils literal notranslate"><span class="pre">min_dist_leaf</span></code> describes the number of edges to the clostest leaf node and <code class="code docutils literal notranslate"><span class="pre">diversity</span></code> holds the average similarity and its standard deviation between all leaf nodes. Inspecting a leaf node, such as O=CCO reveals futher information, for example a precalculated fingerprints. All these precomputed values are used for scoring a new reaction. Many of the other fields which are still showing their default values are needed for diagrams in transition_state mode. If we provide reactions instead of molecules in the smiles list, we can rerun the calculation in transition_state mode:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">smiles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;O=CCO.OO&gt;&gt;OCCO.O=O&quot;</span><span class="p">,</span><span class="s2">&quot;O=CCC.OO&gt;&gt;OCCC.O=O&quot;</span><span class="p">,</span><span class="s2">&quot;O=CC.OO&gt;&gt;OCC.O=O&quot;</span><span class="p">]</span>
+<span class="n">d</span><span class="o">=</span><span class="n">calculate_diagram</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span><span class="n">train_mode</span><span class="o">=</span><span class="s1">&#39;transition_state&#39;</span><span class="p">,</span><span class="n">compute_aam</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where we have enabled automated atom-mapping since the inputted reactions are not atom-mapped. Note that reactions MUST be balanced, including hydrogen atoms. Explore some of the nodes and their values!</p>
+</div>
+<div class="section" id="scoring-new-reactions-from-the-command-line">
+<h3>Scoring new reactions from the command line<a class="headerlink" href="#scoring-new-reactions-from-the-command-line" title="Permalink to this headline">¶</a></h3>
+<p>A precomputed Hasse diagram can be utilized to score new, putative reactions by calculating their similarity to known reactions, but also the topology of the Hasse diagram, which introduces a penalty if important common substructures are missing. Let us calculate a Hasse diagram in single reactant mode and save it to disk:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">train</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">data_path</span> <span class="n">ehreact</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">molecule_training</span><span class="o">.</span><span class="n">dat</span> <span class="o">--</span><span class="n">save_path</span> <span class="n">test_single_reactant</span><span class="o">.</span><span class="n">pkl</span> <span class="o">--</span><span class="n">train_mode</span> <span class="n">single_reactant</span> <span class="o">--</span><span class="n">seed</span> <span class="s2">&quot;C([H])O[H]&quot;</span>
+</pre></div>
+</div>
+<p>The query substrates:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">c1c</span><span class="p">(</span><span class="n">C</span><span class="p">)</span><span class="n">cc</span><span class="p">(</span><span class="n">cc1</span><span class="p">)</span><span class="n">C</span><span class="p">(</span><span class="n">O</span><span class="p">)</span><span class="n">C</span><span class="p">([</span><span class="n">O</span><span class="o">-</span><span class="p">])</span><span class="o">=</span><span class="n">O</span>
+<span class="n">Cc1ccc</span><span class="p">(</span><span class="n">cc1</span><span class="p">)</span><span class="n">C</span><span class="p">(</span><span class="n">O</span><span class="p">)</span><span class="n">C</span><span class="p">([</span><span class="n">O</span><span class="o">-</span><span class="p">])</span><span class="o">=</span><span class="n">O</span>
+<span class="n">C</span><span class="p">(</span><span class="n">C</span><span class="p">(</span><span class="n">C</span><span class="p">(</span><span class="o">=</span><span class="n">O</span><span class="p">)[</span><span class="n">O</span><span class="o">-</span><span class="p">])</span><span class="n">O</span><span class="p">)</span><span class="n">O</span>
+<span class="n">C</span><span class="p">(</span><span class="n">C</span><span class="p">(</span><span class="n">C</span><span class="p">(</span><span class="o">=</span><span class="n">O</span><span class="p">)</span><span class="n">C</span><span class="p">)</span><span class="n">O</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>can then be loaded from file, and scored via:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">predict</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">test_path</span> <span class="n">ehreact</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">molecule_test</span><span class="o">.</span><span class="n">dat</span> <span class="o">--</span><span class="n">load_path</span> <span class="n">test_single_reactant</span><span class="o">.</span><span class="n">pkl</span> <span class="o">--</span><span class="n">predict_mode</span> <span class="n">single_reactant</span>
+</pre></div>
+</div>
+<p>Let us explore the query substrates and their scores</p>
+<a class="reference internal image-reference" href="_images/test_mols.png"><img alt="_images/test_mols.png" src="_images/test_mols.png" style="width: 700px;" /></a>
+<p>Upon comparison with the single reactant Hasse diagram</p>
+<a class="reference internal image-reference" href="_images/reactant_diagram1.png"><img alt="_images/reactant_diagram1.png" src="_images/reactant_diagram1.png" style="width: 700px;" /></a>
+<p>we see that query 2 scores very high because it follows all the patterns we have outline before (hydroxyl group at secondary carbon next to carboxyl group, if an aromatic sidechain is present it is always para-substituted). Furthermore, it is very similar to some of the known substrates. The second best score is achieved by query 3, which has still all of the common substructures (hydroxyl group at secondary carbon next to carboxyl group) but has a lower similarity with the known substrates. Query 1 is rather similar to the known substrates, but is meta-substituted in the aromatic ring, which causes a penalty in the scoring function (the template it fits to in the Hasse diagram has no immediate leaf nodes). Query 4 is missing the carboxyl group, causing a large penalty, too. In fact, query 2 and 3 are known to be processed by lactate oxidase according to BRENDA, the other two were made up for the course of this tutorial, which query 4 being expected to be worse than query 1. The scoring thus depicts our confidence in lactate oxidase being able to oxidize the query substrates quite well.</p>
+<p>The exact scoring function is</p>
+<div class="math notranslate nohighlight">
+\[S_\mathrm{EHreact} = S_S * (1 - S_P + S_M - 0.1 * S_L)\]</div>
+<p>where <span class="math notranslate nohighlight">\(S_S\)</span> is the maximum Tanimoto similarity of Morgan fingerprints  (radius 2, no features) between the query substrate and the known substrates within the current branch.
+<span class="math notranslate nohighlight">\(S_P\)</span> is the average Tanimoto similarity between all pairs of substrates in the template tree, capped at 0.8. <span class="math notranslate nohighlight">\(S_M\)</span> is the mean Tanimoto similarity between the query and all known substrates (within the whole tree, not only the current branch).
+<span class="math notranslate nohighlight">\(S_S\)</span>, <span class="math notranslate nohighlight">\(S_P\)</span> and <span class="math notranslate nohighlight">\(S_M\)</span> are calculated on the reactants in single substrate mode, or averaged over reactants and products in transition state mode.
+<span class="math notranslate nohighlight">\(S_L\)</span> scores the position of the highest applicable template within the tree by counting the minimum number of edges to the closest leaf node capped at 5,  minus 1 so that it equals zero in the ideal case of only one edge to the closest leaf node. The coefficients 1, -1, 1 and -0.1 are easily customizable in EHreact (see later in this tutorial).</p>
+<p>In transition state mode, we can likewise create a Hasse diagram, save it to file and then score the oxidation reactions of the four query substrates:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">train</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">data_path</span> <span class="n">ehreact</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">reaction_training</span><span class="o">.</span><span class="n">dat</span> <span class="o">--</span><span class="n">save_path</span> <span class="n">test_transition_state</span><span class="o">.</span><span class="n">pkl</span> <span class="o">--</span><span class="n">train_mode</span> <span class="n">transition_state</span>
+<span class="n">python</span> <span class="n">predict</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">test_path</span> <span class="n">ehreact</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">reaction_test</span><span class="o">.</span><span class="n">dat</span> <span class="o">--</span><span class="n">load_path</span> <span class="n">test_transition_state</span><span class="o">.</span><span class="n">pkl</span> <span class="o">--</span><span class="n">predict_mode</span> <span class="n">transition_state</span>
+</pre></div>
+</div>
+<p>The scores are quite similar to the scores in single reactant mode, in fact, the main difference is that both reactants and products contribute to the similarity scores, instead of just reactants in single reactant mode:</p>
+<a class="reference internal image-reference" href="_images/score_transition.png"><img alt="_images/score_transition.png" src="_images/score_transition.png" style="width: 700px;" /></a>
+<p>If the Hasse diagram was produced in transition state mode, it can furthermore be queried by single substrates, as well as multiple substrates and automatically suggest cosubstrates and possible products. For example, if queried by the four substrates (not full reactions) via:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">predict</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">test_path</span> <span class="n">ehreact</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">molecule_test</span><span class="o">.</span><span class="n">dat</span> <span class="o">--</span><span class="n">load_path</span> <span class="n">test_transition_state</span><span class="o">.</span><span class="n">pkl</span> <span class="o">--</span><span class="n">predict_mode</span> <span class="n">single_reactant</span>
+</pre></div>
+</div>
+<p>the proposed reactions all contain the missing reaction partner, oxygen, and there are six possible reactions, where query 3 produces three possible reactions (oxidation at two different positions, one of them producing different stereocenters). Currently, single reactant and multi reactant mode on transition state diagrams do not support stereoinformation, so that the two different solutions based on stereocenters are the same. This will be updated in the future. However, predicting full reactions (transition state mode) supports stereoinformation, as well as single reactant mode if the diagram was produced in single reactant mode, also. The scores of query 3 reveal the regioselectivity of the reaction:</p>
+<a class="reference internal image-reference" href="_images/regioselectivity.png"><img alt="_images/regioselectivity.png" src="_images/regioselectivity.png" style="width: 700px;" /></a>
+<p>Although there are two hydroxyl groups which in principle could be oxidized, one receives a much higher score than the other, indicating that most likely only Option B will occur. If only the proposal of different reaction outcomes is of interest, not the proposal of reaction partners (here, oxygen), you can obtain the same results by running in multi-substrate mode, where the input is all reactants (substrates and oxygen) and all possible products are created and scored:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">predict</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">test_path</span> <span class="n">ehreact</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">multi_molecule_test</span><span class="o">.</span><span class="n">dat</span> <span class="o">--</span><span class="n">load_path</span> <span class="n">test_transition_state</span><span class="o">.</span><span class="n">pkl</span> <span class="o">--</span><span class="n">predict_mode</span> <span class="n">multi_reactant</span>
+</pre></div>
+</div>
+<p>Note that if any cosubstrate were missing in multi-substrate mode, no reactions would be created. Try to load <code class="code docutils literal notranslate"><span class="pre">ehreact/data/molecule_test.dat</span></code> instead of <code class="code docutils literal notranslate"><span class="pre">ehreact/data/multi_molecule_test.dat</span></code> to observe this behavior.</p>
+</div>
+<div class="section" id="scoring-new-reactions-within-a-python-script">
+<h3>Scoring new reactions within a python script<a class="headerlink" href="#scoring-new-reactions-within-a-python-script" title="Permalink to this headline">¶</a></h3>
+<p>Within a python script, you can easily score a query:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ehreact</span>
+<span class="kn">from</span> <span class="nn">ehreact.train</span> <span class="kn">import</span> <span class="n">calculate_diagram</span>
+<span class="kn">from</span> <span class="nn">ehreact.predict</span> <span class="kn">import</span> <span class="n">make_prediction</span>
+
+<span class="n">smiles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;O=CCO&quot;</span><span class="p">,</span><span class="s2">&quot;O=CCC&quot;</span><span class="p">,</span><span class="s2">&quot;O=CC&quot;</span><span class="p">]</span>
+<span class="n">d</span><span class="o">=</span><span class="n">calculate_diagram</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span><span class="n">train_mode</span><span class="o">=</span><span class="s1">&#39;single_reactant&#39;</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;C=O&#39;</span><span class="p">])</span>
+<span class="n">test_smi</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;O=CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;O=CCCCC&#39;</span><span class="p">]</span>
+<span class="n">scores</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="o">=</span><span class="n">make_prediction</span><span class="p">(</span><span class="n">smiles</span><span class="o">=</span><span class="n">test_smi</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span><span class="n">predict_mode</span><span class="o">=</span><span class="s2">&quot;single_reactant&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Which produces the scores:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mf">0.5166604229104229</span><span class="p">,</span> <span class="mf">0.43269129597254596</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The output of <code class="code docutils literal notranslate"><span class="pre">make_prediction()</span></code> includes information beyond the scores, too, namely the reaction partner, reaction smiles, the original input smiles it belongs to, and the raw scores, which is especially helpful if the diagram was created in transition state mode. For example, explore:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ehreact</span>
+<span class="kn">from</span> <span class="nn">ehreact.train</span> <span class="kn">import</span> <span class="n">calculate_diagram</span>
+<span class="kn">from</span> <span class="nn">ehreact.predict</span> <span class="kn">import</span> <span class="n">make_prediction</span>
+
+<span class="n">smiles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;O=CCO.OO&gt;&gt;OCCO.O=O&quot;</span><span class="p">,</span><span class="s2">&quot;O=CCC.OO&gt;OCCC.O=O&quot;</span><span class="p">,</span><span class="s2">&quot;O=CC.OO&gt;OCC.O=O&quot;</span><span class="p">]</span>
+<span class="n">d</span><span class="o">=</span><span class="n">calculate_diagram</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span><span class="n">train_mode</span><span class="o">=</span><span class="s1">&#39;transition_state&#39;</span><span class="p">,</span><span class="n">compute_aam</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">test_smi</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;O=CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;O=CCCCC&#39;</span><span class="p">]</span>
+<span class="n">scores</span><span class="p">,</span><span class="n">combination</span><span class="p">,</span><span class="n">current_smiles</span><span class="p">,</span><span class="n">belongs_to</span><span class="p">,</span><span class="n">raw_scores</span><span class="o">=</span><span class="n">make_prediction</span><span class="p">(</span><span class="n">smiles</span><span class="o">=</span><span class="n">test_smi</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span><span class="n">predict_mode</span><span class="o">=</span><span class="s2">&quot;single_reactant&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">combination</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">current_smiles</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">belongs_to</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">raw_scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where <code class="code docutils literal notranslate"><span class="pre">combination</span></code> specifies the added reaction partners, <code class="code docutils literal notranslate"><span class="pre">current_smiles</span></code> the atom-mapped reaction SMILES, <code class="code docutils literal notranslate"><span class="pre">belongs_to</span></code> a list of indices which reaction belongs to which input (which is important if multiple reactions are created for one input), as well as a dictionary of raw metrics.</p>
+</div>
+<div class="section" id="changing-the-scoring-function">
+<h3>Changing the scoring function<a class="headerlink" href="#changing-the-scoring-function" title="Permalink to this headline">¶</a></h3>
+<p>You can change the scoring function via specifying the <code class="code docutils literal notranslate"><span class="pre">params</span></code> argument:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ehreact</span>
+<span class="kn">from</span> <span class="nn">ehreact.train</span> <span class="kn">import</span> <span class="n">calculate_diagram</span>
+<span class="kn">from</span> <span class="nn">ehreact.predict</span> <span class="kn">import</span> <span class="n">make_prediction</span>
+
+<span class="n">smiles</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;O=CCO&quot;</span><span class="p">,</span><span class="s2">&quot;O=CCC&quot;</span><span class="p">,</span><span class="s2">&quot;O=CC&quot;</span><span class="p">]</span>
+<span class="n">d</span><span class="o">=</span><span class="n">calculate_diagram</span><span class="p">(</span><span class="n">smiles</span><span class="p">,</span><span class="n">train_mode</span><span class="o">=</span><span class="s1">&#39;single_reactant&#39;</span><span class="p">,</span><span class="n">seed</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;C=O&#39;</span><span class="p">])</span>
+<span class="n">test_smi</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;O=CCCC&#39;</span><span class="p">,</span><span class="s1">&#39;O=CCCCC&#39;</span><span class="p">]</span>
+<span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;use_prod&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span><span class="s2">&quot;coeff_ss&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span><span class="s2">&quot;coeff_sp&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="s2">&quot;coeff_sm&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span><span class="s2">&quot;coeff_sl&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">,</span><span class="s2">&quot;cap_sp&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span><span class="s2">&quot;cap_sl&quot;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">}</span>
+<span class="n">scores</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="o">=</span><span class="n">make_prediction</span><span class="p">(</span><span class="n">smiles</span><span class="o">=</span><span class="n">test_smi</span><span class="p">,</span><span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span><span class="n">predict_mode</span><span class="o">=</span><span class="s2">&quot;single_reactant&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Which produces the scores:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mf">0.4251425657675657</span><span class="p">,</span> <span class="mf">0.36230645800958294</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>On the command line, you can read in a json file of <code class="code docutils literal notranslate"><span class="pre">params</span></code> via the keyword <code class="code docutils literal notranslate"><span class="pre">--hyper_params</span> <span class="pre">&lt;path</span> <span class="pre">to</span> <span class="pre">json</span> <span class="pre">file&gt;</span></code>, with an example json file
+available at <code class="code docutils literal notranslate"><span class="pre">ehreact/data/hyperparams_example.json</span></code>.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="api.html" class="btn btn-neutral float-right" title="API Documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to ehreact’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Esther Heid. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.5.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

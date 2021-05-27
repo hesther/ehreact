@@ -1,0 +1,1267 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ehreact.helpers.rdkit &mdash; ehreact  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ehreact
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ehreact</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ehreact.helpers.rdkit</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ehreact.helpers.rdkit</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">Chem</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="n">AllChem</span>
+<span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">DataStructs</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="n">rdFMCS</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">from</span> <span class="nn">ehreact.helpers.transition_state</span> <span class="kn">import</span> <span class="n">process_an_example</span>
+
+
+<div class="viewcode-block" id="morgan_bit_fp_from_mol"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.morgan_bit_fp_from_mol">[docs]</a><span class="k">def</span> <span class="nf">morgan_bit_fp_from_mol</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">chirality</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes a Morgan Bit Fingerprint for a molecule.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule.</span>
+<span class="sd">    chirality: bool</span>
+<span class="sd">        Whether to use stereoinformation in fingerprint.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    fp: rdkit.DataStructs.cDataStructs.ExplicitBitVect</span>
+<span class="sd">        Morgan fingerprint.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">RemoveHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="n">fp</span> <span class="o">=</span> <span class="n">AllChem</span><span class="o">.</span><span class="n">GetMorganFingerprintAsBitVect</span><span class="p">(</span>
+        <span class="n">mol</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nBits</span><span class="o">=</span><span class="mi">2048</span><span class="p">,</span> <span class="n">useFeatures</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">useChirality</span><span class="o">=</span><span class="n">chirality</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">fp</span></div>
+
+
+<div class="viewcode-block" id="tanimoto_from_fp"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.tanimoto_from_fp">[docs]</a><span class="k">def</span> <span class="nf">tanimoto_from_fp</span><span class="p">(</span><span class="n">fp1</span><span class="p">,</span> <span class="n">fp2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes the Tanimoto similarity between fingerprints.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fp1: rdkit.DataStructs.cDataStructs.ExplicitBitVect</span>
+<span class="sd">        Molecular fingerprint.</span>
+<span class="sd">    fp2: rdkit.DataStructs.cDataStructs.ExplicitBitVect</span>
+<span class="sd">        Molecular fingerprint.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tanimoto: float</span>
+<span class="sd">        Tanimoto similarity</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">tanimoto</span> <span class="o">=</span> <span class="n">DataStructs</span><span class="o">.</span><span class="n">cDataStructs</span><span class="o">.</span><span class="n">TanimotoSimilarity</span><span class="p">(</span><span class="n">fp1</span><span class="p">,</span> <span class="n">fp2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tanimoto</span></div>
+
+
+<div class="viewcode-block" id="find_common"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.find_common">[docs]</a><span class="k">def</span> <span class="nf">find_common</span><span class="p">(</span><span class="n">mols</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to find the maximum common substructure of a list of RDKit molecules</span>
+<span class="sd">    and check whether charges match.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mols: List[rdkit.Chem.Mol]</span>
+<span class="sd">        List of RDKit mols</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    new_mcs_mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule of common substructure.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mols</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Not enough molecules to calculate common structures. Provide a seed instead.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">atomComp</span> <span class="o">=</span> <span class="n">rdFMCS</span><span class="o">.</span><span class="n">AtomCompare</span><span class="o">.</span><span class="n">CompareElements</span>
+
+    <span class="n">atomParam</span> <span class="o">=</span> <span class="n">rdFMCS</span><span class="o">.</span><span class="n">MCSAtomCompareParameters</span><span class="p">()</span>
+    <span class="n">atomParam</span><span class="o">.</span><span class="n">MatchChiralTag</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">atomParam</span><span class="o">.</span><span class="n">MatchFormalCharge</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">atomParam</span><span class="o">.</span><span class="n">MatchValences</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">atomParam</span><span class="o">.</span><span class="n">RingMatchesRingOnly</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">bondComp</span> <span class="o">=</span> <span class="n">rdFMCS</span><span class="o">.</span><span class="n">BondCompare</span><span class="o">.</span><span class="n">CompareOrderExact</span>
+
+    <span class="n">bondParam</span> <span class="o">=</span> <span class="n">rdFMCS</span><span class="o">.</span><span class="n">MCSBondCompareParameters</span><span class="p">()</span>
+    <span class="n">bondParam</span><span class="o">.</span><span class="n">CompleteRingsOnly</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">bondParam</span><span class="o">.</span><span class="n">RingMatchesRingOnly</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">opt</span> <span class="o">=</span> <span class="n">rdFMCS</span><span class="o">.</span><span class="n">MCSParameters</span><span class="p">()</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">MaximizeBonds</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">Timeout</span> <span class="o">=</span> <span class="mi">3600</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">AtomCompareParameters</span> <span class="o">=</span> <span class="n">atomParam</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">BondCompareParameters</span> <span class="o">=</span> <span class="n">bondParam</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">SetAtomTyper</span><span class="p">(</span><span class="n">atomComp</span><span class="p">)</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">SetBondTyper</span><span class="p">(</span><span class="n">bondComp</span><span class="p">)</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">Threshold</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">Verbose</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">seedSmarts</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="n">mcs</span> <span class="o">=</span> <span class="n">rdFMCS</span><span class="o">.</span><span class="n">FindMCS</span><span class="p">(</span><span class="n">mols</span><span class="p">,</span> <span class="n">opt</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">mcs</span><span class="o">.</span><span class="n">canceled</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: MCS search timed out, returning best match&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mcs</span><span class="o">.</span><span class="n">numAtoms</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No MCS was found between the molecules&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Convert to RDKit molecule:</span>
+    <span class="n">mcs_mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmarts</span><span class="p">(</span><span class="n">mcs</span><span class="o">.</span><span class="n">smartsString</span><span class="p">)</span>
+
+    <span class="c1"># Reintroduce charges:</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="n">mols</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">GetSubstructMatches</span><span class="p">(</span><span class="n">mcs_mol</span><span class="p">)</span>
+    <span class="n">new_mcs_mol</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+        <span class="n">mcs_mol_charged</span> <span class="o">=</span> <span class="n">force_charge_fit</span><span class="p">(</span><span class="n">mols</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mcs_mol</span><span class="p">,</span> <span class="n">match</span><span class="p">)</span>
+
+        <span class="c1"># check if charged mcs mol is ok with other mols</span>
+        <span class="n">ok</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">mol</span> <span class="ow">in</span> <span class="n">mols</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">matches2</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetSubstructMatches</span><span class="p">(</span><span class="n">mcs_mol_charged</span><span class="p">)</span>
+            <span class="k">if</span> <span class="kc">True</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="n">do_charges_fit</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">mcs_mol_charged</span><span class="p">,</span> <span class="n">match2</span><span class="p">)</span> <span class="k">for</span> <span class="n">match2</span> <span class="ow">in</span> <span class="n">matches2</span>
+            <span class="p">]:</span>
+                <span class="n">ok</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="n">ok</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="kc">False</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ok</span><span class="p">:</span>
+            <span class="n">new_mcs_mol</span> <span class="o">=</span> <span class="n">mcs_mol_charged</span>
+            <span class="k">break</span>
+    <span class="k">if</span> <span class="n">new_mcs_mol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Could not find consistent charges for MCS&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">new_mcs_mol</span></div>
+
+
+<div class="viewcode-block" id="check_if_reaction"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.check_if_reaction">[docs]</a><span class="k">def</span> <span class="nf">check_if_reaction</span><span class="p">(</span><span class="n">smi</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to check whether &quot;&gt;&quot; occurs in a string, and raise a ValueError if the expected behavior is not met.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    smi: str</span>
+<span class="sd">        SMILES string (reaction SMILES or molecule SMILES)</span>
+<span class="sd">    expected: bool</span>
+<span class="sd">        Whether the input string is expected to be a reaction.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">observed</span> <span class="o">=</span> <span class="s2">&quot;&gt;&quot;</span> <span class="ow">in</span> <span class="n">smi</span>
+    <span class="k">if</span> <span class="n">observed</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">expected</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected molecule smiles but received reaction smiles.&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">expected</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">observed</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected reaction smiles but received molecule smiles.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="make_mol"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.make_mol">[docs]</a><span class="k">def</span> <span class="nf">make_mol</span><span class="p">(</span><span class="n">smi</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make RDKit molecule from a smiles string and add hydrogens.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    smi: str</span>
+<span class="sd">        SMILES string.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mol</span></div>
+
+
+<div class="viewcode-block" id="make_mol_no_sanit_h"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.make_mol_no_sanit_h">[docs]</a><span class="k">def</span> <span class="nf">make_mol_no_sanit_h</span><span class="p">(</span><span class="n">smi</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make RDKit molecule from a smiles string without sanitizing hydrogens (keep hydrogens as given).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    smi: str</span>
+<span class="sd">        SMILES string.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">smi</span><span class="p">,</span> <span class="n">sanitize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">Chem</span><span class="o">.</span><span class="n">SanitizeMol</span><span class="p">(</span>
+        <span class="n">mol</span><span class="p">,</span>
+        <span class="n">sanitizeOps</span><span class="o">=</span><span class="n">Chem</span><span class="o">.</span><span class="n">SanitizeFlags</span><span class="o">.</span><span class="n">SANITIZE_ALL</span>
+        <span class="o">^</span> <span class="n">Chem</span><span class="o">.</span><span class="n">SanitizeFlags</span><span class="o">.</span><span class="n">SANITIZE_ADJUSTHS</span><span class="p">,</span>
+    <span class="p">)</span>  <span class="c1"># Sanitize all functions apart hydrogens</span>
+    <span class="k">return</span> <span class="n">mol</span></div>
+
+
+<div class="viewcode-block" id="canonicalize"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.canonicalize">[docs]</a><span class="k">def</span> <span class="nf">canonicalize</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Outputs the canonical SMILES string of a molecule.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    canonical_smi: str</span>
+<span class="sd">        Canonical SMILES string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">smi</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">canonical</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">make_mol</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+    <span class="n">canonical_smi</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">canonical</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">canonical_smi</span></div>
+
+
+<div class="viewcode-block" id="canonicalize_with_h"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.canonicalize_with_h">[docs]</a><span class="k">def</span> <span class="nf">canonicalize_with_h</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">reaction</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">old2new_mapno</span><span class="o">=</span><span class="p">{}):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Outputs the canonical SMILES with hydrogens.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule.</span>
+<span class="sd">    reaction: bool, default False</span>
+<span class="sd">        Whether the input SMILES stems from a reaction and therefore map numbers need to be included</span>
+<span class="sd">    old2new_mapno: dict, default {}</span>
+<span class="sd">        Dictionary of custom map numbers to use. If not supplied, map numbers will be calculated from</span>
+<span class="sd">        atom indices.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    canonical_smi: str</span>
+<span class="sd">        Canonical SMILES string.</span>
+<span class="sd">    old2new_mapno: dict</span>
+<span class="sd">        Dictionary of map numbers.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">reaction</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">old2new_mapno</span> <span class="o">==</span> <span class="p">{}:</span>
+            <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+                <span class="n">old2new_mapno</span><span class="p">[</span><span class="n">atom</span><span class="o">.</span><span class="n">GetAtomMapNum</span><span class="p">()]</span> <span class="o">=</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">atom</span><span class="o">.</span><span class="n">SetAtomMapNum</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+                <span class="n">atom</span><span class="o">.</span><span class="n">SetAtomMapNum</span><span class="p">(</span><span class="n">old2new_mapno</span><span class="p">[</span><span class="n">atom</span><span class="o">.</span><span class="n">GetAtomMapNum</span><span class="p">()])</span>
+
+    <span class="n">smi</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">canonical</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="n">make_mol_no_sanit_h</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+    <span class="n">canonical_smi</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">canonical</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">canonical_smi</span><span class="p">,</span> <span class="n">old2new_mapno</span></div>
+
+
+<div class="viewcode-block" id="preprocess"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.preprocess">[docs]</a><span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="n">smi</span><span class="p">,</span> <span class="n">delete_aam</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">reaction</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">old2new_mapno</span><span class="o">=</span><span class="p">{}):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Preprocess a SMILES string.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    smi: str</span>
+<span class="sd">        SMILES string.</span>
+<span class="sd">    delete_aam: bool, default True</span>
+<span class="sd">        Whether to delete atom mappings from the string.</span>
+<span class="sd">    reaction: bool, default False</span>
+<span class="sd">        Whether the input SMILES stems from a reaction and molecules need to be created</span>
+<span class="sd">        without sanitizing hydrogens.</span>
+<span class="sd">    old2new_mapno: dict, default {}</span>
+<span class="sd">        Dictionary of custom map numbers to use.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    canonical_smi_no_stereo: str</span>
+<span class="sd">        Canonical SMILES string without stereoinformation.</span>
+<span class="sd">    canonical_smi: str</span>
+<span class="sd">        Canonical SMILES string with stereoinformation (if provided).</span>
+<span class="sd">    mol_no_stereo: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule without stereoinformation.</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule with stereoinformation.</span>
+<span class="sd">    old2new_mapno: dict</span>
+<span class="sd">        Dictionary of map numbers.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">delete_aam</span><span class="p">:</span>
+        <span class="n">smi</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\:[0-9]+\]&quot;</span><span class="p">,</span> <span class="s2">&quot;]&quot;</span><span class="p">,</span> <span class="n">smi</span><span class="p">)</span>
+
+    <span class="c1"># Without stereochemistry:</span>
+    <span class="n">smi_no_stereo</span> <span class="o">=</span> <span class="n">smi</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">reaction</span><span class="p">:</span>
+        <span class="n">mol_no_stereo</span> <span class="o">=</span> <span class="n">make_mol_no_sanit_h</span><span class="p">(</span><span class="n">smi_no_stereo</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">mol_no_stereo</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">make_mol</span><span class="p">(</span><span class="n">smi_no_stereo</span><span class="p">))</span>
+    <span class="n">canonical_smi_no_stereo</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">canonicalize_with_h</span><span class="p">(</span>
+        <span class="n">mol_no_stereo</span><span class="p">,</span> <span class="n">reaction</span><span class="p">,</span> <span class="n">old2new_mapno</span>
+    <span class="p">)</span>
+
+    <span class="c1"># With stereochemistry:</span>
+    <span class="k">if</span> <span class="n">reaction</span><span class="p">:</span>
+        <span class="n">mol</span> <span class="o">=</span> <span class="n">make_mol_no_sanit_h</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">mol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">make_mol</span><span class="p">(</span><span class="n">smi</span><span class="p">))</span>
+    <span class="n">canonical_smi</span><span class="p">,</span> <span class="n">old2new_mapno</span> <span class="o">=</span> <span class="n">canonicalize_with_h</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">reaction</span><span class="p">,</span> <span class="n">old2new_mapno</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">canonical_smi_no_stereo</span><span class="p">,</span> <span class="n">canonical_smi</span><span class="p">,</span> <span class="n">mol_no_stereo</span><span class="p">,</span> <span class="n">mol</span><span class="p">,</span> <span class="n">old2new_mapno</span></div>
+
+
+<div class="viewcode-block" id="preprocess_rxn"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.preprocess_rxn">[docs]</a><span class="k">def</span> <span class="nf">preprocess_rxn</span><span class="p">(</span><span class="n">rxn_smi</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Preprocess a reaction SMILES string.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rxn_smi: str</span>
+<span class="sd">        Reaction SMILES string.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    canonical_smi_no_stereo: str</span>
+<span class="sd">        Canonical SMILES string without stereoinformation.</span>
+<span class="sd">    canonical_smi: str</span>
+<span class="sd">        Canonical SMILES string with stereoinformation (if provided).</span>
+<span class="sd">    mol_no_stereo: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule without stereoinformation.</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule with stereoinformation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">reac</span> <span class="o">=</span> <span class="n">rxn_smi</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="p">(</span>
+        <span class="n">reac_canonical_smi_no_stereo</span><span class="p">,</span>
+        <span class="n">reac_canonical_smi</span><span class="p">,</span>
+        <span class="n">reac_mol_no_stereo</span><span class="p">,</span>
+        <span class="n">reac_mol</span><span class="p">,</span>
+        <span class="n">old2new_mapno</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">reac</span><span class="p">,</span> <span class="n">delete_aam</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reaction</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">old2new_mapno</span><span class="o">=</span><span class="p">{})</span>
+
+    <span class="n">prod</span> <span class="o">=</span> <span class="n">rxn_smi</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;&gt;&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="p">(</span>
+        <span class="n">prod_canonical_smi_no_stereo</span><span class="p">,</span>
+        <span class="n">prod_canonical_smi</span><span class="p">,</span>
+        <span class="n">prod_mol_no_stereo</span><span class="p">,</span>
+        <span class="n">prod_mol</span><span class="p">,</span>
+        <span class="n">_</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">prod</span><span class="p">,</span> <span class="n">delete_aam</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">reaction</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">old2new_mapno</span><span class="o">=</span><span class="n">old2new_mapno</span><span class="p">)</span>
+
+    <span class="n">canonical_smi</span> <span class="o">=</span> <span class="n">reac_canonical_smi</span> <span class="o">+</span> <span class="s2">&quot;&gt;&gt;&quot;</span> <span class="o">+</span> <span class="n">prod_canonical_smi</span>
+    <span class="n">canonical_smi_no_stereo</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">reac_canonical_smi_no_stereo</span> <span class="o">+</span> <span class="s2">&quot;&gt;&gt;&quot;</span> <span class="o">+</span> <span class="n">prod_canonical_smi_no_stereo</span>
+    <span class="p">)</span>
+    <span class="n">mol_no_stereo</span> <span class="o">=</span> <span class="p">(</span><span class="n">reac_mol_no_stereo</span><span class="p">,</span> <span class="n">prod_mol_no_stereo</span><span class="p">)</span>
+    <span class="n">mol</span> <span class="o">=</span> <span class="p">(</span><span class="n">reac_mol</span><span class="p">,</span> <span class="n">prod_mol</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">canonical_smi_no_stereo</span><span class="p">,</span> <span class="n">canonical_smi</span><span class="p">,</span> <span class="n">mol_no_stereo</span><span class="p">,</span> <span class="n">mol</span></div>
+
+
+<div class="viewcode-block" id="read_in_smiles"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.read_in_smiles">[docs]</a><span class="k">def</span> <span class="nf">read_in_smiles</span><span class="p">(</span><span class="n">smiles</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes canonical SMILES strings and RDKit molecules from a list of SMILES strings.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    smiles: List[str]</span>
+<span class="sd">        List of SMILES strings</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    canonical_smiles: List[str]</span>
+<span class="sd">        List of canonical SMILES strings</span>
+<span class="sd">    smiles_dict: dict</span>
+<span class="sd">        Dictionary of canonical SMILES strings and their respective SMILES with stereoinformation and RDKit molecules.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">canonical_smiles</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">smiles_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">smi</span> <span class="ow">in</span> <span class="n">smiles</span><span class="p">:</span>
+        <span class="n">check_if_reaction</span><span class="p">(</span><span class="n">smi</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">canonical_smi_no_stereo</span><span class="p">,</span> <span class="n">canonical_smi</span><span class="p">,</span> <span class="n">mol_no_stereo</span><span class="p">,</span> <span class="n">mol</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="n">smiles_dict</span><span class="p">[</span><span class="n">canonical_smi_no_stereo</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;canonical_smi&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">canonical_smi</span><span class="p">],</span>
+            <span class="s2">&quot;mol_diagram&quot;</span><span class="p">:</span> <span class="n">mol_no_stereo</span><span class="p">,</span>
+            <span class="s2">&quot;mol_no_stereo&quot;</span><span class="p">:</span> <span class="n">mol_no_stereo</span><span class="p">,</span>
+            <span class="s2">&quot;mol&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">mol</span><span class="p">],</span>
+            <span class="s2">&quot;original_smi&quot;</span><span class="p">:</span> <span class="n">smi</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">canonical_smiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">canonical_smi_no_stereo</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">canonical_smiles</span><span class="p">,</span> <span class="n">smiles_dict</span></div>
+
+
+<div class="viewcode-block" id="read_in_smiles_unique"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.read_in_smiles_unique">[docs]</a><span class="k">def</span> <span class="nf">read_in_smiles_unique</span><span class="p">(</span><span class="n">smiles</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes canonical SMILES strings and RDKit molecules from a list of SMILES strings and only keeps unique entries.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    smiles: List[str]</span>
+<span class="sd">        List of SMILES strings</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    canonical_smiles: List[str]</span>
+<span class="sd">        Sorted list of canonical SMILES strings</span>
+<span class="sd">    smiles_dict: dict</span>
+<span class="sd">        Dictionary of canonical SMILES strings and their respective SMILES with stereoinformation and RDKit molecules.</span>
+<span class="sd">    skipped: List[str]</span>
+<span class="sd">        List of skipped (because duplicate) SMILES strings.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">canonical_smiles</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">smiles_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">skipped</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">smi</span> <span class="ow">in</span> <span class="n">smiles</span><span class="p">:</span>
+        <span class="n">check_if_reaction</span><span class="p">(</span><span class="n">smi</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">canonical_smi_no_stereo</span><span class="p">,</span> <span class="n">canonical_smi</span><span class="p">,</span> <span class="n">mol_no_stereo</span><span class="p">,</span> <span class="n">mol</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+        <span class="c1"># New entry:</span>
+        <span class="k">if</span> <span class="n">canonical_smi_no_stereo</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">smiles_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">smiles_dict</span><span class="p">[</span><span class="n">canonical_smi_no_stereo</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;canonical_smi&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">canonical_smi</span><span class="p">],</span>
+                <span class="s2">&quot;mol_diagram&quot;</span><span class="p">:</span> <span class="n">mol_no_stereo</span><span class="p">,</span>
+                <span class="s2">&quot;mol_no_stereo&quot;</span><span class="p">:</span> <span class="n">mol_no_stereo</span><span class="p">,</span>
+                <span class="s2">&quot;mol&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">mol</span><span class="p">],</span>
+                <span class="s2">&quot;original_smi&quot;</span><span class="p">:</span> <span class="n">smi</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">canonical_smiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">canonical_smi_no_stereo</span><span class="p">)</span>
+        <span class="c1"># Known entry, but different stereochemistry:</span>
+        <span class="k">elif</span> <span class="n">canonical_smi</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">smiles_dict</span><span class="p">[</span><span class="n">canonical_smi_no_stereo</span><span class="p">][</span><span class="s2">&quot;canonical_smi&quot;</span><span class="p">]:</span>
+            <span class="n">smiles_dict</span><span class="p">[</span><span class="n">canonical_smi_no_stereo</span><span class="p">][</span><span class="s2">&quot;canonical_smi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">canonical_smi</span><span class="p">)</span>
+            <span class="n">smiles_dict</span><span class="p">[</span><span class="n">canonical_smi_no_stereo</span><span class="p">][</span><span class="s2">&quot;mol&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+        <span class="c1"># Duplicate:</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">skipped</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+
+    <span class="n">canonical_smiles</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">canonical_smiles</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">canonical_smiles</span><span class="p">,</span> <span class="n">smiles_dict</span><span class="p">,</span> <span class="n">skipped</span></div>
+
+
+<div class="viewcode-block" id="read_in_reactions"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.read_in_reactions">[docs]</a><span class="k">def</span> <span class="nf">read_in_reactions</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes canonical SMILES strings and RDKit molecules from a list of reaction SMILES strings.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rxn_smiles: List[str]</span>
+<span class="sd">        List of reaction SMILES strings</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    canonical_smiles: List[str]</span>
+<span class="sd">        List of canonical SMILES strings</span>
+<span class="sd">    smiles_dict: dict</span>
+<span class="sd">        Dictionary of canonical SMILES strings and their respective SMILES with stereoinformation and RDKit molecules.</span>
+<span class="sd">    tags_core: dict</span>
+<span class="sd">        Dictionary of atom map numbers of reaction center for each canonical SMILES.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">canonical_smiles</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">smiles_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">tags_core</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">rxn_smi</span> <span class="ow">in</span> <span class="n">rxn_smiles</span><span class="p">:</span>
+        <span class="n">check_if_reaction</span><span class="p">(</span><span class="n">rxn_smi</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">canonical_smi_no_stereo</span><span class="p">,</span> <span class="n">canonical_smi</span><span class="p">,</span> <span class="n">mol_no_stereo</span><span class="p">,</span> <span class="n">mol</span> <span class="o">=</span> <span class="n">preprocess_rxn</span><span class="p">(</span>
+            <span class="n">rxn_smi</span>
+        <span class="p">)</span>
+        <span class="n">change_ts_to_reac</span><span class="p">,</span> <span class="n">change_ts_to_prod</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">ts_seed</span> <span class="o">=</span> <span class="n">process_an_example</span><span class="p">(</span>
+            <span class="n">canonical_smi_no_stereo</span>
+        <span class="p">)</span>
+        <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">ts_seed</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+
+        <span class="n">smiles_dict</span><span class="p">[</span><span class="n">canonical_smi_no_stereo</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;canonical_smi&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">canonical_smi</span><span class="p">],</span>
+            <span class="s2">&quot;mol_diagram&quot;</span><span class="p">:</span> <span class="n">ts</span><span class="p">,</span>
+            <span class="s2">&quot;mol_no_stereo&quot;</span><span class="p">:</span> <span class="n">mol_no_stereo</span><span class="p">,</span>
+            <span class="s2">&quot;mol&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">mol</span><span class="p">],</span>
+            <span class="s2">&quot;original_smi&quot;</span><span class="p">:</span> <span class="n">rxn_smi</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">tags_core</span><span class="p">[</span><span class="n">canonical_smi_no_stereo</span><span class="p">]</span> <span class="o">=</span> <span class="n">tags</span>
+        <span class="n">canonical_smiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">canonical_smi_no_stereo</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">canonical_smiles</span><span class="p">,</span> <span class="n">smiles_dict</span><span class="p">,</span> <span class="n">tags_core</span></div>
+
+
+<div class="viewcode-block" id="read_in_reactions_unique"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.read_in_reactions_unique">[docs]</a><span class="k">def</span> <span class="nf">read_in_reactions_unique</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes canonical SMILES strings and RDKit molecules from a list of reaction SMILES strings</span>
+<span class="sd">    and only keeps unique entries.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rxn_smiles: List[str]</span>
+<span class="sd">        List of reaction SMILES strings</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    seeds: List[str]</span>
+<span class="sd">        List of SMILES seeds (of all minimal templates).</span>
+<span class="sd">    rule_dict: dict</span>
+<span class="sd">        A dictionary of all minimal templates of all seeds.</span>
+<span class="sd">    canonical_smiles: List[str]</span>
+<span class="sd">        List of canonical SMILES strings</span>
+<span class="sd">    smiles_dict: dict</span>
+<span class="sd">        Dictionary of canonical SMILES strings and their respective SMILES with stereoinformation and RDKit molecules.</span>
+<span class="sd">    skipped: List[str]</span>
+<span class="sd">        List of skipped (because duplicate) SMILES strings.</span>
+<span class="sd">    tags_core: dict</span>
+<span class="sd">        Dictionary of atom map numbers of reaction center for each canonical SMILES.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">canonical_smiles</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">smiles_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">skipped</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">tags_core</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">rule_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">list_ts_seed</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">seeds</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">rxn_smi</span> <span class="ow">in</span> <span class="n">rxn_smiles</span><span class="p">:</span>
+        <span class="n">check_if_reaction</span><span class="p">(</span><span class="n">rxn_smi</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">canonical_smi_no_stereo</span><span class="p">,</span> <span class="n">canonical_smi</span><span class="p">,</span> <span class="n">mol_no_stereo</span><span class="p">,</span> <span class="n">mol</span> <span class="o">=</span> <span class="n">preprocess_rxn</span><span class="p">(</span>
+            <span class="n">rxn_smi</span>
+        <span class="p">)</span>
+        <span class="n">change_ts_to_reac</span><span class="p">,</span> <span class="n">change_ts_to_prod</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">ts_seed</span> <span class="o">=</span> <span class="n">process_an_example</span><span class="p">(</span>
+            <span class="n">canonical_smi_no_stereo</span>
+        <span class="p">)</span>
+        <span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">ts_seed</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()]</span>
+        <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">ts_seed</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+            <span class="n">atom</span><span class="o">.</span><span class="n">SetNoImplicit</span><span class="p">(</span>
+                <span class="kc">True</span>
+            <span class="p">)</span>  <span class="c1"># Set everything to &quot;NoImplicit&quot; in templates, we never want to add Hs without explicitly specifying</span>
+        <span class="n">ts_seed_smiles</span> <span class="o">=</span> <span class="n">moltosmiles_transition</span><span class="p">(</span>
+            <span class="n">ts_seed</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;reac&quot;</span><span class="p">:</span> <span class="n">change_ts_to_reac</span><span class="p">,</span> <span class="s2">&quot;prod&quot;</span><span class="p">:</span> <span class="n">change_ts_to_prod</span><span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Create seed</span>
+        <span class="n">reac</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span>
+            <span class="n">moltosmiles_transition</span><span class="p">(</span>
+                <span class="n">ts_seed</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;reac&quot;</span><span class="p">:</span> <span class="n">change_ts_to_reac</span><span class="p">,</span> <span class="s2">&quot;prod&quot;</span><span class="p">:</span> <span class="n">change_ts_to_reac</span><span class="p">}</span>
+            <span class="p">),</span>
+            <span class="n">sanitize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">prod</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span>
+            <span class="n">moltosmiles_transition</span><span class="p">(</span>
+                <span class="n">ts_seed</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;reac&quot;</span><span class="p">:</span> <span class="n">change_ts_to_prod</span><span class="p">,</span> <span class="s2">&quot;prod&quot;</span><span class="p">:</span> <span class="n">change_ts_to_prod</span><span class="p">}</span>
+            <span class="p">),</span>
+            <span class="n">sanitize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># New entry:</span>
+        <span class="k">if</span> <span class="n">canonical_smi_no_stereo</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">smiles_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">smiles_dict</span><span class="p">[</span><span class="n">canonical_smi_no_stereo</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;canonical_smi&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">canonical_smi</span><span class="p">],</span>
+                <span class="s2">&quot;mol_diagram&quot;</span><span class="p">:</span> <span class="n">ts</span><span class="p">,</span>
+                <span class="s2">&quot;mol_no_stereo&quot;</span><span class="p">:</span> <span class="n">mol_no_stereo</span><span class="p">,</span>
+                <span class="s2">&quot;mol&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">mol</span><span class="p">],</span>
+                <span class="s2">&quot;original_smi&quot;</span><span class="p">:</span> <span class="n">rxn_smi</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">canonical_smiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">canonical_smi_no_stereo</span><span class="p">)</span>
+            <span class="n">tags_core</span><span class="p">[</span><span class="n">canonical_smi_no_stereo</span><span class="p">]</span> <span class="o">=</span> <span class="n">tags</span>
+        <span class="c1"># Known entry, but different stereochemistry:</span>
+        <span class="k">elif</span> <span class="n">canonical_smi</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">smiles_dict</span><span class="p">[</span><span class="n">canonical_smi_no_stereo</span><span class="p">][</span><span class="s2">&quot;canonical_smi&quot;</span><span class="p">]:</span>
+            <span class="n">smiles_dict</span><span class="p">[</span><span class="n">canonical_smi_no_stereo</span><span class="p">][</span><span class="s2">&quot;canonical_smi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">canonical_smi</span><span class="p">)</span>
+            <span class="n">smiles_dict</span><span class="p">[</span><span class="n">canonical_smi_no_stereo</span><span class="p">][</span><span class="s2">&quot;mol&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+        <span class="c1"># Duplicate:</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">skipped</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rxn_smi</span><span class="p">)</span>
+            <span class="k">break</span>
+
+        <span class="c1"># Save seed if not new</span>
+        <span class="n">found_equal_seed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">list_ts_seed</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">mols_are_equal</span><span class="p">(</span><span class="n">ts_seed</span><span class="p">,</span> <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="ow">and</span> <span class="n">mols_are_equal</span><span class="p">(</span><span class="n">reac</span><span class="p">,</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="ow">and</span> <span class="n">mols_are_equal</span><span class="p">(</span><span class="n">prod</span><span class="p">,</span> <span class="n">item</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="p">):</span>
+                <span class="n">found_equal_seed</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">rule_dict</span><span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">3</span><span class="p">]][</span><span class="s2">&quot;smiles&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">canonical_smi_no_stereo</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">found_equal_seed</span><span class="p">:</span>
+            <span class="n">seeds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ts_seed_smiles</span><span class="p">)</span>
+            <span class="n">rule_dict</span><span class="p">[</span><span class="n">ts_seed_smiles</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;rule&quot;</span><span class="p">:</span> <span class="n">ts_seed</span><span class="p">,</span>
+                <span class="s2">&quot;smiles&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">canonical_smi_no_stereo</span><span class="p">],</span>
+                <span class="s2">&quot;change_dict&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;reac&quot;</span><span class="p">:</span> <span class="n">change_ts_to_reac</span><span class="p">,</span> <span class="s2">&quot;prod&quot;</span><span class="p">:</span> <span class="n">change_ts_to_prod</span><span class="p">},</span>
+            <span class="p">}</span>
+            <span class="n">list_ts_seed</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">ts_seed</span><span class="p">,</span> <span class="n">reac</span><span class="p">,</span> <span class="n">prod</span><span class="p">,</span> <span class="n">ts_seed_smiles</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">seeds</span><span class="p">,</span> <span class="n">rule_dict</span><span class="p">,</span> <span class="n">canonical_smiles</span><span class="p">,</span> <span class="n">smiles_dict</span><span class="p">,</span> <span class="n">skipped</span><span class="p">,</span> <span class="n">tags_core</span></div>
+
+
+<div class="viewcode-block" id="preprocess_seeds"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.preprocess_seeds">[docs]</a><span class="k">def</span> <span class="nf">preprocess_seeds</span><span class="p">(</span><span class="n">seed_list</span><span class="p">,</span> <span class="n">smiles</span><span class="p">,</span> <span class="n">smiles_dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Preprocesses a list of seeds and matches them to a list of SMILES strings. If given an empty list of seeds,</span>
+<span class="sd">    a seed with the maximum common substructure of all molecules is created.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    seed_list: List[str]</span>
+<span class="sd">        List of seeds.</span>
+<span class="sd">    smiles: List[str]</span>
+<span class="sd">        List of SMILES strings</span>
+<span class="sd">    smiles_dict: dict</span>
+<span class="sd">        Dictionary of canonical SMILES strings and their respective SMILES with stereoinformation and RDKit molecules.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    seeds: List[str]</span>
+<span class="sd">        List of seeds.</span>
+<span class="sd">    rule_dict: dict</span>
+<span class="sd">        A dictionary of all minimal templates of all seeds.</span>
+<span class="sd">    num_smiles_seed: List[int]</span>
+<span class="sd">        List of how many SMILES strings fit each seed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seed_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">mcs</span> <span class="o">=</span> <span class="n">find_common</span><span class="p">([</span><span class="n">smiles_dict</span><span class="p">[</span><span class="n">smi</span><span class="p">][</span><span class="s2">&quot;mol_no_stereo&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">smi</span> <span class="ow">in</span> <span class="n">smiles</span><span class="p">])</span>
+        <span class="n">seeds</span> <span class="o">=</span> <span class="p">[</span><span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">mcs</span><span class="p">)]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">seeds</span> <span class="o">=</span> <span class="n">seed_list</span>
+
+    <span class="n">rule_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">num_smiles_seed</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">seed</span> <span class="ow">in</span> <span class="n">seeds</span><span class="p">:</span>
+        <span class="n">current_smiles</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">current_rule</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="n">sanitize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">current_rule</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+            <span class="n">atom</span><span class="o">.</span><span class="n">SetNoImplicit</span><span class="p">(</span>
+                <span class="kc">True</span>
+            <span class="p">)</span>  <span class="c1"># Set everything to &quot;NoImplicit&quot; in templates, we never want to add Hs without explicitly specifying</span>
+        <span class="k">for</span> <span class="n">smi</span> <span class="ow">in</span> <span class="n">smiles</span><span class="p">:</span>
+            <span class="n">mol</span> <span class="o">=</span> <span class="n">smiles_dict</span><span class="p">[</span><span class="n">smi</span><span class="p">][</span><span class="s2">&quot;mol_no_stereo&quot;</span><span class="p">]</span>
+            <span class="n">matches</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetSubstructMatches</span><span class="p">(</span><span class="n">current_rule</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">do_charges_fit</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">current_rule</span><span class="p">,</span> <span class="n">match</span><span class="p">):</span>
+                    <span class="n">current_smiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">smi</span><span class="p">)</span>
+                    <span class="k">break</span>
+        <span class="n">rule_dict</span><span class="p">[</span><span class="n">seed</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;rule&quot;</span><span class="p">:</span> <span class="n">current_rule</span><span class="p">,</span>
+            <span class="s2">&quot;smiles&quot;</span><span class="p">:</span> <span class="n">current_smiles</span><span class="p">,</span>
+            <span class="s2">&quot;change_dict&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;reac&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;atom&quot;</span><span class="p">:</span> <span class="p">{},</span> <span class="s2">&quot;bond&quot;</span><span class="p">:</span> <span class="p">{}},</span>
+                <span class="s2">&quot;prod&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;atom&quot;</span><span class="p">:</span> <span class="p">{},</span> <span class="s2">&quot;bond&quot;</span><span class="p">:</span> <span class="p">{}},</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+        <span class="n">num_smiles_seed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">current_smiles</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">seeds</span><span class="p">,</span> <span class="n">rule_dict</span><span class="p">,</span> <span class="n">num_smiles_seed</span></div>
+
+
+<div class="viewcode-block" id="moltosmiles_transition"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.moltosmiles_transition">[docs]</a><span class="k">def</span> <span class="nf">moltosmiles_transition</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">change_dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts an RDKit mol with the changes specified in change_dict before converting to smiles.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule.</span>
+<span class="sd">    change_dict: dict</span>
+<span class="sd">        A dictionary specifying changes to apply to bonds and atoms for reactants and products.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Converted SMILES.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">smiles</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">mode</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;reac&quot;</span><span class="p">,</span> <span class="s2">&quot;prod&quot;</span><span class="p">]:</span>
+        <span class="n">mol2</span> <span class="o">=</span> <span class="n">mol_transition</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">change_dict</span><span class="p">[</span><span class="n">mode</span><span class="p">])</span>
+        <span class="n">smiles</span><span class="p">[</span><span class="n">mode</span><span class="p">]</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">mol2</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">smiles</span><span class="p">[</span><span class="s2">&quot;reac&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">smiles</span><span class="p">[</span><span class="s2">&quot;prod&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">smiles</span><span class="p">[</span><span class="s2">&quot;reac&quot;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">smiles</span><span class="p">[</span><span class="s2">&quot;reac&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;&gt;&gt;&quot;</span> <span class="o">+</span> <span class="n">smiles</span><span class="p">[</span><span class="s2">&quot;prod&quot;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="mol_transition"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.mol_transition">[docs]</a><span class="k">def</span> <span class="nf">mol_transition</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">change_dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts an RDKit mol with the changes specified in change_dict.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule.</span>
+<span class="sd">    change_dict: dict</span>
+<span class="sd">        A dictionary specifying changes to apply to bonds and atoms.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    mol2: rdkit.Chem.Mol</span>
+<span class="sd">        Transformed RDKit molecule.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">mol2</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+    <span class="c1"># Change bonds</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;bond&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">mol2</span><span class="o">.</span><span class="n">GetBondBetweenAtoms</span><span class="p">(</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">SetBondType</span><span class="p">(</span>
+            <span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;bond&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="p">)</span>
+    <span class="c1"># Delete bonds with zero bond order</span>
+    <span class="n">editable</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">EditableMol</span><span class="p">(</span><span class="n">mol2</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">mol2</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">()):</span>
+        <span class="k">if</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetBondType</span><span class="p">()</span> <span class="o">==</span> <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">ZERO</span><span class="p">:</span>
+            <span class="n">editable</span><span class="o">.</span><span class="n">RemoveBond</span><span class="p">(</span>
+                <span class="n">bond</span><span class="o">.</span><span class="n">GetBeginAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">(),</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetEndAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">()</span>
+            <span class="p">)</span>
+    <span class="n">mol2</span> <span class="o">=</span> <span class="n">editable</span><span class="o">.</span><span class="n">GetMol</span><span class="p">()</span>
+    <span class="c1"># Change charges</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;atom&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">mol2</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">.</span><span class="n">SetFormalCharge</span><span class="p">(</span><span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;atom&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">mol2</span></div>
+
+
+<div class="viewcode-block" id="mols_are_equal"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.mols_are_equal">[docs]</a><span class="k">def</span> <span class="nf">mols_are_equal</span><span class="p">(</span><span class="n">mol1</span><span class="p">,</span> <span class="n">mol2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes if two molecules are equal.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mol1: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule.</span>
+<span class="sd">    mol2: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        Boolean whether molecules are equal.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">mol1</span><span class="o">.</span><span class="n">HasSubstructMatch</span><span class="p">(</span><span class="n">mol2</span><span class="p">)</span> <span class="ow">and</span> <span class="n">mol2</span><span class="o">.</span><span class="n">HasSubstructMatch</span><span class="p">(</span><span class="n">mol1</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="find_matching_atoms"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.find_matching_atoms">[docs]</a><span class="k">def</span> <span class="nf">find_matching_atoms</span><span class="p">(</span><span class="n">train_mode</span><span class="p">,</span> <span class="n">mol</span><span class="p">,</span> <span class="n">rule</span><span class="p">,</span> <span class="n">rule_small</span><span class="p">,</span> <span class="n">tags_core</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find the substructure matching of a rule or lowest matching rule to a molecule and confirm</span>
+<span class="sd">    the match contains the reaction center.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    train_mode: Literal[&quot;single_reactant&quot;, &quot;transition_state&quot;]</span>
+<span class="sd">        Mode in which diagram was constructed.</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule.</span>
+<span class="sd">    rule: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule of substructure/reaction rule.</span>
+<span class="sd">    rule_small: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule of substructure/reaction rule of lowest matching template</span>
+<span class="sd">    tags_core: List[str]</span>
+<span class="sd">        A list of the atom map numbers in the reaction center.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    to_do_matches: list</span>
+<span class="sd">        List of valid matches.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">atoms_core</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">atom</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">HasProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">tags_core</span>
+    <span class="p">]</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetSubstructMatches</span><span class="p">(</span><span class="n">rule</span><span class="p">)</span>  <span class="c1"># There might be multiple matches</span>
+    <span class="n">to_do_matches</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">rule_small</span><span class="p">:</span>
+        <span class="n">matches_small</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetSubstructMatches</span><span class="p">(</span><span class="n">rule_small</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)):</span>
+            <span class="n">match_large</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">match_includes_reaction_center</span><span class="p">(</span><span class="n">train_mode</span><span class="p">,</span> <span class="n">match_large</span><span class="p">,</span> <span class="n">atoms_core</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">matches_small</span><span class="p">)):</span>
+                <span class="n">match</span> <span class="o">=</span> <span class="n">matches_small</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="k">if</span> <span class="kc">False</span> <span class="ow">in</span> <span class="p">[</span><span class="n">x</span> <span class="ow">in</span> <span class="n">match_large</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">match</span><span class="p">]:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">match_includes_reaction_center</span><span class="p">(</span><span class="n">train_mode</span><span class="p">,</span> <span class="n">match</span><span class="p">,</span> <span class="n">atoms_core</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="n">to_do_matches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)):</span>
+            <span class="n">match</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">match_includes_reaction_center</span><span class="p">(</span><span class="n">train_mode</span><span class="p">,</span> <span class="n">match</span><span class="p">,</span> <span class="n">atoms_core</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">to_do_matches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">to_do_matches</span></div>
+
+
+<div class="viewcode-block" id="match_includes_reaction_center"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.match_includes_reaction_center">[docs]</a><span class="k">def</span> <span class="nf">match_includes_reaction_center</span><span class="p">(</span><span class="n">train_mode</span><span class="p">,</span> <span class="n">match</span><span class="p">,</span> <span class="n">atoms_core</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determindes whether a substructure match includes the full reaction center.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    train_mode: Literal[&quot;single_reactant&quot;, &quot;transition_state&quot;]</span>
+<span class="sd">        Mode in which diagram was constructed.</span>
+<span class="sd">    match: tuple</span>
+<span class="sd">        Indices of substructure match.</span>
+<span class="sd">    atoms_core: List[int]</span>
+<span class="sd">        Atom indices belonging to the reaction center.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    includes_rc: bool</span>
+<span class="sd">        Boolean whether match includes the reaction center.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">includes_rc</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">train_mode</span> <span class="o">==</span> <span class="s2">&quot;transition_state&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="kc">False</span> <span class="ow">in</span> <span class="p">[</span><span class="n">core_atom</span> <span class="ow">in</span> <span class="n">match</span> <span class="k">for</span> <span class="n">core_atom</span> <span class="ow">in</span> <span class="n">atoms_core</span><span class="p">]:</span>
+            <span class="n">includes_rc</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">includes_rc</span></div>
+
+
+<div class="viewcode-block" id="make_fragment_indices"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.make_fragment_indices">[docs]</a><span class="k">def</span> <span class="nf">make_fragment_indices</span><span class="p">(</span><span class="n">rule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fragments a molecule into multiple molecules where it is disconnected.</span>
+<span class="sd">    For examples, turns &#39;CC.C&#39; into &#39;CC&#39; and &#39;C&#39;.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rule: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    rule_fragment_indices: tuple</span>
+<span class="sd">        Tuple of tuple of atom indices in each fragment.</span>
+<span class="sd">    rule_fragment_mols: tuple</span>
+<span class="sd">        Tuple of RDKit molecule objects of each fragment.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">rule_fragment_indices</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">GetMolFrags</span><span class="p">(</span><span class="n">rule</span><span class="p">)</span>
+    <span class="n">rule_fragment_mols</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">GetMolFrags</span><span class="p">(</span><span class="n">rule</span><span class="p">,</span> <span class="n">asMols</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sanitizeFrags</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">rule_fragment_indices</span><span class="p">,</span> <span class="n">rule_fragment_mols</span></div>
+
+
+<div class="viewcode-block" id="match_and_mol_transition"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.match_and_mol_transition">[docs]</a><span class="k">def</span> <span class="nf">match_and_mol_transition</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">change_dict</span><span class="p">,</span> <span class="n">rule</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;regular&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts an RDKit mol with the changes specified in change_dict, with bond numbers corresponding to rule not mol</span>
+<span class="sd">    thus an additional conversion step is needed to identify the correct bonds.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule.</span>
+<span class="sd">    change_dict: dict</span>
+<span class="sd">        Changes to be applied to bonds and atoms, indexing corresponding to rule.</span>
+<span class="sd">    rule: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule of substructure/reaction rule.</span>
+<span class="sd">    direction: Literal[&#39;regular&#39;, &#39;reversed&#39;], default &#39;regular&#39;</span>
+<span class="sd">        Direction of change (&#39;regular&#39; or &#39;reversed&#39;).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    mol2s: List[rdkit.Chem.Mol]</span>
+<span class="sd">        List of transformed molecules.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">matches</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetSubstructMatches</span><span class="p">(</span><span class="n">rule</span><span class="p">)</span>
+    <span class="n">mol2s</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+        <span class="n">mol2</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+        <span class="c1"># Change bonds</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;bond&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">begin_atom_mol</span> <span class="o">=</span> <span class="n">match</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="n">end_atom_mol</span> <span class="o">=</span> <span class="n">match</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="n">bond</span> <span class="o">=</span> <span class="n">mol2</span><span class="o">.</span><span class="n">GetBondBetweenAtoms</span><span class="p">(</span><span class="n">begin_atom_mol</span><span class="p">,</span> <span class="n">end_atom_mol</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;regular&quot;</span><span class="p">:</span>
+                <span class="n">new_type</span> <span class="o">=</span> <span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;bond&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_type</span> <span class="o">=</span> <span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;bond&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">bond</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">bond</span><span class="o">.</span><span class="n">SetBondType</span><span class="p">(</span><span class="n">new_type</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">editable</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">EditableMol</span><span class="p">(</span><span class="n">mol2</span><span class="p">)</span>
+                <span class="n">editable</span><span class="o">.</span><span class="n">AddBond</span><span class="p">(</span><span class="n">begin_atom_mol</span><span class="p">,</span> <span class="n">end_atom_mol</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">new_type</span><span class="p">)</span>
+                <span class="n">mol2</span> <span class="o">=</span> <span class="n">editable</span><span class="o">.</span><span class="n">GetMol</span><span class="p">()</span>
+
+        <span class="c1"># Delete bonds with zero bond order</span>
+        <span class="n">editable</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">EditableMol</span><span class="p">(</span><span class="n">mol2</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">mol2</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetBondType</span><span class="p">()</span> <span class="o">==</span> <span class="n">Chem</span><span class="o">.</span><span class="n">rdchem</span><span class="o">.</span><span class="n">BondType</span><span class="o">.</span><span class="n">ZERO</span><span class="p">:</span>
+                <span class="n">editable</span><span class="o">.</span><span class="n">RemoveBond</span><span class="p">(</span>
+                    <span class="n">bond</span><span class="o">.</span><span class="n">GetBeginAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">(),</span> <span class="n">bond</span><span class="o">.</span><span class="n">GetEndAtom</span><span class="p">()</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">()</span>
+                <span class="p">)</span>
+        <span class="n">mol2</span> <span class="o">=</span> <span class="n">editable</span><span class="o">.</span><span class="n">GetMol</span><span class="p">()</span>
+        <span class="c1"># Change charges</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;atom&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="s2">&quot;regular&quot;</span><span class="p">:</span>
+                <span class="n">mol2</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">match</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span><span class="o">.</span><span class="n">SetFormalCharge</span><span class="p">(</span>
+                    <span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;atom&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mol2</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">match</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span><span class="o">.</span><span class="n">SetFormalCharge</span><span class="p">(</span>
+                    <span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;atom&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                <span class="p">)</span>
+        <span class="n">mol2s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mol2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mol2s</span></div>
+
+
+<div class="viewcode-block" id="mol_to_rxn_smiles"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.mol_to_rxn_smiles">[docs]</a><span class="k">def</span> <span class="nf">mol_to_rxn_smiles</span><span class="p">(</span><span class="n">initial_smiles</span><span class="p">,</span> <span class="n">initial_mols</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">predict_mode</span><span class="p">,</span> <span class="n">verbose</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a list of all possible reaction smiles from a given list of reactant(s).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    initial_smiles: List[str]</span>
+<span class="sd">        List of SMILES strings for reactant(s).</span>
+<span class="sd">    initial_mols: List[rdkit.Chem.Mol]</span>
+<span class="sd">        RDKit molecules of reactant(s) list.</span>
+<span class="sd">    d: ehreact.diagram.diagram.Diagram</span>
+<span class="sd">        Hasse Diagram.</span>
+<span class="sd">    predict_mode: Literal[&quot;single_reactant&quot;, &quot;multi_reactant&quot;, &quot;transition_state&quot;]</span>
+<span class="sd">        Mode of prediction.</span>
+<span class="sd">    verbose: bool</span>
+<span class="sd">        Whether to print additional information.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    current_smiles: List[str]</span>
+<span class="sd">        List of reaction SMILES.</span>
+<span class="sd">    belongs_to: List[int]</span>
+<span class="sd">        List of indices which item in current_smiles belongs to which initial_smiles.</span>
+<span class="sd">    combination: List[str]</span>
+<span class="sd">        List of combination of reactants.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Check for partners, create list of possibilities</span>
+    <span class="n">current_smiles</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">belongs_to</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">combination</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">fragment_dict_reac</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">fragment_reac</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">initial_mols</span><span class="p">)):</span>
+
+        <span class="k">for</span> <span class="n">key1</span> <span class="ow">in</span> <span class="n">fragment_dict_reac</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">change_dict</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">change_dict</span><span class="p">[</span><span class="n">key1</span><span class="p">]</span>
+            <span class="n">rule_reac</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key1</span><span class="p">]</span><span class="o">.</span><span class="n">rule_reac</span>
+            <span class="n">rule</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">key1</span><span class="p">]</span><span class="o">.</span><span class="n">rule</span>
+
+            <span class="c1"># Check for partners, create list of possibilities</span>
+            <span class="k">if</span> <span class="n">predict_mode</span> <span class="o">==</span> <span class="s2">&quot;single_reactant&quot;</span><span class="p">:</span>
+                <span class="n">missing_fragments</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">key2</span> <span class="ow">in</span> <span class="n">fragment_dict_reac</span><span class="p">[</span><span class="n">key1</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">rule_fragment</span> <span class="o">=</span> <span class="n">fragment_dict_reac</span><span class="p">[</span><span class="n">key1</span><span class="p">][</span><span class="n">key2</span><span class="p">][</span><span class="s2">&quot;rule_fragment&quot;</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">initial_mols</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">HasSubstructMatch</span><span class="p">(</span><span class="n">rule_fragment</span><span class="p">):</span>
+                        <span class="n">missing_fragments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="n">fragment_dict_reac</span><span class="p">[</span><span class="n">key1</span><span class="p">][</span><span class="n">key2</span><span class="p">][</span><span class="s2">&quot;molecules&quot;</span><span class="p">]</span>
+                        <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">missing_fragments</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">initial_smiles</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+                <span class="n">combination_fragments</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tups</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">tups</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">missing_fragments</span><span class="p">))</span>
+                <span class="p">]</span>
+
+            <span class="c1"># Simply use inputted molecules for multi_reactant mode</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">combination_fragments</span> <span class="o">=</span> <span class="p">[</span><span class="n">initial_smiles</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+
+            <span class="n">combination_fragments</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+                <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">combination_fragments</span><span class="p">))</span>
+            <span class="p">)</span>  <span class="c1"># Only use unique entries</span>
+
+            <span class="c1"># For each combination of reactants, create atom map numbers, update smiles, and create</span>
+            <span class="c1"># the transition state and products according to change_dict and rule</span>
+            <span class="k">for</span> <span class="n">combination_fragment</span> <span class="ow">in</span> <span class="n">combination_fragments</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Current fragment:&quot;</span><span class="p">,</span> <span class="n">combination_fragment</span><span class="p">)</span>
+                <span class="n">mol</span> <span class="o">=</span> <span class="n">make_mol</span><span class="p">(</span><span class="n">combination_fragment</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+                    <span class="n">atom</span><span class="o">.</span><span class="n">SetProp</span><span class="p">(</span><span class="s2">&quot;molAtomMapNumber&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetIdx</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">smiles_reac</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;... Atom mapped reactants:&quot;</span><span class="p">,</span> <span class="n">smiles_reac</span><span class="p">)</span>
+                <span class="n">ts_mols</span> <span class="o">=</span> <span class="n">match_and_mol_transition</span><span class="p">(</span>
+                    <span class="n">mol</span><span class="p">,</span> <span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;reac&quot;</span><span class="p">],</span> <span class="n">rule_reac</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;reverse&quot;</span>
+                <span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">ts_mol</span> <span class="ow">in</span> <span class="n">ts_mols</span><span class="p">:</span>
+                    <span class="n">prod</span> <span class="o">=</span> <span class="n">match_and_mol_transition</span><span class="p">(</span>
+                        <span class="n">ts_mol</span><span class="p">,</span> <span class="n">change_dict</span><span class="p">[</span><span class="s2">&quot;prod&quot;</span><span class="p">],</span> <span class="n">rule</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;regular&quot;</span>
+                    <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">smiles_prod</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolToSmiles</span><span class="p">(</span><span class="n">prod</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;... Possible product:&quot;</span><span class="p">,</span> <span class="n">smiles_prod</span><span class="p">)</span>
+                    <span class="n">rxn_smiles</span> <span class="o">=</span> <span class="n">smiles_reac</span> <span class="o">+</span> <span class="s2">&quot;&gt;&gt;&quot;</span> <span class="o">+</span> <span class="n">smiles_prod</span>
+
+                    <span class="c1"># Check if valid rxn_smiles was produced (i.e. something changes):</span>
+                    <span class="k">if</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">smiles_reac</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)))</span> <span class="o">==</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="nb">sorted</span><span class="p">(</span><span class="n">smiles_prod</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">))</span>
+                    <span class="p">):</span>
+                        <span class="k">continue</span>
+                    <span class="n">current_smiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="p">)</span>
+                    <span class="n">belongs_to</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                    <span class="n">combination</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">combination_fragment</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                            <span class="n">initial_smiles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
+                        <span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">initial_smiles</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">current_smiles</span><span class="p">,</span> <span class="n">belongs_to</span><span class="p">,</span> <span class="n">combination</span></div>
+
+
+<div class="viewcode-block" id="do_charges_fit"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.do_charges_fit">[docs]</a><span class="k">def</span> <span class="nf">do_charges_fit</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">current_rule</span><span class="p">,</span> <span class="n">match</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines whether a current rule matches a molecule if formal charges are taken into account.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule object.</span>
+<span class="sd">    current_rule: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule object of rule</span>
+<span class="sd">    match: tuple</span>
+<span class="sd">         Indices of matching atoms in current_rule and mol.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    do_charges_fit: bool</span>
+<span class="sd">        Whether formal charges are the same.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">do_charges_fit</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">match</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">current_rule</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">.</span><span class="n">GetFormalCharge</span><span class="p">()</span>
+            <span class="o">!=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">match</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span><span class="o">.</span><span class="n">GetFormalCharge</span><span class="p">()</span>
+        <span class="p">):</span>
+            <span class="n">do_charges_fit</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">do_charges_fit</span></div>
+
+
+<div class="viewcode-block" id="force_charge_fit"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.force_charge_fit">[docs]</a><span class="k">def</span> <span class="nf">force_charge_fit</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">current_rule</span><span class="p">,</span> <span class="n">match</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Forces the formal charges of a rule to match the formal charges of a molecule.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule object.</span>
+<span class="sd">    current_rule: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule object of rule</span>
+<span class="sd">    match: tuple</span>
+<span class="sd">         Indices of matching atoms in current_rule and mol.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    current_rule: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule object of rule with updated formal charges.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">match</span><span class="p">)):</span>
+        <span class="n">current_rule</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span><span class="o">.</span><span class="n">SetFormalCharge</span><span class="p">(</span>
+            <span class="n">mol</span><span class="o">.</span><span class="n">GetAtomWithIdx</span><span class="p">(</span><span class="n">match</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span><span class="o">.</span><span class="n">GetFormalCharge</span><span class="p">()</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">current_rule</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Esther Heid. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.5.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

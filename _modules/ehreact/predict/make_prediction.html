@@ -1,0 +1,596 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>ehreact.predict.make_prediction &mdash; ehreact  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> ehreact
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">ehreact</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>ehreact.predict.make_prediction</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for ehreact.predict.make_prediction</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Score on Hasse diagram.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">ehreact.helpers.rdkit</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">read_in_smiles</span><span class="p">,</span>
+    <span class="n">read_in_reactions</span><span class="p">,</span>
+    <span class="n">mol_to_rxn_smiles</span><span class="p">,</span>
+    <span class="n">morgan_bit_fp_from_mol</span><span class="p">,</span>
+    <span class="n">tanimoto_from_fp</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.score</span> <span class="kn">import</span> <span class="n">default_score_generator</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="make_prediction"><a class="viewcode-back" href="../../../predict.html#ehreact.predict.make_prediction.make_prediction">[docs]</a><span class="k">def</span> <span class="nf">make_prediction</span><span class="p">(</span>
+    <span class="n">smiles</span><span class="p">,</span>
+    <span class="n">d</span><span class="p">,</span>
+    <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">quiet</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">compute_aam</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">predict_mode</span><span class="o">=</span><span class="s2">&quot;transition_state&quot;</span><span class="p">,</span>
+    <span class="n">stereochemistry</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes a Hasse diagram of a list of reaction or molecule smiles.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    smiles: List[str]</span>
+<span class="sd">        List of SMILES or reaction SMILES to score.</span>
+<span class="sd">    d: ehreact.diagram.diagram.Diagram</span>
+<span class="sd">        Diagram to calculate scores on.</span>
+<span class="sd">    params: dict, default None</span>
+<span class="sd">        Dictionary of scoring hyperparameters.</span>
+<span class="sd">    verbose: bool, default False</span>
+<span class="sd">        Whether to print additional information.</span>
+<span class="sd">    quiet: bool, default True</span>
+<span class="sd">        Whether to silence all output.</span>
+<span class="sd">    compute_aam: bool, default False</span>
+<span class="sd">        Whether to compute atom-mappings for reactions.</span>
+<span class="sd">    predict_mode: Literal[&quot;single_reactant&quot;,&quot;multi_reactant&quot;,&quot;transition_state&quot;], default &quot;transition_state&quot;</span>
+<span class="sd">        Prediction mode, either transition states extracted from reaction smiles or single/multi reactants from smiles.</span>
+<span class="sd">        If single reactants, reaction partners are added automatically and all possible reaction products enumerated,</span>
+<span class="sd">        for multi_reactants no reaction partners are added but different reaction outcomes are taken in to account.</span>
+<span class="sd">    stereochemistry: bool, default False</span>
+<span class="sd">        Whether to use stereochemistry for scoring.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    scores: List[float]</span>
+<span class="sd">        List of scores.</span>
+<span class="sd">    combination: List[str]</span>
+<span class="sd">        List of multiple reactants.</span>
+<span class="sd">    current_smiles: List[str]</span>
+<span class="sd">        List of SMILES strings.</span>
+<span class="sd">    belongs_to: List[int]</span>
+<span class="sd">        List of integer index characterizing to which initial smiles the reaction belongs to.</span>
+<span class="sd">    raw_scores: List[dict]</span>
+<span class="sd">        List of dictionaries of raw scores.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Initialize dictionaries and lists</span>
+    <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;use_prod&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span><span class="s2">&quot;coeff_ss&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span><span class="s2">&quot;coeff_sp&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span><span class="s2">&quot;coeff_sm&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span><span class="s2">&quot;coeff_sl&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">,</span><span class="s2">&quot;cap_sp&quot;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">,</span><span class="s2">&quot;cap_sl&quot;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Parameters for scoring:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+    <span class="n">start1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Preprocessing data&quot;</span><span class="p">)</span>
+
+    <span class="n">tags_core</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">combination</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">smiles</span><span class="p">)</span>
+    <span class="n">belongs_to</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">smiles</span><span class="p">)))</span>
+
+    <span class="c1"># Preprocess for single_reactant training mode</span>
+    <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;single_reactant&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">predict_mode</span> <span class="o">!=</span> <span class="s2">&quot;single_reactant&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;In train_mode=&#39;single_reactant&#39; it is required to also use predict_mode=&#39;single_reactant&#39;.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">current_smiles</span><span class="p">,</span> <span class="n">smiles_dict</span> <span class="o">=</span> <span class="n">read_in_smiles</span><span class="p">(</span><span class="n">smiles</span><span class="p">)</span>
+        <span class="n">current_mols</span> <span class="o">=</span> <span class="p">[</span><span class="n">smiles_dict</span><span class="p">[</span><span class="n">smi</span><span class="p">][</span><span class="s2">&quot;mol_diagram&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">smi</span> <span class="ow">in</span> <span class="n">current_smiles</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">current_smiles</span><span class="p">)):</span>
+            <span class="n">tags_core</span><span class="p">[</span><span class="n">current_smiles</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Preprocess for transition_state training mode</span>
+    <span class="k">elif</span> <span class="n">d</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;transition_state&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">predict_mode</span> <span class="o">==</span> <span class="s2">&quot;single_reactant&quot;</span> <span class="ow">or</span> <span class="n">predict_mode</span> <span class="o">==</span> <span class="s2">&quot;multi_reactant&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">stereochemistry</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sd">&quot;&quot;&quot;Use of stereochemistry in scores is currently only available for</span>
+<span class="sd">                    single_reactant/single_reactant or transition_state/transition_state mode.&quot;&quot;&quot;</span>
+                <span class="p">)</span>
+            <span class="n">initial_smiles_no_stereo</span><span class="p">,</span> <span class="n">initial_smiles_dict</span> <span class="o">=</span> <span class="n">read_in_smiles</span><span class="p">(</span><span class="n">smiles</span><span class="p">)</span>
+            <span class="n">initial_mols</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">initial_smiles_dict</span><span class="p">[</span><span class="n">smi</span><span class="p">][</span><span class="s2">&quot;mol_diagram&quot;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">smi</span> <span class="ow">in</span> <span class="n">initial_smiles_no_stereo</span>
+            <span class="p">]</span>
+
+            <span class="c1"># TODO intramolecular reactions</span>
+            <span class="n">current_smiles</span><span class="p">,</span> <span class="n">belongs_to</span><span class="p">,</span> <span class="n">combination</span> <span class="o">=</span> <span class="n">mol_to_rxn_smiles</span><span class="p">(</span>
+                <span class="n">initial_smiles_no_stereo</span><span class="p">,</span> <span class="n">initial_mols</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">predict_mode</span><span class="p">,</span> <span class="n">verbose</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;Inputting smiles string to transition state routine&quot;</span><span class="p">,</span>
+                    <span class="n">current_smiles</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="n">current_smiles</span><span class="p">,</span> <span class="n">smiles_dict</span><span class="p">,</span> <span class="n">tags_core</span> <span class="o">=</span> <span class="n">read_in_reactions</span><span class="p">(</span><span class="n">current_smiles</span><span class="p">)</span>
+            <span class="n">current_mols</span> <span class="o">=</span> <span class="p">[</span><span class="n">smiles_dict</span><span class="p">[</span><span class="n">smi</span><span class="p">][</span><span class="s2">&quot;mol_diagram&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">smi</span> <span class="ow">in</span> <span class="n">current_smiles</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="n">predict_mode</span> <span class="o">==</span> <span class="s2">&quot;transition_state&quot;</span><span class="p">:</span>
+
+            <span class="n">current_smiles</span><span class="p">,</span> <span class="n">smiles_dict</span><span class="p">,</span> <span class="n">tags_core</span> <span class="o">=</span> <span class="n">read_in_reactions</span><span class="p">(</span><span class="n">smiles</span><span class="p">)</span>
+            <span class="n">current_mols</span> <span class="o">=</span> <span class="p">[</span><span class="n">smiles_dict</span><span class="p">[</span><span class="n">smi</span><span class="p">][</span><span class="s2">&quot;mol_diagram&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">smi</span> <span class="ow">in</span> <span class="n">current_smiles</span><span class="p">]</span>
+
+    <span class="n">end1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="c1"># Prediction on diagram</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Prediction on diagram&quot;</span><span class="p">)</span>
+
+    <span class="n">start2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="n">scores</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">raw_scores</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">current_smiles</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Searching template for&quot;</span><span class="p">,</span> <span class="n">current_smiles</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">highest_template</span> <span class="o">=</span> <span class="n">find_highest_template</span><span class="p">(</span>
+            <span class="n">curr_node</span><span class="o">=</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">],</span> <span class="n">mol</span><span class="o">=</span><span class="n">current_mols</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">d</span><span class="o">=</span><span class="n">d</span><span class="p">,</span> <span class="n">highest_template</span><span class="o">=</span><span class="kc">None</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">highest_template</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;Highest template:&quot;</span><span class="p">,</span>
+                    <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">highest_template</span><span class="p">]</span><span class="o">.</span><span class="n">key</span><span class="p">,</span>
+                    <span class="s2">&quot;with&quot;</span><span class="p">,</span>
+                    <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">highest_template</span><span class="p">]</span><span class="o">.</span><span class="n">min_dist_leaf</span><span class="p">,</span>
+                    <span class="s2">&quot;edges to nearest leaf and&quot;</span><span class="p">,</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">highest_template</span><span class="p">]</span><span class="o">.</span><span class="n">all_leafs</span><span class="p">),</span>
+                    <span class="s2">&quot;leaf nodes&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="n">score</span><span class="p">,</span> <span class="n">raw_score</span> <span class="o">=</span> <span class="n">calculate_score</span><span class="p">(</span>
+                <span class="n">current_smiles</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">current_mols</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">highest_template</span><span class="p">,</span>
+                <span class="n">d</span><span class="p">,</span>
+                <span class="n">verbose</span><span class="p">,</span>
+                <span class="n">predict_mode</span><span class="p">,</span>
+                <span class="n">params</span><span class="p">,</span>
+                <span class="n">smiles_dict</span><span class="p">,</span>
+                <span class="n">stereochemistry</span><span class="p">,</span>
+                <span class="n">tags_core</span><span class="o">=</span><span class="n">tags_core</span><span class="p">[</span><span class="n">current_smiles</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No template found, setting score to 0.&quot;</span><span class="p">)</span>
+            <span class="n">score</span><span class="p">,</span> <span class="n">raw_score</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="p">{}</span>
+        <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score</span><span class="p">)</span>
+        <span class="n">raw_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">raw_score</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Scores:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">current_smiles</span><span class="p">)):</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="n">smiles</span><span class="p">[</span><span class="n">belongs_to</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span>
+                <span class="n">combination</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="n">current_smiles</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                <span class="s2">&quot;: Score:&quot;</span><span class="p">,</span>
+                <span class="n">scores</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+            <span class="p">)</span>
+
+    <span class="n">end2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="c1"># Print timing</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Finished&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Preprocessing -- time:</span><span class="si">{}</span><span class="s2">s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">end1</span> <span class="o">-</span> <span class="n">start1</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Prediction -- time:</span><span class="si">{}</span><span class="s2">s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">end2</span> <span class="o">-</span> <span class="n">start2</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">scores</span><span class="p">,</span> <span class="n">combination</span><span class="p">,</span> <span class="n">current_smiles</span><span class="p">,</span> <span class="n">belongs_to</span><span class="p">,</span> <span class="n">raw_scores</span></div>
+
+
+<div class="viewcode-block" id="find_highest_template"><a class="viewcode-back" href="../../../predict.html#ehreact.predict.make_prediction.find_highest_template">[docs]</a><span class="k">def</span> <span class="nf">find_highest_template</span><span class="p">(</span><span class="n">curr_node</span><span class="p">,</span> <span class="n">mol</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">highest_template</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Recursive function to find the highest matching substructure/reaction rule of a molecule/reaction.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    curr_node: str</span>
+<span class="sd">        SMILES string of current node.</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule.</span>
+<span class="sd">    d: ehreact.diagram.diagram.Diagram</span>
+<span class="sd">        Hasse diagram.</span>
+<span class="sd">    highest_template: str</span>
+<span class="sd">        Current highest matching substructure/reaction rule.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    highest_template: str</span>
+<span class="sd">        highest matching (most specific) template in tree</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">curr_node</span><span class="o">.</span><span class="n">key</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="n">rule</span> <span class="o">=</span> <span class="n">curr_node</span><span class="o">.</span><span class="n">rule</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">mol</span><span class="o">.</span><span class="n">GetSubstructMatch</span><span class="p">(</span><span class="n">rule</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">match</span> <span class="ow">or</span> <span class="n">curr_node</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+        <span class="n">highest_template</span> <span class="o">=</span> <span class="n">curr_node</span><span class="o">.</span><span class="n">key</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">curr_node</span><span class="o">.</span><span class="n">edges_to_child</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">child_node</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">n</span><span class="o">.</span><span class="n">is_leaf</span><span class="p">:</span>
+                <span class="n">highest_template</span> <span class="o">=</span> <span class="n">find_highest_template</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">mol</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">highest_template</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">highest_template</span></div>
+
+
+<div class="viewcode-block" id="calculate_score"><a class="viewcode-back" href="../../../predict.html#ehreact.predict.make_prediction.calculate_score">[docs]</a><span class="k">def</span> <span class="nf">calculate_score</span><span class="p">(</span>
+    <span class="n">smi</span><span class="p">,</span>
+    <span class="n">mol</span><span class="p">,</span>
+    <span class="n">highest_template</span><span class="p">,</span>
+    <span class="n">d</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">,</span>
+    <span class="n">predict_mode</span><span class="p">,</span>
+    <span class="n">params</span><span class="p">,</span>
+    <span class="n">smiles_dict</span><span class="p">,</span>
+    <span class="n">stereochemistry</span><span class="p">,</span>
+    <span class="n">tags_core</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to score a query molecule given the diagram, highest template, QM information.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    smi: str</span>
+<span class="sd">        SMILES string of the query molecule.</span>
+<span class="sd">    mol: rdkit.Chem.Mol</span>
+<span class="sd">        RDKit molecule.</span>
+<span class="sd">    highest_template: str</span>
+<span class="sd">        key of the highest matching template.</span>
+<span class="sd">    d: ehreact.diagram.diagram.Diagram</span>
+<span class="sd">        Hasse diagram.</span>
+<span class="sd">    verbose: bool, default False</span>
+<span class="sd">        Whether to print additional information.</span>
+<span class="sd">    predict_mode: Literal[&quot;single_reactant&quot;,&quot;multi_reactant&quot;,&quot;transition_state&quot;], default &quot;transition_state&quot;</span>
+<span class="sd">        Prediction mode, either transition states extracted from reaction smiles or single/multi reactants from smiles.</span>
+<span class="sd">        If single reactants, reaction partners are added automatically and all possible reaction products enumerated,</span>
+<span class="sd">        for multi_reactants no reaction partners are added but different reaction outcomes are taken in to account.</span>
+<span class="sd">     params: dict</span>
+<span class="sd">        Dictionary of scoring hyperparameters.</span>
+<span class="sd">    smiles_dict: dict</span>
+<span class="sd">        A dictionary of the canonicalized input smiles.</span>
+<span class="sd">    stereochemistry: bool</span>
+<span class="sd">        Whether to use stereochemistry for scoring.</span>
+<span class="sd">    tags_core: dict, default None</span>
+<span class="sd">        Atom mapping numbers of atom in the reaction core. Used to verify a correct match.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    best_score: float</span>
+<span class="sd">        Score.</span>
+<span class="sd">    rawnumber: dict</span>
+<span class="sd">        Dictionary of raw scores.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Scoring&quot;</span><span class="p">,</span> <span class="n">smi</span><span class="p">,</span> <span class="s2">&quot;at template&quot;</span><span class="p">,</span> <span class="n">highest_template</span><span class="p">)</span>
+
+    <span class="n">overall_div_mean_reac</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">diversity_reac</span>
+    <span class="n">overall_div_mean_prod</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">diversity_prod</span>
+
+    <span class="n">chemical_scores</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">chemical_scores_prod</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">chemical_scores_overall</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">chemical_scores_overall_prod</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="n">predict_mode</span> <span class="o">==</span> <span class="s2">&quot;single_reactant&quot;</span> <span class="ow">and</span> <span class="n">d</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;single_reactant&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">stereochemistry</span><span class="p">:</span>
+            <span class="n">fp_reac</span> <span class="o">=</span> <span class="n">morgan_bit_fp_from_mol</span><span class="p">(</span><span class="n">smiles_dict</span><span class="p">[</span><span class="n">smi</span><span class="p">][</span><span class="s2">&quot;mol&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">chirality</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fp_reac</span> <span class="o">=</span> <span class="n">morgan_bit_fp_from_mol</span><span class="p">(</span><span class="n">smiles_dict</span><span class="p">[</span><span class="n">smi</span><span class="p">][</span><span class="s2">&quot;mol_no_stereo&quot;</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">leaf</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">highest_template</span><span class="p">]</span><span class="o">.</span><span class="n">all_leafs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">stereochemistry</span><span class="p">:</span>
+                <span class="n">fp_reac_ref</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">fp_reac_stereo</span>
+                <span class="n">chemical_score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">tanimoto_from_fp</span><span class="p">(</span><span class="n">fp_reac</span><span class="p">,</span> <span class="n">ref</span><span class="p">)</span> <span class="k">for</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">fp_reac_ref</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fp_reac_ref</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">fp_reac</span>
+                <span class="n">chemical_score</span> <span class="o">=</span> <span class="n">tanimoto_from_fp</span><span class="p">(</span><span class="n">fp_reac</span><span class="p">,</span> <span class="n">fp_reac_ref</span><span class="p">)</span>
+            <span class="n">chemical_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chemical_score</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">leaf</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">all_leafs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">stereochemistry</span><span class="p">:</span>
+                <span class="n">fp_reac_ref</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">fp_reac_stereo</span>
+                <span class="n">chemical_score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">tanimoto_from_fp</span><span class="p">(</span><span class="n">fp_reac</span><span class="p">,</span> <span class="n">ref</span><span class="p">)</span> <span class="k">for</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">fp_reac_ref</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fp_reac_ref</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">fp_reac</span>
+                <span class="n">chemical_score</span> <span class="o">=</span> <span class="n">tanimoto_from_fp</span><span class="p">(</span><span class="n">fp_reac</span><span class="p">,</span> <span class="n">fp_reac_ref</span><span class="p">)</span>
+            <span class="n">chemical_scores_overall</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chemical_score</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">d</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;transition_state&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">stereochemistry</span><span class="p">:</span>
+            <span class="n">fp_reac</span> <span class="o">=</span> <span class="n">morgan_bit_fp_from_mol</span><span class="p">(</span>
+                <span class="n">smiles_dict</span><span class="p">[</span><span class="n">smi</span><span class="p">][</span><span class="s2">&quot;mol&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">chirality</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fp_reac</span> <span class="o">=</span> <span class="n">morgan_bit_fp_from_mol</span><span class="p">(</span><span class="n">smiles_dict</span><span class="p">[</span><span class="n">smi</span><span class="p">][</span><span class="s2">&quot;mol_no_stereo&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;use_prod&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">stereochemistry</span><span class="p">:</span>
+                <span class="n">fp_prod</span> <span class="o">=</span> <span class="n">morgan_bit_fp_from_mol</span><span class="p">(</span>
+                    <span class="n">smiles_dict</span><span class="p">[</span><span class="n">smi</span><span class="p">][</span><span class="s2">&quot;mol&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">chirality</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fp_prod</span> <span class="o">=</span> <span class="n">morgan_bit_fp_from_mol</span><span class="p">(</span><span class="n">smiles_dict</span><span class="p">[</span><span class="n">smi</span><span class="p">][</span><span class="s2">&quot;mol_no_stereo&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">leaf</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">highest_template</span><span class="p">]</span><span class="o">.</span><span class="n">all_leafs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">stereochemistry</span><span class="p">:</span>
+                <span class="n">fp_reac_ref</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">fp_reac_stereo</span>
+                <span class="n">fp_prod_ref</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">fp_prod_stereo</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fp_reac_ref</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">fp_reac</span>
+                <span class="n">fp_prod_ref</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">fp_prod</span>
+            <span class="k">if</span> <span class="n">stereochemistry</span><span class="p">:</span>
+                <span class="n">chemical_score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">tanimoto_from_fp</span><span class="p">(</span><span class="n">fp_reac</span><span class="p">,</span> <span class="n">ref</span><span class="p">)</span> <span class="k">for</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">fp_reac_ref</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">chemical_score</span> <span class="o">=</span> <span class="n">tanimoto_from_fp</span><span class="p">(</span><span class="n">fp_reac</span><span class="p">,</span> <span class="n">fp_reac_ref</span><span class="p">)</span>
+            <span class="n">chemical_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chemical_score</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;use_prod&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">stereochemistry</span><span class="p">:</span>
+                    <span class="n">chemical_score_prod</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span>
+                        <span class="p">[</span><span class="n">tanimoto_from_fp</span><span class="p">(</span><span class="n">fp_prod</span><span class="p">,</span> <span class="n">ref</span><span class="p">)</span> <span class="k">for</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">fp_prod_ref</span><span class="p">]</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">chemical_score_prod</span> <span class="o">=</span> <span class="n">tanimoto_from_fp</span><span class="p">(</span><span class="n">fp_prod</span><span class="p">,</span> <span class="n">fp_prod_ref</span><span class="p">)</span>
+                <span class="n">chemical_scores_prod</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chemical_score_prod</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">leaf</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">all_leafs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">stereochemistry</span><span class="p">:</span>
+                <span class="n">fp_reac_ref</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">fp_reac_stereo</span>
+                <span class="n">chemical_score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">tanimoto_from_fp</span><span class="p">(</span><span class="n">fp_reac</span><span class="p">,</span> <span class="n">ref</span><span class="p">)</span> <span class="k">for</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">fp_reac_ref</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fp_reac_ref</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">fp_reac</span>
+                <span class="n">chemical_score</span> <span class="o">=</span> <span class="n">tanimoto_from_fp</span><span class="p">(</span><span class="n">fp_reac</span><span class="p">,</span> <span class="n">fp_reac_ref</span><span class="p">)</span>
+            <span class="n">chemical_scores_overall</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chemical_score</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;use_prod&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">stereochemistry</span><span class="p">:</span>
+                    <span class="n">fp_prod_ref</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">fp_prod_stereo</span>
+                    <span class="n">chemical_score_prod</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span>
+                        <span class="p">[</span><span class="n">tanimoto_from_fp</span><span class="p">(</span><span class="n">fp_prod</span><span class="p">,</span> <span class="n">ref</span><span class="p">)</span> <span class="k">for</span> <span class="n">ref</span> <span class="ow">in</span> <span class="n">fp_prod_ref</span><span class="p">]</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">fp_prod_ref</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">leaf</span><span class="p">]</span><span class="o">.</span><span class="n">fp_prod</span>
+                    <span class="n">chemical_score_prod</span> <span class="o">=</span> <span class="n">tanimoto_from_fp</span><span class="p">(</span><span class="n">fp_prod</span><span class="p">,</span> <span class="n">fp_prod_ref</span><span class="p">)</span>
+                <span class="n">chemical_scores_overall_prod</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chemical_score_prod</span><span class="p">)</span>
+
+    <span class="n">min_dist_leaf</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">highest_template</span><span class="p">]</span><span class="o">.</span><span class="n">min_dist_leaf</span>
+
+    <span class="n">rawnumber</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;chemical_scores&quot;</span><span class="p">:</span> <span class="n">chemical_scores</span><span class="p">,</span>
+        <span class="s2">&quot;chemical_scores_prod&quot;</span><span class="p">:</span> <span class="n">chemical_scores_prod</span><span class="p">,</span>
+        <span class="s2">&quot;chemical_scores_overall&quot;</span><span class="p">:</span> <span class="n">chemical_scores_overall</span><span class="p">,</span>
+        <span class="s2">&quot;chemical_scores_overall_prod&quot;</span><span class="p">:</span> <span class="n">chemical_scores_overall_prod</span><span class="p">,</span>
+        <span class="s2">&quot;overall_div_mean_reac&quot;</span><span class="p">:</span> <span class="n">overall_div_mean_reac</span><span class="p">,</span>
+        <span class="s2">&quot;overall_div_mean_prod&quot;</span><span class="p">:</span> <span class="n">overall_div_mean_prod</span><span class="p">,</span>
+        <span class="s2">&quot;min_dist_leaf&quot;</span><span class="p">:</span> <span class="n">min_dist_leaf</span><span class="p">,</span>
+        <span class="s2">&quot;train_mode&quot;</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">best_score</span> <span class="o">=</span> <span class="n">default_score_generator</span><span class="p">(</span><span class="n">rawnumber</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">best_score</span><span class="p">,</span> <span class="n">rawnumber</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Esther Heid. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.5.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

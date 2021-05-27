@@ -1,0 +1,1102 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Helpers &mdash; ehreact  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Diagram" href="diagram.html" />
+    <link rel="prev" title="Predict" href="predict.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ehreact
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arguments.html">Command Line Arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="train.html">Train</a></li>
+<li class="toctree-l2"><a class="reference internal" href="predict.html">Predict</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Helpers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#rdkit">RDKit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#utils">Utils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transition-state">Transition state</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="diagram.html">Diagram</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ehreact</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="api.html">API Documentation</a> &raquo;</li>
+        
+      <li>Helpers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/helpers.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="helpers">
+<h1>Helpers<a class="headerlink" href="#helpers" title="Permalink to this headline">¶</a></h1>
+<p>ehreact.helpers contains a variety of helper functions.</p>
+<div class="section" id="rdkit">
+<h2>RDKit<a class="headerlink" href="#rdkit" title="Permalink to this headline">¶</a></h2>
+<p>Functions from ehreact.helpers.rdkit.py contain helper functions relying on RDKit.</p>
+<span class="target" id="module-ehreact.helpers.rdkit"></span><dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.canonicalize">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">canonicalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#canonicalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.canonicalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Outputs the canonical SMILES string of a molecule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mol</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>canonical_smi</strong> – Canonical SMILES string.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.canonicalize_with_h">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">canonicalize_with_h</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reaction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old2new_mapno</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#canonicalize_with_h"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.canonicalize_with_h" title="Permalink to this definition">¶</a></dt>
+<dd><p>Outputs the canonical SMILES with hydrogens.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mol</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule.</p></li>
+<li><p><strong>reaction</strong> (<em>bool, default False</em>) – Whether the input SMILES stems from a reaction and therefore map numbers need to be included</p></li>
+<li><p><strong>old2new_mapno</strong> (<em>dict, default {}</em>) – Dictionary of custom map numbers to use. If not supplied, map numbers will be calculated from
+atom indices.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>canonical_smi</strong> (<em>str</em>) – Canonical SMILES string.</p></li>
+<li><p><strong>old2new_mapno</strong> (<em>dict</em>) – Dictionary of map numbers.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.check_if_reaction">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">check_if_reaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expected</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#check_if_reaction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.check_if_reaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to check whether “&gt;” occurs in a string, and raise a ValueError if the expected behavior is not met.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>smi</strong> (<em>str</em>) – SMILES string (reaction SMILES or molecule SMILES)</p></li>
+<li><p><strong>expected</strong> (<em>bool</em>) – Whether the input string is expected to be a reaction.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.do_charges_fit">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">do_charges_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_rule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#do_charges_fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.do_charges_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines whether a current rule matches a molecule if formal charges are taken into account.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mol</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule object.</p></li>
+<li><p><strong>current_rule</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule object of rule</p></li>
+<li><p><strong>match</strong> (<em>tuple</em>) – Indices of matching atoms in current_rule and mol.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>do_charges_fit</strong> – Whether formal charges are the same.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.find_common">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">find_common</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mols</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#find_common"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.find_common" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to find the maximum common substructure of a list of RDKit molecules
+and check whether charges match.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mols</strong> (<em>List[rdkit.Chem.Mol]</em>) – List of RDKit mols</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>new_mcs_mol</strong> – RDKit molecule of common substructure.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>rdkit.Chem.Mol</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.find_matching_atoms">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">find_matching_atoms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rule_small</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags_core</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#find_matching_atoms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.find_matching_atoms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the substructure matching of a rule or lowest matching rule to a molecule and confirm
+the match contains the reaction center.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_mode</strong> (<em>Literal[“single_reactant”, “transition_state”]</em>) – Mode in which diagram was constructed.</p></li>
+<li><p><strong>mol</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule.</p></li>
+<li><p><strong>rule</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule of substructure/reaction rule.</p></li>
+<li><p><strong>rule_small</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule of substructure/reaction rule of lowest matching template</p></li>
+<li><p><strong>tags_core</strong> (<em>List[str]</em>) – A list of the atom map numbers in the reaction center.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>to_do_matches</strong> – List of valid matches.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.force_charge_fit">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">force_charge_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_rule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#force_charge_fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.force_charge_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forces the formal charges of a rule to match the formal charges of a molecule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mol</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule object.</p></li>
+<li><p><strong>current_rule</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule object of rule</p></li>
+<li><p><strong>match</strong> (<em>tuple</em>) – Indices of matching atoms in current_rule and mol.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>current_rule</strong> – RDKit molecule object of rule with updated formal charges.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>rdkit.Chem.Mol</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.make_fragment_indices">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">make_fragment_indices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rule</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#make_fragment_indices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.make_fragment_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fragments a molecule into multiple molecules where it is disconnected.
+For examples, turns ‘CC.C’ into ‘CC’ and ‘C’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rule</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>rule_fragment_indices</strong> (<em>tuple</em>) – Tuple of tuple of atom indices in each fragment.</p></li>
+<li><p><strong>rule_fragment_mols</strong> (<em>tuple</em>) – Tuple of RDKit molecule objects of each fragment.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.make_mol">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">make_mol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smi</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#make_mol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.make_mol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make RDKit molecule from a smiles string and add hydrogens.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>smi</strong> (<em>str</em>) – SMILES string.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>mol</strong> – RDKit molecule.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>rdkit.Chem.Mol</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.make_mol_no_sanit_h">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">make_mol_no_sanit_h</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smi</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#make_mol_no_sanit_h"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.make_mol_no_sanit_h" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make RDKit molecule from a smiles string without sanitizing hydrogens (keep hydrogens as given).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>smi</strong> (<em>str</em>) – SMILES string.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>mol</strong> – RDKit molecule.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>rdkit.Chem.Mol</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.match_and_mol_transition">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">match_and_mol_transition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">change_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'regular'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#match_and_mol_transition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.match_and_mol_transition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts an RDKit mol with the changes specified in change_dict, with bond numbers corresponding to rule not mol
+thus an additional conversion step is needed to identify the correct bonds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mol</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule.</p></li>
+<li><p><strong>change_dict</strong> (<em>dict</em>) – Changes to be applied to bonds and atoms, indexing corresponding to rule.</p></li>
+<li><p><strong>rule</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule of substructure/reaction rule.</p></li>
+<li><p><strong>direction</strong> (<em>Literal[‘regular’, ‘reversed’], default ‘regular’</em>) – Direction of change (‘regular’ or ‘reversed’).</p></li>
+<li><p><strong>Returns</strong></p></li>
+<li><p><strong>mol2s</strong> (<em>List[rdkit.Chem.Mol]</em>) – List of transformed molecules.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.match_includes_reaction_center">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">match_includes_reaction_center</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms_core</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#match_includes_reaction_center"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.match_includes_reaction_center" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determindes whether a substructure match includes the full reaction center.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_mode</strong> (<em>Literal[“single_reactant”, “transition_state”]</em>) – Mode in which diagram was constructed.</p></li>
+<li><p><strong>match</strong> (<em>tuple</em>) – Indices of substructure match.</p></li>
+<li><p><strong>atoms_core</strong> (<em>List[int]</em>) – Atom indices belonging to the reaction center.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>includes_rc</strong> – Boolean whether match includes the reaction center.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.mol_to_rxn_smiles">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">mol_to_rxn_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_mols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predict_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#mol_to_rxn_smiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.mol_to_rxn_smiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a list of all possible reaction smiles from a given list of reactant(s).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>initial_smiles</strong> (<em>List[str]</em>) – List of SMILES strings for reactant(s).</p></li>
+<li><p><strong>initial_mols</strong> (<em>List[rdkit.Chem.Mol]</em>) – RDKit molecules of reactant(s) list.</p></li>
+<li><p><strong>d</strong> (<em>ehreact.diagram.diagram.Diagram</em>) – Hasse Diagram.</p></li>
+<li><p><strong>predict_mode</strong> (<em>Literal[“single_reactant”, “multi_reactant”, “transition_state”]</em>) – Mode of prediction.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Whether to print additional information.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>current_smiles</strong> (<em>List[str]</em>) – List of reaction SMILES.</p></li>
+<li><p><strong>belongs_to</strong> (<em>List[int]</em>) – List of indices which item in current_smiles belongs to which initial_smiles.</p></li>
+<li><p><strong>combination</strong> (<em>List[str]</em>) – List of combination of reactants.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.mol_transition">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">mol_transition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">change_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#mol_transition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.mol_transition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts an RDKit mol with the changes specified in change_dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mol</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule.</p></li>
+<li><p><strong>change_dict</strong> (<em>dict</em>) – A dictionary specifying changes to apply to bonds and atoms.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>mol2</strong> – Transformed RDKit molecule.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>rdkit.Chem.Mol</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.mols_are_equal">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">mols_are_equal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#mols_are_equal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.mols_are_equal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes if two molecules are equal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mol1</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule.</p></li>
+<li><p><strong>mol2</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Boolean whether molecules are equal.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.moltosmiles_transition">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">moltosmiles_transition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">change_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#moltosmiles_transition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.moltosmiles_transition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts an RDKit mol with the changes specified in change_dict before converting to smiles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mol</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule.</p></li>
+<li><p><strong>change_dict</strong> (<em>dict</em>) – A dictionary specifying changes to apply to bonds and atoms for reactants and products.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Converted SMILES.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.morgan_bit_fp_from_mol">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">morgan_bit_fp_from_mol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chirality</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#morgan_bit_fp_from_mol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.morgan_bit_fp_from_mol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes a Morgan Bit Fingerprint for a molecule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mol</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule.</p></li>
+<li><p><strong>chirality</strong> (<em>bool</em>) – Whether to use stereoinformation in fingerprint.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>fp</strong> – Morgan fingerprint.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>rdkit.DataStructs.cDataStructs.ExplicitBitVect</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.preprocess">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_aam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reaction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old2new_mapno</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#preprocess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.preprocess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preprocess a SMILES string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>smi</strong> (<em>str</em>) – SMILES string.</p></li>
+<li><p><strong>delete_aam</strong> (<em>bool, default True</em>) – Whether to delete atom mappings from the string.</p></li>
+<li><p><strong>reaction</strong> (<em>bool, default False</em>) – Whether the input SMILES stems from a reaction and molecules need to be created
+without sanitizing hydrogens.</p></li>
+<li><p><strong>old2new_mapno</strong> (<em>dict, default {}</em>) – Dictionary of custom map numbers to use.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>canonical_smi_no_stereo</strong> (<em>str</em>) – Canonical SMILES string without stereoinformation.</p></li>
+<li><p><strong>canonical_smi</strong> (<em>str</em>) – Canonical SMILES string with stereoinformation (if provided).</p></li>
+<li><p><strong>mol_no_stereo</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule without stereoinformation.</p></li>
+<li><p><strong>mol</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule with stereoinformation.</p></li>
+<li><p><strong>old2new_mapno</strong> (<em>dict</em>) – Dictionary of map numbers.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.preprocess_rxn">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">preprocess_rxn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rxn_smi</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#preprocess_rxn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.preprocess_rxn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preprocess a reaction SMILES string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rxn_smi</strong> (<em>str</em>) – Reaction SMILES string.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>canonical_smi_no_stereo</strong> (<em>str</em>) – Canonical SMILES string without stereoinformation.</p></li>
+<li><p><strong>canonical_smi</strong> (<em>str</em>) – Canonical SMILES string with stereoinformation (if provided).</p></li>
+<li><p><strong>mol_no_stereo</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule without stereoinformation.</p></li>
+<li><p><strong>mol</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule with stereoinformation.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.preprocess_seeds">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">preprocess_seeds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smiles_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#preprocess_seeds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.preprocess_seeds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preprocesses a list of seeds and matches them to a list of SMILES strings. If given an empty list of seeds,
+a seed with the maximum common substructure of all molecules is created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seed_list</strong> (<em>List[str]</em>) – List of seeds.</p></li>
+<li><p><strong>smiles</strong> (<em>List[str]</em>) – List of SMILES strings</p></li>
+<li><p><strong>smiles_dict</strong> (<em>dict</em>) – Dictionary of canonical SMILES strings and their respective SMILES with stereoinformation and RDKit molecules.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>seeds</strong> (<em>List[str]</em>) – List of seeds.</p></li>
+<li><p><strong>rule_dict</strong> (<em>dict</em>) – A dictionary of all minimal templates of all seeds.</p></li>
+<li><p><strong>num_smiles_seed</strong> (<em>List[int]</em>) – List of how many SMILES strings fit each seed.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.read_in_reactions">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">read_in_reactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rxn_smiles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#read_in_reactions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.read_in_reactions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes canonical SMILES strings and RDKit molecules from a list of reaction SMILES strings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rxn_smiles</strong> (<em>List[str]</em>) – List of reaction SMILES strings</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>canonical_smiles</strong> (<em>List[str]</em>) – List of canonical SMILES strings</p></li>
+<li><p><strong>smiles_dict</strong> (<em>dict</em>) – Dictionary of canonical SMILES strings and their respective SMILES with stereoinformation and RDKit molecules.</p></li>
+<li><p><strong>tags_core</strong> (<em>dict</em>) – Dictionary of atom map numbers of reaction center for each canonical SMILES.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.read_in_reactions_unique">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">read_in_reactions_unique</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rxn_smiles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#read_in_reactions_unique"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.read_in_reactions_unique" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes canonical SMILES strings and RDKit molecules from a list of reaction SMILES strings
+and only keeps unique entries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rxn_smiles</strong> (<em>List[str]</em>) – List of reaction SMILES strings</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>seeds</strong> (<em>List[str]</em>) – List of SMILES seeds (of all minimal templates).</p></li>
+<li><p><strong>rule_dict</strong> (<em>dict</em>) – A dictionary of all minimal templates of all seeds.</p></li>
+<li><p><strong>canonical_smiles</strong> (<em>List[str]</em>) – List of canonical SMILES strings</p></li>
+<li><p><strong>smiles_dict</strong> (<em>dict</em>) – Dictionary of canonical SMILES strings and their respective SMILES with stereoinformation and RDKit molecules.</p></li>
+<li><p><strong>skipped</strong> (<em>List[str]</em>) – List of skipped (because duplicate) SMILES strings.</p></li>
+<li><p><strong>tags_core</strong> (<em>dict</em>) – Dictionary of atom map numbers of reaction center for each canonical SMILES.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.read_in_smiles">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">read_in_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#read_in_smiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.read_in_smiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes canonical SMILES strings and RDKit molecules from a list of SMILES strings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>smiles</strong> (<em>List[str]</em>) – List of SMILES strings</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>canonical_smiles</strong> (<em>List[str]</em>) – List of canonical SMILES strings</p></li>
+<li><p><strong>smiles_dict</strong> (<em>dict</em>) – Dictionary of canonical SMILES strings and their respective SMILES with stereoinformation and RDKit molecules.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.read_in_smiles_unique">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">read_in_smiles_unique</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#read_in_smiles_unique"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.read_in_smiles_unique" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes canonical SMILES strings and RDKit molecules from a list of SMILES strings and only keeps unique entries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>smiles</strong> (<em>List[str]</em>) – List of SMILES strings</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>canonical_smiles</strong> (<em>List[str]</em>) – Sorted list of canonical SMILES strings</p></li>
+<li><p><strong>smiles_dict</strong> (<em>dict</em>) – Dictionary of canonical SMILES strings and their respective SMILES with stereoinformation and RDKit molecules.</p></li>
+<li><p><strong>skipped</strong> (<em>List[str]</em>) – List of skipped (because duplicate) SMILES strings.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.rdkit.tanimoto_from_fp">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.rdkit.</span></span><span class="sig-name descname"><span class="pre">tanimoto_from_fp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fp1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fp2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/rdkit.html#tanimoto_from_fp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.rdkit.tanimoto_from_fp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the Tanimoto similarity between fingerprints.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fp1</strong> (<em>rdkit.DataStructs.cDataStructs.ExplicitBitVect</em>) – Molecular fingerprint.</p></li>
+<li><p><strong>fp2</strong> (<em>rdkit.DataStructs.cDataStructs.ExplicitBitVect</em>) – Molecular fingerprint.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>tanimoto</strong> – Tanimoto similarity</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="utils">
+<h2>Utils<a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h2>
+<p>Functions from ehreact.helpers.utils.py contain other helper functions (not relying on RDKit).</p>
+<span class="target" id="module-ehreact.helpers.utils"></span><dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.utils.findsubsets">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.utils.</span></span><span class="sig-name descname"><span class="pre">findsubsets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/utils.html#findsubsets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.utils.findsubsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all subsets of S containing m elements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>S</strong> (<em>list</em>) – List of objects.</p></li>
+<li><p><strong>m</strong> (<em>int</em>) – Number of elements per subset.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>subset_list</strong> – List of subsets.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="transition-state">
+<h2>Transition state<a class="headerlink" href="#transition-state" title="Permalink to this headline">¶</a></h2>
+<p>Functions from ehreact.helpers.transition_state.py contain helper functions to construct imaginary
+transition states from reaction SMILES.</p>
+<span class="target" id="module-ehreact.helpers.transition_state"></span><p>transition_state.py
+Some of the functions in this file originate from RDChiral (<a class="reference external" href="https://github.com/connorcoley/rdchiral">https://github.com/connorcoley/rdchiral</a>).</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.transition_state.atoms_are_different">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.transition_state.</span></span><span class="sig-name descname"><span class="pre">atoms_are_different</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atom2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/transition_state.html#atoms_are_different"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.transition_state.atoms_are_different" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares two RDKit atoms based on basic properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atom1</strong> (<em>rdkit.Chem.Atom</em>) – First RDKit atom.</p></li>
+<li><p><strong>atom2</strong> (<em>rdkit.Chem.Atom</em>) – Second RDKit atom.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Boolean whether the atoms have the same properties.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.transition_state.bond_order_increases">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.transition_state.</span></span><span class="sig-name descname"><span class="pre">bond_order_increases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bond1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bond2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/transition_state.html#bond_order_increases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.transition_state.bond_order_increases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines whether bond order gets larger from bond1 to bond2.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bond1</strong> (<em>rdkit.Chem.Bond</em>) – RDKit bond object.</p></li>
+<li><p><strong>bond2</strong> (<em>rdkit.Chem.Bond</em>) – RDKit bond object.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether bond order increases from bond1 to bond2.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.transition_state.bond_to_label">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.transition_state.</span></span><span class="sig-name descname"><span class="pre">bond_to_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bond</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/transition_state.html#bond_to_label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.transition_state.bond_to_label" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function takes an RDKit bond and creates a label describing
+the most important attributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bond</strong> (<em>rdkit.Chem.Bond</em>) – RDKit bond.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>label</strong> – Label of bond.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.transition_state.changed_bonds">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.transition_state.</span></span><span class="sig-name descname"><span class="pre">changed_bonds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">included_bonds_reac</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">included_bonds_prod</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/transition_state.html#changed_bonds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.transition_state.changed_bonds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a dictionary of changed bonds from a list of included bonds in the reactants and products.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>included_bonds_reac</strong> (<em>list</em>) – List of included bonds in the reactants.</p></li>
+<li><p><strong>included_bonds_prod</strong> (<em>list</em>) – List of included bonds in the products.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>change_dict_bonds</strong> – Dictionary of changed bonds.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.transition_state.changed_labels">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.transition_state.</span></span><span class="sig-name descname"><span class="pre">changed_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reac_fragments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prod_fragments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reac_fragment_atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prod_fragment_atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reac_mols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prod_mols</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/transition_state.html#changed_labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.transition_state.changed_labels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the fragments of reactants and products (strings), the mapping of index to atom-mapping number
+(dictionaries), and the whole molecules (RDKit mols), this function computes the changed labels, this
+is the changed formal charges (e.g. R-O-H to R-O- (change of charge on the oxygen).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reac_fragments</strong> (<em>str</em>) – Fragment of reactant(s).</p></li>
+<li><p><strong>prod_fragments</strong> (<em>str</em>) – Fragment of product(s).</p></li>
+<li><p><strong>reac_fragment_atoms</strong> (<em>dict</em>) – Dictionary of index to atom-mapping numbers in reactant fragment.</p></li>
+<li><p><strong>prod_fragment_atoms</strong> (<em>dict</em>) – Dictionary of index to atom-mapping numbers in product fragment.</p></li>
+<li><p><strong>reac_mols</strong> (<em>rdkit.Chem.Mol</em>) – RDKit reactant(s) molecule.</p></li>
+<li><p><strong>reac_prod</strong> (<em>rdkit.Chem.Mol</em>) – RDKit product(s) molecule.</p></li>
+<li><p><strong>Returns</strong></p></li>
+<li><p><strong>change_dict_atoms</strong> (<em>list</em>) – List of changed labels (=changed formal charges).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.transition_state.compute_aam_with_h">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.transition_state.</span></span><span class="sig-name descname"><span class="pre">compute_aam_with_h</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rxn_smiles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/transition_state.html#compute_aam_with_h"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.transition_state.compute_aam_with_h" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to produce an atom mapping for a reaction smiles via the
+ReactionRecoder tool (RDT) by Syed Asad Rahman. The tool maps hydrogens that undergo changes,
+and this function adds the necessary atom-mapping to all other hydrogens.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rxn_smiles</strong> (<em>str</em>) – Reaction SMILES.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>rxn_smiles</strong> – atom-mapped reaction SMILES with hydrogens.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.transition_state.compute_aam_without_h">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.transition_state.</span></span><span class="sig-name descname"><span class="pre">compute_aam_without_h</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rxn_smiles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/transition_state.html#compute_aam_without_h"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.transition_state.compute_aam_without_h" title="Permalink to this definition">¶</a></dt>
+<dd><p>This helper function produces an atom mapping for a reaction smiles via the
+ReactionRecoder tool (RDT) by Syed Asad Rahman.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rxn_smiles</strong> (<em>str</em>) – Reaction SMILES.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>rxn_smiles</strong> – atom-mapped reaction SMILES without hydrogens.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.transition_state.get_changed_atoms">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.transition_state.</span></span><span class="sig-name descname"><span class="pre">get_changed_atoms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reacs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prods</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/transition_state.html#get_changed_atoms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.transition_state.get_changed_atoms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Looks at mapped atoms in a reaction and determines which ones changed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reacs</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule of reactant(s).</p></li>
+<li><p><strong>prods</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule of product(s).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>changed_atoms</strong> (<em>List[rdkit.Chem.Atom]</em>) – List of changed atoms</p></li>
+<li><p><strong>changed_atom_tags</strong> (<em>List[str]</em>) – List of tag numbers of changed atoms</p></li>
+<li><p><strong>err</strong> (<em>int</em>) – Integer indicating an error if not equal 0.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.transition_state.get_fragments_for_changed_atoms">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.transition_state.</span></span><span class="sig-name descname"><span class="pre">get_fragments_for_changed_atoms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">changed_atom_tags</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/transition_state.html#get_fragments_for_changed_atoms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.transition_state.get_fragments_for_changed_atoms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given an RDKit mols and a list of changed atom tags, this function
+computes the SMILES string of molecular fragments using MolFragmentToSmiles
+for all changed fragments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mol</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule</p></li>
+<li><p><strong>changed_atom_tags</strong> (<em>List[str]</em>) – List of changed atom tags.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>this_fragment</strong> (<em>str</em>) – SMILES string of molecular fragment of changed atoms</p></li>
+<li><p><strong>fragment_atoms</strong> (<em>dict</em>) – Dictionary of atoms in fragment.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.transition_state.get_strict_smarts_for_atom">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.transition_state.</span></span><span class="sig-name descname"><span class="pre">get_strict_smarts_for_atom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">atom</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/transition_state.html#get_strict_smarts_for_atom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.transition_state.get_strict_smarts_for_atom" title="Permalink to this definition">¶</a></dt>
+<dd><p>For an RDkit atom object, generate a simple SMARTS pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>atom</strong> (<em>rdkit.Chem.Atom</em>) – RDKit atom.</p></li>
+<li><p><strong>Results</strong></p></li>
+<li><p><strong>——-</strong></p></li>
+<li><p><strong>symbol</strong> (<em>str</em>) – SMARTS symbol of the atom.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.transition_state.get_tagged_atoms_from_mol">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.transition_state.</span></span><span class="sig-name descname"><span class="pre">get_tagged_atoms_from_mol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/transition_state.html#get_tagged_atoms_from_mol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.transition_state.get_tagged_atoms_from_mol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes an RDKit molecule and returns list of tagged atoms and their
+corresponding numbers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mol</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>atoms</strong> (<em>List[rdkit.Chem.Atom]</em>) – List of tagged atoms</p></li>
+<li><p><strong>atom_tags</strong> (<em>List[str]</em>) – List of atom-mapping numbers</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.transition_state.include_bonds">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.transition_state.</span></span><span class="sig-name descname"><span class="pre">include_bonds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">changed_atom_tags</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fragment_atoms</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/transition_state.html#include_bonds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.transition_state.include_bonds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a list of bonds and their indices that have changed atoms attached and should thus
+be included in the transition state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mols</strong> (<em>List[rdkit.Chem.Mol]</em>) – RDKit molecule(s).</p></li>
+<li><p><strong>changed_atom_tags</strong> (<em>List[int]</em>) – Indices of changed atoms.</p></li>
+<li><p><strong>fragment_atoms</strong> (<em>dict</em>) – Dictionary of index to atom-mapping numbers in fragment.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>included_bonds</strong> (<em>list</em>) – List of included bonds.</p></li>
+<li><p><strong>included_bonds_idx</strong> (<em>List[int]</em>) – List of included bond indices</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.transition_state.make_mols">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.transition_state.</span></span><span class="sig-name descname"><span class="pre">make_mols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stereoinformation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/transition_state.html#make_mols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.transition_state.make_mols" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a smiles string as input and creates an RDKit mol object. The molecule cannot be sanitized,
+since we would else get rid of the explicit hydrogens. Thus, instead we check if the molecule could
+be sanitized, and reorder the atoms corresponding to the sanitized molecule. The reordering of atoms
+and molecules ensures that the same reaction with different atom ordering gives the same transition
+state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>smi</strong> (<em>str</em>) – SMILES string.</p></li>
+<li><p><strong>stereoinformation</strong> (<em>bool</em>) – Whether to use stereoinformation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>mol_ordered</strong> – RDKit molecule object.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>rdkit.Chem.Mol</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.transition_state.make_ts">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.transition_state.</span></span><span class="sig-name descname"><span class="pre">make_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reac_mols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">included_bonds_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">change_dict_bonds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">change_dict_atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reac_fragment_atoms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ts_seed</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/transition_state.html#make_ts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.transition_state.make_ts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes an RDKit mol of the transition state, either the whole transistion state (with all atoms and bonds included,
+or only the seed (if ts_seed==True), which includes only the atoms undergoing changes and the corresponding bonds.
+Returns the transition state (whole or seed), and dictionaries of how to change bond types and charges to
+revert back to either the products or reactants.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reac_mols</strong> (<em>rdkit.Chem.mol</em>) – RDKit molecule of reactant(s).</p></li>
+<li><p><strong>included_bonds_idx</strong> (<em>List[int]</em>) – List of included bond indices in transition state.</p></li>
+<li><p><strong>change_dict_bonds</strong> (<em>dict</em>) – Dictionary of bond changes in reaction.</p></li>
+<li><p><strong>change_dict_atoms</strong> (<em>dict</em>) – Dictionary of formal charge changes in reaction.</p></li>
+<li><p><strong>reac_fragment_atoms</strong> (<em>dict</em>) – Dictionary of atom indices in reactant(s) fragment.</p></li>
+<li><p><strong>ts_seed</strong> (<em>bool</em>) – Boolean whether only to save the full transition state or only the reaction center.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>change_ts_to_reac</strong> (<em>dict</em>) – Dictionary of bond and atom changes from the ts to the reactants</p></li>
+<li><p><strong>change_ts_to_prod</strong> (<em>dict</em>) – Dictionary of bond and atom changes from the ts to the products,</p></li>
+<li><p><strong>ts</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule of the transition state</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.transition_state.mapping_list_dict">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.transition_state.</span></span><span class="sig-name descname"><span class="pre">mapping_list_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/transition_state.html#mapping_list_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.transition_state.mapping_list_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes a list of all map numbers and an atom-mapping indices dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mol</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>map_numbers</strong> (<em>List[int]</em>) – Sorted list of atom map numbers</p></li>
+<li><p><strong>mapping</strong> (<em>dict</em>) – Dictionary of mapping</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.helpers.transition_state.process_an_example">
+<span class="sig-prename descclassname"><span class="pre">ehreact.helpers.transition_state.</span></span><span class="sig-name descname"><span class="pre">process_an_example</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rxn_smiles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/helpers/transition_state.html#process_an_example"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.helpers.transition_state.process_an_example" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes one rxn_smiles string and returns the transition state (whole or seed depending on ts_seed)
+RDKit mol object, as well as dictionaries of how to change bond types and charges to revert the transition state
+back to either the products or reactants.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rxn_smiles</strong> (<em>str</em>) – Reaction SMILES.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>change_ts_to_reac</strong> (<em>dict</em>) – Dictionary of bond and atom changes from the ts to the reactants</p></li>
+<li><p><strong>change_ts_to_prod</strong> (<em>dict</em>) – Dictionary of bond and atom changes from the ts to the products</p></li>
+<li><p><strong>ts</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule of the whole imaginary transition state</p></li>
+<li><p><strong>ts_seed</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule of the reaction center</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="diagram.html" class="btn btn-neutral float-right" title="Diagram" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="predict.html" class="btn btn-neutral float-left" title="Predict" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Esther Heid. Project structure based on the Computational Molecular Science Python Cookiecutter version 1.5.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
