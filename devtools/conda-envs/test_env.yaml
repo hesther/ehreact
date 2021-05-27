@@ -14,7 +14,10 @@ dependencies:
   - pytest-cov
   - codecov
 
+  - numpy
+  - rdkit
+
     # Pip-only installs
-  #- pip:
-  #  - codecov
+  - pip:
+    - typed-argument-parser>=1.6.1
 
