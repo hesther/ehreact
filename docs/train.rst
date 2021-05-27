@@ -14,8 +14,15 @@ Classes and functions from ehreact.train.calculate_diagram.py.
 Train
 -----
 
-Classes and functions from ehreact.train.train.
+Classes and functions from ehreact.train.train.py
 
 .. automodule:: ehreact.train.train
    :members:
 
+Hasse
+-----
+
+Classes and functions from ehreact.train.hasse.py
+
+.. automodule:: ehreact.train.hasse
+   :members:

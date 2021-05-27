@@ -7,3 +7,6 @@ API Documentation
 
    arguments
    train
+   predict
+   helpers
+   diagram

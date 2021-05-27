@@ -3,10 +3,10 @@ ehreact
 A Python package for extracting and scoring reaction templates based on extended Hasse diagrams.
 """
 
-# Add imports here
 import ehreact.arguments
 import ehreact.train
-
+import ehreact.predict
+import ehreact.helpers
 
 # Handle versioneer
 from ._version import get_versions
