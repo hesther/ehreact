@@ -4,9 +4,14 @@ dependencies:
     # Base depends
   - python
   - pip
-
+  - numpy
+  - rdkit
 
 
     # Pip-only installs
-  #- pip:
+  - pip:
+    - sphinx
+    - sphinx-rtd-theme
+    - typed-argument-parser>=1.6.1
+
 
