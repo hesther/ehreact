@@ -12,10 +12,10 @@ A Python package for extracting and scoring reaction templates based on extended
 
 - [Requirements](#requirements)
 - [Installation](#installation)
-* [Installation of ehreact](#installation-of-ehreact)
-* [Installation of optional packages](#installation-of-optional-packages)
+  * [Installation of ehreact](#installation-of-ehreact)
+  * [Installation of optional packages](#installation-of-optional-packages)
 - [Creating a diagram](#creating-a-diagram)
-- [Scoring a diagram](#scoring-a-diagram)
+- [Scoring on a diagram](#scoring-on-a-diagram)
 - [Contact](#contact)
 
 ## Requirements
@@ -64,7 +64,7 @@ Use `train.py` to create a Hasse diagram and specify `--data_path <path>` (the p
 python train.py --data_path ehreact/data/reaction_training.dat --save_path test_transition_state.pkl --train_mode transition_state --save_plot test.png
 ```
 
-which creates an image of the diagram saved under `test.png` and a pickle file of the diagram under `test_transition_state.pkl`. Please refer to the [tutorial](https://hesther.github.io/ehreact/) for more examples and options.
+which creates an image of the diagram saved under `test.png` and a pickle file of the diagram under `test_transition_state.pkl`. Please refer to the [tutorial](https://hesther.github.io/ehreact/getting_started.html#tutorial) for more examples and options.
 
 ## Scoring on a diagram
 
@@ -74,7 +74,7 @@ Use `predict.py` to score a set of query substrates or reactions. Specify `--tes
 python predict.py --test_path ehreact/data/reaction_test.dat --load_path test_transition_state.pkl --predict_mode transition_state
 ```
 
-Please refer to the [tutorial](https://hesther.github.io/ehreact/) for more examples and options.
+Please refer to the [tutorial](https://hesther.github.io/ehreact/getting_started.html#tutorial) for more examples and options.
 
 ## Contact
 Feel free to post questions, feedback, bugs or suggestions on github, or email to eheid@mit.edu.
