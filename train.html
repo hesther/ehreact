@@ -610,6 +610,26 @@ create a new template and attach it to the current Hasse diagram (edits to diagr
 </dl>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="ehreact.train.hasse.quick_match">
+<span class="sig-prename descclassname"><span class="pre">ehreact.train.hasse.</span></span><span class="sig-name descname"><span class="pre">quick_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_small</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol_large</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/train/hasse.html#quick_match"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.train.hasse.quick_match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes whether mol_small could possibly be a subgraph of mol_large based on atom type counts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mol_small</strong> (<em>RDKit.Chem.Mol</em>) – A molecule.</p></li>
+<li><p><strong>mol_large</strong> (<em>RDKit.Chem.Mol</em>) – A molecule.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Whether a subgraph match is possible based on atom type counts.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </div>
 

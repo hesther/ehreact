@@ -160,7 +160,7 @@
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">Chem</span>
 <span class="kn">from</span> <span class="nn">ehreact.helpers.utils</span> <span class="kn">import</span> <span class="n">findsubsets</span>
-
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <div class="viewcode-block" id="extended_hasse"><a class="viewcode-back" href="../../../train.html#ehreact.train.hasse.extended_hasse">[docs]</a><span class="k">def</span> <span class="nf">extended_hasse</span><span class="p">(</span><span class="n">smiles_dict</span><span class="p">,</span> <span class="n">seeds</span><span class="p">,</span> <span class="n">rule_dict</span><span class="p">,</span> <span class="n">tags_core</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">quiet</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -472,9 +472,42 @@
 
     <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">extensions_all_matches</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="n">max_rule</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">extensions_all_matches</span><span class="p">[</span><span class="n">match</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">max_rule</span><span class="o">.</span><span class="n">HasSubstructMatch</span><span class="p">(</span><span class="n">pivot_rule</span><span class="p">):</span>
-            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">quick_match</span><span class="p">(</span><span class="n">pivot_rule</span><span class="p">,</span><span class="n">max_rule</span><span class="p">):</span> <span class="c1">#Only compute matching if plausible (based on number of atoms)</span>
+            <span class="k">if</span> <span class="n">max_rule</span><span class="o">.</span><span class="n">HasSubstructMatch</span><span class="p">(</span><span class="n">pivot_rule</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
     <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="quick_match"><a class="viewcode-back" href="../../../train.html#ehreact.train.hasse.quick_match">[docs]</a><span class="k">def</span> <span class="nf">quick_match</span><span class="p">(</span><span class="n">mol_small</span><span class="p">,</span><span class="n">mol_large</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes whether mol_small could possibly be a subgraph of mol_large based on atom type counts.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mol_small: RDKit.Chem.Mol</span>
+<span class="sd">        A molecule.</span>
+<span class="sd">    mol_large: RDKit.Chem.Mol</span>
+<span class="sd">        A molecule.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        Whether a subgraph match is possible based on atom type counts.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">mol_small</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">mol_large</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">():</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    
+    <span class="n">bincount_small</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">([</span><span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span> <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol_small</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()])</span>
+    <span class="n">bincount_large</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">([</span><span class="n">atom</span><span class="o">.</span><span class="n">GetAtomicNum</span><span class="p">()</span> <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">mol_large</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">()])</span>
+
+    <span class="k">if</span> <span class="n">bincount_small</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">bincount_large</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">bincount_small</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">bincount_small</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span><span class="n">bincount_large</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
 
 
 <div class="viewcode-block" id="extend_by_single_match"><a class="viewcode-back" href="../../../train.html#ehreact.train.hasse.extend_by_single_match">[docs]</a><span class="k">def</span> <span class="nf">extend_by_single_match</span><span class="p">(</span>
