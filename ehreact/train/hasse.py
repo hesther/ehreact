@@ -3,7 +3,7 @@ from ehreact.diagram.diagram import Diagram
 from copy import deepcopy
 from rdkit import Chem
 from ehreact.helpers.utils import findsubsets
-
+import numpy as np
 
 def extended_hasse(smiles_dict, seeds, rule_dict, tags_core, verbose, quiet):
     """
@@ -315,9 +315,42 @@ def has_one_extension(pivot_rule, extensions_all_matches):
 
     for match in extensions_all_matches.keys():
         max_rule = list(extensions_all_matches[match].values())[0]
-        if max_rule.HasSubstructMatch(pivot_rule):
-            return True
+        if quick_match(pivot_rule,max_rule): #Only compute matching if plausible (based on number of atoms)
+            if max_rule.HasSubstructMatch(pivot_rule):
+                return True
     return False
+
+
+def quick_match(mol_small,mol_large):
+    """
+    Computes whether mol_small could possibly be a subgraph of mol_large based on atom type counts.
+
+    Parameters
+    ----------
+    mol_small: RDKit.Chem.Mol
+        A molecule.
+    mol_large: RDKit.Chem.Mol
+        A molecule.
+
+    Returns
+    -------
+    bool
+        Whether a subgraph match is possible based on atom type counts.
+    """
+
+    if mol_small.GetNumAtoms() > mol_large.GetNumAtoms():
+        return False
+    
+    bincount_small=np.bincount([atom.GetAtomicNum() for atom in mol_small.GetAtoms()])
+    bincount_large=np.bincount([atom.GetAtomicNum() for atom in mol_large.GetAtoms()])
+
+    if bincount_small.shape[0] > bincount_large.shape[0]:
+        return False
+    
+    for i in range(bincount_small.shape[0]):
+        if bincount_small[i]>bincount_large[i]:
+            return False
+    return True
 
 
 def extend_by_single_match(
