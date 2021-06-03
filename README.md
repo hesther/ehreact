@@ -4,7 +4,7 @@ ehreact
 [![GitHub Actions Build Status](https://github.com/hesther/ehreact/workflows/CI/badge.svg)](https://github.com/hesther/ehreact/actions?query=workflow%3ACI)
 
 
-A Python package for extracting and scoring reaction templates based on extended Hasse diagrams. A link to the corresponding manuscript will be available, soon.
+A Python package for extracting and scoring reaction templates based on extended Hasse diagrams. The corresponding manuscript is currently available as preprint [here](<https://chemrxiv.org/articles/preprint/EHreact_Extended_Hasse_Diagrams_for_the_Extraction_and_Scoring_of_Enzymatic_Reaction_Templates/14714748/1>); the journal article will be posted here at a later time.
 
 **Documentation:** Documentation and a tutorial of EHreact is available at https://hesther.github.io/ehreact/.
 
