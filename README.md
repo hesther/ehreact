@@ -77,7 +77,7 @@ python predict.py --test_path ehreact/data/reaction_test.dat --load_path test_tr
 Please refer to the [tutorial](https://hesther.github.io/ehreact/getting_started.html#tutorial) for more examples and options.
 
 ## Contact
-Feel free to post questions, feedback, bugs or suggestions on github, or email to eheid@mit.edu.
+Feel free to post questions, feedback, bugs or suggestions on github, or email to esther.heid@tuwien.ac.at.
 
 ### Copyright
 
