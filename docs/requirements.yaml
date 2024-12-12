@@ -1,17 +1,18 @@
 name: docs
 channels:
+
+  - conda-forge
+
+  - defaults
 dependencies:
     # Base depends
   - python
   - pip
   - numpy
   - rdkit
-
-
+  
     # Pip-only installs
   - pip:
     - sphinx
     - sphinx-rtd-theme
     - typed-argument-parser>=1.6.1
-
-
