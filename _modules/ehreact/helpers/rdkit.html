@@ -1,19 +1,20 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ehreact.helpers.rdkit &mdash; ehreact  documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -24,11 +25,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> ehreact
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ehreact
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -53,9 +58,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>ehreact.helpers.rdkit</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ehreact.helpers.rdkit</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -76,7 +81,7 @@
 
 
 <div class="viewcode-block" id="morgan_bit_fp_from_mol"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.morgan_bit_fp_from_mol">[docs]</a><span class="k">def</span> <span class="nf">morgan_bit_fp_from_mol</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">chirality</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes a Morgan Bit Fingerprint for a molecule.</span>
 
 <span class="sd">    Parameters</span>
@@ -100,7 +105,7 @@
 
 
 <div class="viewcode-block" id="tanimoto_from_fp"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.tanimoto_from_fp">[docs]</a><span class="k">def</span> <span class="nf">tanimoto_from_fp</span><span class="p">(</span><span class="n">fp1</span><span class="p">,</span> <span class="n">fp2</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the Tanimoto similarity between fingerprints.</span>
 
 <span class="sd">    Parameters</span>
@@ -121,7 +126,7 @@
 
 
 <div class="viewcode-block" id="find_common"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.find_common">[docs]</a><span class="k">def</span> <span class="nf">find_common</span><span class="p">(</span><span class="n">mols</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function to find the maximum common substructure of a list of RDKit molecules</span>
 <span class="sd">    and check whether charges match.</span>
 
@@ -202,7 +207,7 @@
 
 
 <div class="viewcode-block" id="check_if_reaction"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.check_if_reaction">[docs]</a><span class="k">def</span> <span class="nf">check_if_reaction</span><span class="p">(</span><span class="n">smi</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function to check whether &quot;&gt;&quot; occurs in a string, and raise a ValueError if the expected behavior is not met.</span>
 
 <span class="sd">    Parameters</span>
@@ -221,7 +226,7 @@
 
 
 <div class="viewcode-block" id="make_mol"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.make_mol">[docs]</a><span class="k">def</span> <span class="nf">make_mol</span><span class="p">(</span><span class="n">smi</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Make RDKit molecule from a smiles string and add hydrogens.</span>
 
 <span class="sd">    Parameters</span>
@@ -241,7 +246,7 @@
 
 
 <div class="viewcode-block" id="make_mol_no_sanit_h"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.make_mol_no_sanit_h">[docs]</a><span class="k">def</span> <span class="nf">make_mol_no_sanit_h</span><span class="p">(</span><span class="n">smi</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Make RDKit molecule from a smiles string without sanitizing hydrogens (keep hydrogens as given).</span>
 
 <span class="sd">    Parameters</span>
@@ -265,7 +270,7 @@
 
 
 <div class="viewcode-block" id="canonicalize"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.canonicalize">[docs]</a><span class="k">def</span> <span class="nf">canonicalize</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Outputs the canonical SMILES string of a molecule.</span>
 
 <span class="sd">    Parameters</span>
@@ -286,7 +291,7 @@
 
 
 <div class="viewcode-block" id="canonicalize_with_h"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.canonicalize_with_h">[docs]</a><span class="k">def</span> <span class="nf">canonicalize_with_h</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">reaction</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">old2new_mapno</span><span class="o">=</span><span class="p">{}):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Outputs the canonical SMILES with hydrogens.</span>
 
 <span class="sd">    Parameters</span>
@@ -323,7 +328,7 @@
 
 
 <div class="viewcode-block" id="preprocess"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.preprocess">[docs]</a><span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="n">smi</span><span class="p">,</span> <span class="n">delete_aam</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">reaction</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">old2new_mapno</span><span class="o">=</span><span class="p">{}):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Preprocess a SMILES string.</span>
 
 <span class="sd">    Parameters</span>
@@ -376,7 +381,7 @@
 
 
 <div class="viewcode-block" id="preprocess_rxn"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.preprocess_rxn">[docs]</a><span class="k">def</span> <span class="nf">preprocess_rxn</span><span class="p">(</span><span class="n">rxn_smi</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Preprocess a reaction SMILES string.</span>
 
 <span class="sd">    Parameters</span>
@@ -425,7 +430,7 @@
 
 
 <div class="viewcode-block" id="read_in_smiles"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.read_in_smiles">[docs]</a><span class="k">def</span> <span class="nf">read_in_smiles</span><span class="p">(</span><span class="n">smiles</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes canonical SMILES strings and RDKit molecules from a list of SMILES strings.</span>
 
 <span class="sd">    Parameters</span>
@@ -458,7 +463,7 @@
 
 
 <div class="viewcode-block" id="read_in_smiles_unique"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.read_in_smiles_unique">[docs]</a><span class="k">def</span> <span class="nf">read_in_smiles_unique</span><span class="p">(</span><span class="n">smiles</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes canonical SMILES strings and RDKit molecules from a list of SMILES strings and only keeps unique entries.</span>
 
 <span class="sd">    Parameters</span>
@@ -506,7 +511,7 @@
 
 
 <div class="viewcode-block" id="read_in_reactions"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.read_in_reactions">[docs]</a><span class="k">def</span> <span class="nf">read_in_reactions</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes canonical SMILES strings and RDKit molecules from a list of reaction SMILES strings.</span>
 
 <span class="sd">    Parameters</span>
@@ -552,7 +557,7 @@
 
 
 <div class="viewcode-block" id="read_in_reactions_unique"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.read_in_reactions_unique">[docs]</a><span class="k">def</span> <span class="nf">read_in_reactions_unique</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes canonical SMILES strings and RDKit molecules from a list of reaction SMILES strings</span>
 <span class="sd">    and only keeps unique entries.</span>
 
@@ -658,7 +663,7 @@
 
 
 <div class="viewcode-block" id="preprocess_seeds"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.preprocess_seeds">[docs]</a><span class="k">def</span> <span class="nf">preprocess_seeds</span><span class="p">(</span><span class="n">seed_list</span><span class="p">,</span> <span class="n">smiles</span><span class="p">,</span> <span class="n">smiles_dict</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Preprocesses a list of seeds and matches them to a list of SMILES strings. If given an empty list of seeds,</span>
 <span class="sd">    a seed with the maximum common substructure of all molecules is created.</span>
 
@@ -717,7 +722,7 @@
 
 
 <div class="viewcode-block" id="moltosmiles_transition"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.moltosmiles_transition">[docs]</a><span class="k">def</span> <span class="nf">moltosmiles_transition</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">change_dict</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts an RDKit mol with the changes specified in change_dict before converting to smiles.</span>
 
 <span class="sd">    Parameters</span>
@@ -745,7 +750,7 @@
 
 
 <div class="viewcode-block" id="mol_transition"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.mol_transition">[docs]</a><span class="k">def</span> <span class="nf">mol_transition</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">change_dict</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts an RDKit mol with the changes specified in change_dict.</span>
 
 <span class="sd">    Parameters</span>
@@ -783,7 +788,7 @@
 
 
 <div class="viewcode-block" id="mols_are_equal"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.mols_are_equal">[docs]</a><span class="k">def</span> <span class="nf">mols_are_equal</span><span class="p">(</span><span class="n">mol1</span><span class="p">,</span> <span class="n">mol2</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes if two molecules are equal.</span>
 
 <span class="sd">    Parameters</span>
@@ -806,7 +811,7 @@
 
 
 <div class="viewcode-block" id="find_matching_atoms"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.find_matching_atoms">[docs]</a><span class="k">def</span> <span class="nf">find_matching_atoms</span><span class="p">(</span><span class="n">train_mode</span><span class="p">,</span> <span class="n">mol</span><span class="p">,</span> <span class="n">rule</span><span class="p">,</span> <span class="n">rule_small</span><span class="p">,</span> <span class="n">tags_core</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find the substructure matching of a rule or lowest matching rule to a molecule and confirm</span>
 <span class="sd">    the match contains the reaction center.</span>
 
@@ -861,7 +866,7 @@
 
 
 <div class="viewcode-block" id="match_includes_reaction_center"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.match_includes_reaction_center">[docs]</a><span class="k">def</span> <span class="nf">match_includes_reaction_center</span><span class="p">(</span><span class="n">train_mode</span><span class="p">,</span> <span class="n">match</span><span class="p">,</span> <span class="n">atoms_core</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Determindes whether a substructure match includes the full reaction center.</span>
 
 <span class="sd">    Parameters</span>
@@ -887,7 +892,7 @@
 
 
 <div class="viewcode-block" id="make_fragment_indices"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.make_fragment_indices">[docs]</a><span class="k">def</span> <span class="nf">make_fragment_indices</span><span class="p">(</span><span class="n">rule</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Fragments a molecule into multiple molecules where it is disconnected.</span>
 <span class="sd">    For examples, turns &#39;CC.C&#39; into &#39;CC&#39; and &#39;C&#39;.</span>
 
@@ -911,7 +916,7 @@
 
 
 <div class="viewcode-block" id="match_and_mol_transition"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.match_and_mol_transition">[docs]</a><span class="k">def</span> <span class="nf">match_and_mol_transition</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">change_dict</span><span class="p">,</span> <span class="n">rule</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;regular&quot;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Converts an RDKit mol with the changes specified in change_dict, with bond numbers corresponding to rule not mol</span>
 <span class="sd">    thus an additional conversion step is needed to identify the correct bonds.</span>
 
@@ -974,7 +979,7 @@
 
 
 <div class="viewcode-block" id="mol_to_rxn_smiles"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.mol_to_rxn_smiles">[docs]</a><span class="k">def</span> <span class="nf">mol_to_rxn_smiles</span><span class="p">(</span><span class="n">initial_smiles</span><span class="p">,</span> <span class="n">initial_mols</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">predict_mode</span><span class="p">,</span> <span class="n">verbose</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates a list of all possible reaction smiles from a given list of reactant(s).</span>
 
 <span class="sd">    Parameters</span>
@@ -1077,7 +1082,7 @@
 
 
 <div class="viewcode-block" id="do_charges_fit"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.do_charges_fit">[docs]</a><span class="k">def</span> <span class="nf">do_charges_fit</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">current_rule</span><span class="p">,</span> <span class="n">match</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Determines whether a current rule matches a molecule if formal charges are taken into account.</span>
 
 <span class="sd">    Parameters</span>
@@ -1106,7 +1111,7 @@
 
 
 <div class="viewcode-block" id="force_charge_fit"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.rdkit.force_charge_fit">[docs]</a><span class="k">def</span> <span class="nf">force_charge_fit</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">current_rule</span><span class="p">,</span> <span class="n">match</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Forces the formal charges of a rule to match the formal charges of a molecule.</span>
 
 <span class="sd">    Parameters</span>

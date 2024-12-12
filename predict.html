@@ -1,20 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Predict &mdash; ehreact  documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
+      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -27,11 +28,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> ehreact
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ehreact
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -44,9 +49,21 @@
 <li class="toctree-l2"><a class="reference internal" href="arguments.html">Command Line Arguments</a></li>
 <li class="toctree-l2"><a class="reference internal" href="train.html">Train</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Predict</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id1">Predict</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#make-prediction">Make Prediction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#score">Score</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Predict</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.predict.predict.predict"><code class="docutils literal notranslate"><span class="pre">predict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#make-prediction">Make Prediction</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.predict.make_prediction.calculate_score"><code class="docutils literal notranslate"><span class="pre">calculate_score()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.predict.make_prediction.find_highest_template"><code class="docutils literal notranslate"><span class="pre">find_highest_template()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.predict.make_prediction.make_prediction"><code class="docutils literal notranslate"><span class="pre">make_prediction()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#score">Score</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.predict.score.default_score_generator"><code class="docutils literal notranslate"><span class="pre">default_score_generator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.predict.score.highest_sim"><code class="docutils literal notranslate"><span class="pre">highest_sim()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="helpers.html">Helpers</a></li>
@@ -68,9 +85,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="api.html">API Documentation</a> &raquo;</li>
-      <li>Predict</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="api.html">API Documentation</a></li>
+      <li class="breadcrumb-item active">Predict</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/predict.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -81,10 +98,10 @@
            <div itemprop="articleBody">
              
   <section id="predict">
-<h1>Predict<a class="headerlink" href="#predict" title="Permalink to this headline"></a></h1>
+<h1>Predict<a class="headerlink" href="#predict" title="Permalink to this heading"></a></h1>
 <p>ehreact.predict contains functions and classes for calculating scores of query molecules and a Hasse diagram.</p>
 <section id="id1">
-<h2>Predict<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<h2>Predict<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
 <p>Classes and functions from ehreact.predict.predict.py.</p>
 <span class="target" id="module-ehreact.predict.predict"></span><p>Entry point for predicting on a calculated Hasse diagram.</p>
 <dl class="py function">
@@ -92,7 +109,7 @@
 <span class="sig-prename descclassname"><span class="pre">ehreact.predict.predict.</span></span><span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/predict/predict.html#predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.predict.predict.predict" title="Permalink to this definition"></a></dt>
 <dd><p>Scores queries on a precomputed Hasse diagram based on the inputted arguments</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>args</strong> (<em>Namespace</em>) – Namespace of arguments.</p>
 </dd>
 </dl>
@@ -100,7 +117,7 @@
 
 </section>
 <section id="make-prediction">
-<h2>Make Prediction<a class="headerlink" href="#make-prediction" title="Permalink to this headline"></a></h2>
+<h2>Make Prediction<a class="headerlink" href="#make-prediction" title="Permalink to this heading"></a></h2>
 <p>Classes and functions from ehreact.predict.make_prediction.py</p>
 <span class="target" id="module-ehreact.predict.make_prediction"></span><p>Score on Hasse diagram.</p>
 <dl class="py function">
@@ -108,7 +125,7 @@
 <span class="sig-prename descclassname"><span class="pre">ehreact.predict.make_prediction.</span></span><span class="sig-name descname"><span class="pre">calculate_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highest_template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predict_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smiles_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stereochemistry</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags_core</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/predict/make_prediction.html#calculate_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.predict.make_prediction.calculate_score" title="Permalink to this definition"></a></dt>
 <dd><p>Function to score a query molecule given the diagram, highest template, QM information.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>smi</strong> (<em>str</em>) – SMILES string of the query molecule.</p></li>
 <li><p><strong>mol</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule.</p></li>
@@ -128,7 +145,7 @@ for multi_reactants no reaction partners are added but different reaction outcom
 <li><p><strong>tags_core</strong> (<em>dict, default None</em>) – Atom mapping numbers of atom in the reaction core. Used to verify a correct match.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>best_score</strong> (<em>float</em>) – Score.</p></li>
 <li><p><strong>rawnumber</strong> (<em>dict</em>) – Dictionary of raw scores.</p></li>
@@ -143,7 +160,7 @@ for multi_reactants no reaction partners are added but different reaction outcom
 <span class="sig-prename descclassname"><span class="pre">ehreact.predict.make_prediction.</span></span><span class="sig-name descname"><span class="pre">find_highest_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">curr_node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highest_template</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/predict/make_prediction.html#find_highest_template"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.predict.make_prediction.find_highest_template" title="Permalink to this definition"></a></dt>
 <dd><p>Recursive function to find the highest matching substructure/reaction rule of a molecule/reaction.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>curr_node</strong> (<em>str</em>) – SMILES string of current node.</p></li>
 <li><p><strong>mol</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule.</p></li>
@@ -151,10 +168,10 @@ for multi_reactants no reaction partners are added but different reaction outcom
 <li><p><strong>highest_template</strong> (<em>str</em>) – Current highest matching substructure/reaction rule.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>highest_template</strong> – highest matching (most specific) template in tree</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -165,7 +182,7 @@ for multi_reactants no reaction partners are added but different reaction outcom
 <span class="sig-prename descclassname"><span class="pre">ehreact.predict.make_prediction.</span></span><span class="sig-name descname"><span class="pre">make_prediction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_aam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predict_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'transition_state'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stereochemistry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/predict/make_prediction.html#make_prediction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.predict.make_prediction.make_prediction" title="Permalink to this definition"></a></dt>
 <dd><p>Computes a Hasse diagram of a list of reaction or molecule smiles.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>smiles</strong> (<em>List[str]</em>) – List of SMILES or reaction SMILES to score.</p></li>
 <li><p><strong>d</strong> (<em>ehreact.diagram.diagram.Diagram</em>) – Diagram to calculate scores on.</p></li>
@@ -179,7 +196,7 @@ for multi_reactants no reaction partners are added but different reaction outcom
 <li><p><strong>stereochemistry</strong> (<em>bool, default False</em>) – Whether to use stereochemistry for scoring.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>scores</strong> (<em>List[float]</em>) – List of scores.</p></li>
 <li><p><strong>combination</strong> (<em>List[str]</em>) – List of multiple reactants.</p></li>
@@ -194,24 +211,24 @@ for multi_reactants no reaction partners are added but different reaction outcom
 
 </section>
 <section id="score">
-<h2>Score<a class="headerlink" href="#score" title="Permalink to this headline"></a></h2>
+<h2>Score<a class="headerlink" href="#score" title="Permalink to this heading"></a></h2>
 <p>Classes and functions from ehreact.predict.score.py</p>
 <span class="target" id="module-ehreact.predict.score"></span><dl class="py function">
 <dt class="sig sig-object py" id="ehreact.predict.score.default_score_generator">
 <span class="sig-prename descclassname"><span class="pre">ehreact.predict.score.</span></span><span class="sig-name descname"><span class="pre">default_score_generator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rawnumber</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/predict/score.html#default_score_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.predict.score.default_score_generator" title="Permalink to this definition"></a></dt>
 <dd><p>Score generator.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rawnumber</strong> (<em>dict</em>) – Dictionary of raw scores.</p></li>
 <li><p><strong>params</strong> (<em>dict</em>) – Dictionary of hyperparameters.</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em>) – Whether to print additional information.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>best_score</strong> – Overall score.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
@@ -222,17 +239,17 @@ for multi_reactants no reaction partners are added but different reaction outcom
 <span class="sig-prename descclassname"><span class="pre">ehreact.predict.score.</span></span><span class="sig-name descname"><span class="pre">highest_sim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sims_reac</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sims_prod</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_prod</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/predict/score.html#highest_sim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.predict.score.highest_sim" title="Permalink to this definition"></a></dt>
 <dd><p>Function to find highest similarity of a query to a set of leaf nodes.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>sims_reac</strong> (<em>List[float]</em>) – List of similarities of the reactants.</p></li>
 <li><p><strong>sims_prod</strong> (<em>List[float]</em>) – List of similarities of the products.</p></li>
 <li><p><strong>use_prod</strong> (<em>bool</em>) – Whether to use the product similarities in addition to the reactants.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>best_score</strong> – Highest similarity score.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>

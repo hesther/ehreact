@@ -1,19 +1,20 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ehreact.train.hasse &mdash; ehreact  documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -24,11 +25,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> ehreact
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ehreact
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -53,9 +58,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>ehreact.train.hasse</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ehreact.train.hasse</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -73,7 +78,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <div class="viewcode-block" id="extended_hasse"><a class="viewcode-back" href="../../../train.html#ehreact.train.hasse.extended_hasse">[docs]</a><span class="k">def</span> <span class="nf">extended_hasse</span><span class="p">(</span><span class="n">smiles_dict</span><span class="p">,</span> <span class="n">seeds</span><span class="p">,</span> <span class="n">rule_dict</span><span class="p">,</span> <span class="n">tags_core</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">quiet</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create an extended Hasse diagram.</span>
 
 <span class="sd">    Parameters</span>
@@ -138,7 +143,7 @@
 <div class="viewcode-block" id="iterate_algorithm"><a class="viewcode-back" href="../../../train.html#ehreact.train.hasse.iterate_algorithm">[docs]</a><span class="k">def</span> <span class="nf">iterate_algorithm</span><span class="p">(</span>
     <span class="n">d</span><span class="p">,</span> <span class="n">mols</span><span class="p">,</span> <span class="n">smiles</span><span class="p">,</span> <span class="n">rule</span><span class="p">,</span> <span class="n">rule_smiles</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">quiet</span><span class="p">,</span> <span class="n">change_dict</span><span class="p">,</span> <span class="n">tags_core</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Iterate atom extension algorithm by looking for possible atoms to add to, find best combination,</span>
 <span class="sd">    create a new template and attach it to the current Hasse diagram (edits to diagram are in-place).</span>
 
@@ -211,7 +216,7 @@
 
 
 <div class="viewcode-block" id="enlarge_rule"><a class="viewcode-back" href="../../../train.html#ehreact.train.hasse.enlarge_rule">[docs]</a><span class="k">def</span> <span class="nf">enlarge_rule</span><span class="p">(</span><span class="n">rule</span><span class="p">,</span> <span class="n">mols</span><span class="p">,</span> <span class="n">smiles</span><span class="p">,</span> <span class="n">change_dict</span><span class="p">,</span> <span class="n">verbose</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function to look for possible atoms to add to current template, find best combination,</span>
 <span class="sd">    and create a new template.</span>
 
@@ -339,7 +344,7 @@
 
 
 <div class="viewcode-block" id="check_one_extension"><a class="viewcode-back" href="../../../train.html#ehreact.train.hasse.check_one_extension">[docs]</a><span class="k">def</span> <span class="nf">check_one_extension</span><span class="p">(</span><span class="n">pivot_rule</span><span class="p">,</span> <span class="n">max_possible_rules</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function to iterate over all current molecules/pseudomolecules and check whether each of them</span>
 <span class="sd">    allows for an extension resulting in the current pivot_rule.</span>
 
@@ -363,7 +368,7 @@
 
 
 <div class="viewcode-block" id="has_one_extension"><a class="viewcode-back" href="../../../train.html#ehreact.train.hasse.has_one_extension">[docs]</a><span class="k">def</span> <span class="nf">has_one_extension</span><span class="p">(</span><span class="n">pivot_rule</span><span class="p">,</span> <span class="n">extensions_all_matches</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function to check whether any current template match and corresponding extension results</span>
 <span class="sd">    in the current pivot_rule.</span>
 
@@ -389,7 +394,7 @@
 
 
 <div class="viewcode-block" id="quick_match"><a class="viewcode-back" href="../../../train.html#ehreact.train.hasse.quick_match">[docs]</a><span class="k">def</span> <span class="nf">quick_match</span><span class="p">(</span><span class="n">mol_small</span><span class="p">,</span><span class="n">mol_large</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes whether mol_small could possibly be a subgraph of mol_large based on atom type counts.</span>
 
 <span class="sd">    Parameters</span>
@@ -431,7 +436,7 @@
     <span class="n">verbose</span><span class="p">,</span>
     <span class="n">max_possible_rules</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Enlarges the current template by selecting the best extensions.</span>
 
 <span class="sd">    Parameters</span>
@@ -629,7 +634,7 @@
 
 
 <div class="viewcode-block" id="get_max_possible_rules"><a class="viewcode-back" href="../../../train.html#ehreact.train.hasse.get_max_possible_rules">[docs]</a><span class="k">def</span> <span class="nf">get_max_possible_rules</span><span class="p">(</span><span class="n">possible_extensions</span><span class="p">,</span> <span class="n">rule</span><span class="p">,</span> <span class="n">mols</span><span class="p">,</span> <span class="n">change_dict</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Takes a dictionary of possible extensions and computes the corresponding enlarged templates as</span>
 <span class="sd">    RDKit molecule objects.</span>
 
@@ -676,7 +681,7 @@
 
 
 <div class="viewcode-block" id="get_possible_extensions"><a class="viewcode-back" href="../../../train.html#ehreact.train.hasse.get_possible_extensions">[docs]</a><span class="k">def</span> <span class="nf">get_possible_extensions</span><span class="p">(</span><span class="n">rule</span><span class="p">,</span> <span class="n">mols</span><span class="p">,</span> <span class="n">smiles</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Searches for all possible extensions of a template taking into account a list of molecules.</span>
 
 <span class="sd">    Parameters</span>
@@ -740,7 +745,7 @@
 
 
 <div class="viewcode-block" id="extend_by_atom"><a class="viewcode-back" href="../../../train.html#ehreact.train.hasse.extend_by_atom">[docs]</a><span class="k">def</span> <span class="nf">extend_by_atom</span><span class="p">(</span><span class="n">patt</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">match</span><span class="p">,</span> <span class="n">idx_list</span><span class="p">,</span> <span class="n">ring_extension</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extends the current rule (&#39;patt&#39;) by adding neighbours of the atoms specified in the list of</span>
 <span class="sd">    atom indices &#39;idx_list&#39; according to the molecule &#39;m&#39;.</span>
 
@@ -824,7 +829,7 @@
                 <span class="n">editable</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">EditableMol</span><span class="p">(</span><span class="n">new_patt</span><span class="p">)</span>
                 <span class="n">editable</span><span class="o">.</span><span class="n">AddBond</span><span class="p">(</span>
                     <span class="n">pattern_idx</span><span class="p">,</span>
-                    <span class="n">match</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">neighbor_idx</span><span class="p">),</span>
+                    <span class="k">match</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">neighbor_idx</span><span class="p">),</span>
                     <span class="n">order</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">GetBondBetweenAtoms</span><span class="p">(</span><span class="n">match_idx</span><span class="p">,</span> <span class="n">neighbor_idx</span><span class="p">)</span><span class="o">.</span><span class="n">GetBondType</span><span class="p">(),</span>
                 <span class="p">)</span>
                 <span class="n">new_patt</span> <span class="o">=</span> <span class="n">editable</span><span class="o">.</span><span class="n">GetMol</span><span class="p">()</span>

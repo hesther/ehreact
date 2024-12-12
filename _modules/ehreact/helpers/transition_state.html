@@ -1,19 +1,20 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ehreact.helpers.transition_state &mdash; ehreact  documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/doctools.js"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -24,11 +25,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> ehreact
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            ehreact
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -53,9 +58,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>ehreact.helpers.transition_state</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ehreact.helpers.transition_state</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -80,7 +85,7 @@
 
 
 <div class="viewcode-block" id="make_mols"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.make_mols">[docs]</a><span class="k">def</span> <span class="nf">make_mols</span><span class="p">(</span><span class="n">smi</span><span class="p">,</span> <span class="n">stereoinformation</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Takes a smiles string as input and creates an RDKit mol object. The molecule cannot be sanitized,</span>
 <span class="sd">    since we would else get rid of the explicit hydrogens. Thus, instead we check if the molecule could</span>
 <span class="sd">    be sanitized, and reorder the atoms corresponding to the sanitized molecule. The reordering of atoms</span>
@@ -169,7 +174,7 @@
 
 
 <div class="viewcode-block" id="bond_to_label"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.bond_to_label">[docs]</a><span class="k">def</span> <span class="nf">bond_to_label</span><span class="p">(</span><span class="n">bond</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function takes an RDKit bond and creates a label describing</span>
 <span class="sd">    the most important attributes.</span>
 
@@ -198,7 +203,7 @@
 
 
 <div class="viewcode-block" id="atoms_are_different"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.atoms_are_different">[docs]</a><span class="k">def</span> <span class="nf">atoms_are_different</span><span class="p">(</span><span class="n">atom1</span><span class="p">,</span> <span class="n">atom2</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compares two RDKit atoms based on basic properties.</span>
 
 <span class="sd">    Parameters</span>
@@ -237,7 +242,7 @@
 
 
 <div class="viewcode-block" id="get_tagged_atoms_from_mol"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.get_tagged_atoms_from_mol">[docs]</a><span class="k">def</span> <span class="nf">get_tagged_atoms_from_mol</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Takes an RDKit molecule and returns list of tagged atoms and their</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Takes an RDKit molecule and returns list of tagged atoms and their</span>
 <span class="sd">    corresponding numbers.</span>
 
 <span class="sd">    Parameters</span>
@@ -263,7 +268,7 @@
 
 
 <div class="viewcode-block" id="get_changed_atoms"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.get_changed_atoms">[docs]</a><span class="k">def</span> <span class="nf">get_changed_atoms</span><span class="p">(</span><span class="n">reacs</span><span class="p">,</span> <span class="n">prods</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Looks at mapped atoms in a reaction and determines which ones changed.</span>
 
 <span class="sd">    Parameters</span>
@@ -315,7 +320,7 @@
 
 
 <div class="viewcode-block" id="get_strict_smarts_for_atom"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.get_strict_smarts_for_atom">[docs]</a><span class="k">def</span> <span class="nf">get_strict_smarts_for_atom</span><span class="p">(</span><span class="n">atom</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    For an RDkit atom object, generate a simple SMARTS pattern.</span>
 
 <span class="sd">    Parameters</span>
@@ -337,7 +342,7 @@
 
 
 <div class="viewcode-block" id="get_fragments_for_changed_atoms"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.get_fragments_for_changed_atoms">[docs]</a><span class="k">def</span> <span class="nf">get_fragments_for_changed_atoms</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">changed_atom_tags</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given an RDKit mols and a list of changed atom tags, this function</span>
 <span class="sd">    computes the SMILES string of molecular fragments using MolFragmentToSmiles</span>
 <span class="sd">    for all changed fragments.</span>
@@ -401,7 +406,7 @@
     <span class="n">reac_mols</span><span class="p">,</span>
     <span class="n">prod_mols</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given the fragments of reactants and products (strings), the mapping of index to atom-mapping number</span>
 <span class="sd">    (dictionaries), and the whole molecules (RDKit mols), this function computes the changed labels, this</span>
 <span class="sd">    is the changed formal charges (e.g. R-O-H to R-O- (change of charge on the oxygen).</span>
@@ -455,7 +460,7 @@
 
 
 <div class="viewcode-block" id="include_bonds"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.include_bonds">[docs]</a><span class="k">def</span> <span class="nf">include_bonds</span><span class="p">(</span><span class="n">mols</span><span class="p">,</span> <span class="n">changed_atom_tags</span><span class="p">,</span> <span class="n">fragment_atoms</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Creates a list of bonds and their indices that have changed atoms attached and should thus</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates a list of bonds and their indices that have changed atoms attached and should thus</span>
 <span class="sd">    be included in the transition state.</span>
 
 <span class="sd">    Parameters</span>
@@ -501,7 +506,7 @@
 
 
 <div class="viewcode-block" id="changed_bonds"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.changed_bonds">[docs]</a><span class="k">def</span> <span class="nf">changed_bonds</span><span class="p">(</span><span class="n">included_bonds_reac</span><span class="p">,</span> <span class="n">included_bonds_prod</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Creates a dictionary of changed bonds from a list of included bonds in the reactants and products.</span>
 
 <span class="sd">    Parameters</span>
@@ -539,7 +544,7 @@
 
 
 <div class="viewcode-block" id="bond_order_increases"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.bond_order_increases">[docs]</a><span class="k">def</span> <span class="nf">bond_order_increases</span><span class="p">(</span><span class="n">bond1</span><span class="p">,</span> <span class="n">bond2</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Determines whether bond order gets larger from bond1 to bond2.</span>
 
 <span class="sd">    Parameters</span>
@@ -590,7 +595,7 @@
     <span class="n">reac_fragment_atoms</span><span class="p">,</span>
     <span class="n">ts_seed</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Makes an RDKit mol of the transition state, either the whole transistion state (with all atoms and bonds included,</span>
 <span class="sd">    or only the seed (if ts_seed==True), which includes only the atoms undergoing changes and the corresponding bonds.</span>
 <span class="sd">    Returns the transition state (whole or seed), and dictionaries of how to change bond types and charges to</span>
@@ -701,7 +706,7 @@
 
 
 <div class="viewcode-block" id="mapping_list_dict"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.mapping_list_dict">[docs]</a><span class="k">def</span> <span class="nf">mapping_list_dict</span><span class="p">(</span><span class="n">mol</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes a list of all map numbers and an atom-mapping indices dictionary.</span>
 
 <span class="sd">    Parameters</span>
@@ -729,7 +734,7 @@
 
 
 <div class="viewcode-block" id="compute_aam_with_h"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.compute_aam_with_h">[docs]</a><span class="k">def</span> <span class="nf">compute_aam_with_h</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper function to produce an atom mapping for a reaction smiles via the</span>
 <span class="sd">    ReactionRecoder tool (RDT) by Syed Asad Rahman. The tool maps hydrogens that undergo changes,</span>
 <span class="sd">    and this function adds the necessary atom-mapping to all other hydrogens.</span>
@@ -819,7 +824,7 @@
 
 
 <div class="viewcode-block" id="compute_aam_without_h"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.compute_aam_without_h">[docs]</a><span class="k">def</span> <span class="nf">compute_aam_without_h</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This helper function produces an atom mapping for a reaction smiles via the</span>
 <span class="sd">    ReactionRecoder tool (RDT) by Syed Asad Rahman.</span>
 
@@ -855,7 +860,7 @@
 
 
 <div class="viewcode-block" id="process_an_example"><a class="viewcode-back" href="../../../helpers.html#ehreact.helpers.transition_state.process_an_example">[docs]</a><span class="k">def</span> <span class="nf">process_an_example</span><span class="p">(</span><span class="n">rxn_smiles</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Processes one rxn_smiles string and returns the transition state (whole or seed depending on ts_seed)</span>
 <span class="sd">    RDKit mol object, as well as dictionaries of how to change bond types and charges to revert the transition state</span>
 <span class="sd">    back to either the products or reactants.</span>

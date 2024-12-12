@@ -1,20 +1,21 @@
+
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Train &mdash; ehreact  documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+      <script src="_static/doctools.js?v=888ff710"></script>
+      <script src="_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -27,11 +28,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> ehreact
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ehreact
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -43,9 +48,33 @@
 <li class="toctree-l1 current"><a class="reference internal" href="api.html">API Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="arguments.html">Command Line Arguments</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Train</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#calculate-diagram">Calculate Diagram</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id1">Train</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#hasse">Hasse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#calculate-diagram">Calculate Diagram</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.train.calculate_diagram.calculate_diagram"><code class="docutils literal notranslate"><span class="pre">calculate_diagram()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.train.calculate_diagram.calculate_diagram_single_reactant"><code class="docutils literal notranslate"><span class="pre">calculate_diagram_single_reactant()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.train.calculate_diagram.calculate_diagram_transition_state"><code class="docutils literal notranslate"><span class="pre">calculate_diagram_transition_state()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.train.calculate_diagram.calculate_diversity"><code class="docutils literal notranslate"><span class="pre">calculate_diversity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.train.calculate_diagram.fill_information"><code class="docutils literal notranslate"><span class="pre">fill_information()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.train.calculate_diagram.find_lowest_template"><code class="docutils literal notranslate"><span class="pre">find_lowest_template()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.train.calculate_diagram.write_fragment_list_to_root"><code class="docutils literal notranslate"><span class="pre">write_fragment_list_to_root()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Train</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.train.train.train"><code class="docutils literal notranslate"><span class="pre">train()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#hasse">Hasse</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.train.hasse.check_one_extension"><code class="docutils literal notranslate"><span class="pre">check_one_extension()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.train.hasse.enlarge_rule"><code class="docutils literal notranslate"><span class="pre">enlarge_rule()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.train.hasse.extend_by_atom"><code class="docutils literal notranslate"><span class="pre">extend_by_atom()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.train.hasse.extend_by_single_match"><code class="docutils literal notranslate"><span class="pre">extend_by_single_match()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.train.hasse.extended_hasse"><code class="docutils literal notranslate"><span class="pre">extended_hasse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.train.hasse.get_max_possible_rules"><code class="docutils literal notranslate"><span class="pre">get_max_possible_rules()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.train.hasse.get_possible_extensions"><code class="docutils literal notranslate"><span class="pre">get_possible_extensions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.train.hasse.has_one_extension"><code class="docutils literal notranslate"><span class="pre">has_one_extension()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.train.hasse.iterate_algorithm"><code class="docutils literal notranslate"><span class="pre">iterate_algorithm()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ehreact.train.hasse.quick_match"><code class="docutils literal notranslate"><span class="pre">quick_match()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="predict.html">Predict</a></li>
@@ -68,9 +97,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="api.html">API Documentation</a> &raquo;</li>
-      <li>Train</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="api.html">API Documentation</a></li>
+      <li class="breadcrumb-item active">Train</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/train.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -81,10 +110,10 @@
            <div itemprop="articleBody">
              
   <section id="train">
-<h1>Train<a class="headerlink" href="#train" title="Permalink to this headline"></a></h1>
+<h1>Train<a class="headerlink" href="#train" title="Permalink to this heading"></a></h1>
 <p>ehreact.train contains functions and classes for calculating a Hasse diagram.</p>
 <section id="calculate-diagram">
-<h2>Calculate Diagram<a class="headerlink" href="#calculate-diagram" title="Permalink to this headline"></a></h2>
+<h2>Calculate Diagram<a class="headerlink" href="#calculate-diagram" title="Permalink to this heading"></a></h2>
 <p>Classes and functions from ehreact.train.calculate_diagram.py.</p>
 <span class="target" id="module-ehreact.train.calculate_diagram"></span><p>calculate_diagram.py
 Training Hasse diagrams.</p>
@@ -93,7 +122,7 @@ Training Hasse diagrams.</p>
 <span class="sig-prename descclassname"><span class="pre">ehreact.train.calculate_diagram.</span></span><span class="sig-name descname"><span class="pre">calculate_diagram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_aam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'transition_state'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_props</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_only_branches</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_dir_img</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/train/calculate_diagram.html#calculate_diagram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.train.calculate_diagram.calculate_diagram" title="Permalink to this definition"></a></dt>
 <dd><p>Computes a Hasse diagram of a list of reaction or molecule smiles.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>smiles</strong> (<em>List[str]</em>) – List of SMILES or reaction SMILES.</p></li>
 <li><p><strong>verbose</strong> (<em>bool, default False</em>) – Whether to print additional information.</p></li>
@@ -108,10 +137,10 @@ Training Hasse diagrams.</p>
 <li><p><strong>temp_dir_img</strong> (<em>str, default None</em>) – Directory to save temporary image files</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>d</strong> – The Hasse diagram of the input list of molecules/reactions.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="diagram.html#ehreact.diagram.diagram.Diagram" title="ehreact.diagram.diagram.Diagram">ehreact.diagram.diagram.Diagram</a></p>
 </dd>
 </dl>
@@ -122,7 +151,7 @@ Training Hasse diagrams.</p>
 <span class="sig-prename descclassname"><span class="pre">ehreact.train.calculate_diagram.</span></span><span class="sig-name descname"><span class="pre">calculate_diagram_single_reactant</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/train/calculate_diagram.html#calculate_diagram_single_reactant"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.train.calculate_diagram.calculate_diagram_single_reactant" title="Permalink to this definition"></a></dt>
 <dd><p>Computes a Hasse diagram of a list of molecule smiles.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>smiles</strong> (<em>List[str]</em>) – List of SMILES.</p></li>
 <li><p><strong>seed_list</strong> (<em>List[str]</em>) – List of SMILES seeds.</p></li>
@@ -130,7 +159,7 @@ Training Hasse diagrams.</p>
 <li><p><strong>quiet</strong> (<em>bool</em>) – Whether to silence all output.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>d</strong> (<em>ehreact.diagram.diagram.Diagram</em>) – The Hasse diagram of the input list of molecules.</p></li>
 <li><p><strong>smiles_dict</strong> (<em>dict</em>) – A dictionary of the canonicalized input smiles.</p></li>
@@ -145,7 +174,7 @@ Training Hasse diagrams.</p>
 <span class="sig-prename descclassname"><span class="pre">ehreact.train.calculate_diagram.</span></span><span class="sig-name descname"><span class="pre">calculate_diagram_transition_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_aam</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/train/calculate_diagram.html#calculate_diagram_transition_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.train.calculate_diagram.calculate_diagram_transition_state" title="Permalink to this definition"></a></dt>
 <dd><p>Computes a Hasse diagram of a list of reaction smiles.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>smiles</strong> (<em>List[str]</em>) – List of reaction SMILES.</p></li>
 <li><p><strong>verbose</strong> (<em>bool, default False</em>) – Whether to print additional information.</p></li>
@@ -153,7 +182,7 @@ Training Hasse diagrams.</p>
 <li><p><strong>compute_aam</strong> (<em>bool</em>) – Whether to compute atom-mappings for reactions.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>d</strong> (<em>ehreact.diagram.diagram.Diagram</em>) – The Hasse diagram of the input list of reactions.</p></li>
 <li><p><strong>smiles_dict</strong> (<em>dict</em>) – A dictionary of the canonicalized input smiles.</p></li>
@@ -168,7 +197,7 @@ Training Hasse diagrams.</p>
 <span class="sig-prename descclassname"><span class="pre">ehreact.train.calculate_diagram.</span></span><span class="sig-name descname"><span class="pre">calculate_diversity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stereo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_mode</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/train/calculate_diagram.html#calculate_diversity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.train.calculate_diagram.calculate_diversity" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates diversity within a branch or tree.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>d</strong> (<em>ehreact.diagram.diagram.Diagram</em>) – Hasse diagram.</p></li>
 <li><p><strong>node</strong> (<em>ehreact.diagram.diagram.Node</em>) – Node for which to calculate diversity, all leaf nodes attached to this node by an arbitrary number of
@@ -177,7 +206,7 @@ edges toward children are taken into account.</p></li>
 <li><p><strong>train_mode</strong> (<em>Literal[“single_reactant”, “transition_state”]</em>) – Train mode, either transition states extracted from reaction smiles or single reactants extracted from smiles.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>mean_div_reac</strong> (<em>float</em>) – Mean pair similarity of reactants.</p></li>
 <li><p><strong>mean_div_prod</strong> (<em>float</em>) – Mean pair similarity of products.</p></li>
@@ -192,7 +221,7 @@ edges toward children are taken into account.</p></li>
 <span class="sig-prename descclassname"><span class="pre">ehreact.train.calculate_diagram.</span></span><span class="sig-name descname"><span class="pre">fill_information</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smiles_dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/train/calculate_diagram.html#fill_information"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.train.calculate_diagram.fill_information" title="Permalink to this definition"></a></dt>
 <dd><p>Function to fill topology information and fingerprints into a Hasse diagram (alters diagram in-place).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>d</strong> (<em>ehreact.diagram.diagram.Diagram</em>) – Hasse diagram.</p></li>
 <li><p><strong>train_mode</strong> (<em>Literal[“single_reactant”,”transition_state”]</em>) – Train mode, either transition states extracted from reaction smiles or single reactants extracted from smiles.</p></li>
@@ -208,16 +237,16 @@ edges toward children are taken into account.</p></li>
 <span class="sig-prename descclassname"><span class="pre">ehreact.train.calculate_diagram.</span></span><span class="sig-name descname"><span class="pre">find_lowest_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">curr_node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/train/calculate_diagram.html#find_lowest_template"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.train.calculate_diagram.find_lowest_template" title="Permalink to this definition"></a></dt>
 <dd><p>Function to find the lowest (most general) substructure/reaction rule in the tree.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>curr_node</strong> (<em>ehreact.diagram.diagram.Node</em>) – Node for which to find the lowest template.</p></li>
 <li><p><strong>d</strong> (<em>ehreact.diagram.diagram.Diagram</em>) – Hasse diagram.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>lowest_template</strong> – Name of the lowest template.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
@@ -229,7 +258,7 @@ edges toward children are taken into account.</p></li>
 <dd><p>Function to calculate a list of reactant rule fragments (only atoms in reaction center). This in needed
 to transform inputted molecules to their corresponding transition state. Save to the root node (in-place).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>d</strong> (<em>ehreact.diagram.diagram.Diagram</em>) – Hasse diagram.</p></li>
 <li><p><strong>train_mode</strong> (<em>Literal[“single_reactant”,”transition_state”]</em>) – Train mode, either transition states extracted from reaction smiles or single reactants extracted from smiles.</p></li>
@@ -242,7 +271,7 @@ to transform inputted molecules to their corresponding transition state. Save to
 
 </section>
 <section id="id1">
-<h2>Train<a class="headerlink" href="#id1" title="Permalink to this headline"></a></h2>
+<h2>Train<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
 <p>Classes and functions from ehreact.train.train.py</p>
 <span class="target" id="module-ehreact.train.train"></span><p>train.py
 Entry point for training Hasse diagrams.</p>
@@ -251,7 +280,7 @@ Entry point for training Hasse diagrams.</p>
 <span class="sig-prename descclassname"><span class="pre">ehreact.train.train.</span></span><span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/train/train.html#train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.train.train.train" title="Permalink to this definition"></a></dt>
 <dd><p>Computes a Hasse diagram based on the inputted arguments</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>args</strong> (<em>Namespace</em>) – Namespace of arguments.</p>
 </dd>
 </dl>
@@ -259,7 +288,7 @@ Entry point for training Hasse diagrams.</p>
 
 </section>
 <section id="hasse">
-<h2>Hasse<a class="headerlink" href="#hasse" title="Permalink to this headline"></a></h2>
+<h2>Hasse<a class="headerlink" href="#hasse" title="Permalink to this heading"></a></h2>
 <p>Classes and functions from ehreact.train.hasse.py</p>
 <span class="target" id="module-ehreact.train.hasse"></span><dl class="py function">
 <dt class="sig sig-object py" id="ehreact.train.hasse.check_one_extension">
@@ -267,16 +296,16 @@ Entry point for training Hasse diagrams.</p>
 <dd><p>Function to iterate over all current molecules/pseudomolecules and check whether each of them
 allows for an extension resulting in the current pivot_rule.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pivot_rule</strong> (<em>RDKit.Chem.Mol</em>) – A possible new template</p></li>
 <li><p><strong>max_possible_rules</strong> (<em>dict</em>) – A dictionary of the matching atoms and possible new templates for all molecules/pseudomolecules.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Whether or not the pivot rule has a substructure match with any of the possible extensions.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
@@ -288,7 +317,7 @@ allows for an extension resulting in the current pivot_rule.</p>
 <dd><p>Function to look for possible atoms to add to current template, find best combination,
 and create a new template.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rule</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule object of the current template (molecule or pseudomolecule).</p></li>
 <li><p><strong>mols</strong> (<em>List[rdkit.Chem.Mol]</em>) – List of RDKit molecule objects of the molecules or pseudomolecules which are considered in the current branch.</p></li>
@@ -297,10 +326,10 @@ and create a new template.</p>
 <li><p><strong>verbose</strong> (<em>bool</em>) – Whether to print additional information.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>new_rules</strong> – A dictionary of new templates (childs to the current node), might be one or multiple templates.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
@@ -312,7 +341,7 @@ and create a new template.</p>
 <dd><p>Extends the current rule (‘patt’) by adding neighbours of the atoms specified in the list of
 atom indices ‘idx_list’ according to the molecule ‘m’.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>patt</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule object of the current template (molecule or pseudomolecule).</p></li>
 <li><p><strong>n</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule object of the current leaf node.</p></li>
@@ -321,10 +350,10 @@ atom indices ‘idx_list’ according to the molecule ‘m’.</p>
 <li><p><strong>ring_extension</strong> (<em>bool</em>) – Boolean whether current iteration has broken a ring and must thus be iterated until full ring is found.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>new_patt</strong> – RDKit molecule object of the new, extended template (molecule or pseudomolecule).</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>rdkit.Chem.Mol</p>
 </dd>
 </dl>
@@ -344,7 +373,7 @@ yielding the new, extended molecule CCOC:</p>
 <span class="sig-prename descclassname"><span class="pre">ehreact.train.hasse.</span></span><span class="sig-name descname"><span class="pre">extend_by_single_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">possible_extensions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">change_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_possible_rules</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/train/hasse.html#extend_by_single_match"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.train.hasse.extend_by_single_match" title="Permalink to this definition"></a></dt>
 <dd><p>Enlarges the current template by selecting the best extensions.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>possible_extensions</strong> (<em>dict</em>) – A dictionary of possible extensions for each input molecule, containing the matching indices, atom indices of
 atoms to extend, and their possible extension as string.</p></li>
@@ -359,11 +388,11 @@ atoms to extend, and their possible extension as string.</p></li>
 the possible enlarged templates as string and RDKit molecule.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>new_patterns</strong> – Dictionary of new templates, to be attached to current node as children, including list of molecules and smiles
 belonging to each new template.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
@@ -388,7 +417,7 @@ belonging to each new template.</p>
 <span class="sig-prename descclassname"><span class="pre">ehreact.train.hasse.</span></span><span class="sig-name descname"><span class="pre">extended_hasse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seeds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rule_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags_core</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/train/hasse.html#extended_hasse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.train.hasse.extended_hasse" title="Permalink to this definition"></a></dt>
 <dd><p>Create an extended Hasse diagram.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>smiles_dict</strong> (<em>dict</em>) – A dictionary of the canonicalized input smiles.</p></li>
 <li><p><strong>seeds</strong> (<em>List[str]</em>) – List of SMILES seeds.</p></li>
@@ -398,10 +427,10 @@ belonging to each new template.</p>
 <li><p><strong>quiet</strong> (<em>bool</em>) – Whether to silence all output.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>d</strong> – The Hasse diagram of the input list of molecules.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="diagram.html#ehreact.diagram.diagram.Diagram" title="ehreact.diagram.diagram.Diagram">ehreact.diagram.diagram.Diagram</a></p>
 </dd>
 </dl>
@@ -413,7 +442,7 @@ belonging to each new template.</p>
 <dd><p>Takes a dictionary of possible extensions and computes the corresponding enlarged templates as
 RDKit molecule objects.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>possible_extensions</strong> (<em>dict</em>) – A dictionary of possible extensions for each input molecule, containing the matching indices,
 atom indices of atoms to extend, and their possible extension as string.</p></li>
@@ -422,11 +451,11 @@ atom indices of atoms to extend, and their possible extension as string.</p></li
 <li><p><strong>change_dict</strong> (<em>dict</em>) – A dictionary of all changes upon going from reactants to products.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>extension_dict</strong> – Dictionary of possibly extensions, containing the atoms indices of the matching atoms, as well as all the
 possible enlarged templates as string and RDKit molecule.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
@@ -448,18 +477,18 @@ possible enlarged templates as string and RDKit molecule.</p>
 <span class="sig-prename descclassname"><span class="pre">ehreact.train.hasse.</span></span><span class="sig-name descname"><span class="pre">get_possible_extensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/train/hasse.html#get_possible_extensions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.train.hasse.get_possible_extensions" title="Permalink to this definition"></a></dt>
 <dd><p>Searches for all possible extensions of a template taking into account a list of molecules.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rule</strong> (<em>rdkit.Chem.Mol</em>) – RDKit molecule object of the current template (molecule or pseudomolecule).</p></li>
 <li><p><strong>mols</strong> (<em>List[rdkit.Chem.Mol]</em>) – List of RDKit molecule objects of the molecules or pseudomolecules which are considered in the current branch.</p></li>
 <li><p><strong>smiles</strong> (<em>List[str]</em>) – List of SMILES strings of the molecules or pseudomolecules which are considered in the current branch.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>extension_dict</strong> – A dictionary of possible extensions for each input molecule, containing the matching indices, atom indices
 of atoms to extend, and their possible extension as string.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict</p>
 </dd>
 </dl>
@@ -481,16 +510,16 @@ the oxygen, adding a carbon for the first molecule, or an oxygen for the second 
 <dd><p>Function to check whether any current template match and corresponding extension results
 in the current pivot_rule.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>pivot_rule</strong> (<em>RDKit.Chem.Mol</em>) – A possible new template</p></li>
 <li><p><strong>extensions_all_matches</strong> (<em>dict</em>) – A dictionary of matching atoms and possible new templates.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Whether or not the pivot rule has a substructure match with any of the possible extensions.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
@@ -502,7 +531,7 @@ in the current pivot_rule.</p>
 <dd><p>Iterate atom extension algorithm by looking for possible atoms to add to, find best combination,
 create a new template and attach it to the current Hasse diagram (edits to diagram are in-place).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>d</strong> (<em>ehreact.diagram.diagram.Diagram</em>) – The current Hasse diagram.</p></li>
 <li><p><strong>mols</strong> (<em>List[rdkit.Chem.Mol]</em>) – List of RDKit molecule objects of the molecules or pseudomolecules which are considered in the current branch.</p></li>
@@ -523,16 +552,16 @@ create a new template and attach it to the current Hasse diagram (edits to diagr
 <span class="sig-prename descclassname"><span class="pre">ehreact.train.hasse.</span></span><span class="sig-name descname"><span class="pre">quick_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol_small</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol_large</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ehreact/train/hasse.html#quick_match"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ehreact.train.hasse.quick_match" title="Permalink to this definition"></a></dt>
 <dd><p>Computes whether mol_small could possibly be a subgraph of mol_large based on atom type counts.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mol_small</strong> (<em>RDKit.Chem.Mol</em>) – A molecule.</p></li>
 <li><p><strong>mol_large</strong> (<em>RDKit.Chem.Mol</em>) – A molecule.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Whether a subgraph match is possible based on atom type counts.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
